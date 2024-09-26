@@ -1,0 +1,1 @@
+import{j as e}from"./jsx-runtime-21230753.js";function a(){return e("div",{className:"game-container",children:e("iframe",{height:"100%",src:"https://freehtml5games.org/games/flappy-bird/index.html"})})}export{a as default};
