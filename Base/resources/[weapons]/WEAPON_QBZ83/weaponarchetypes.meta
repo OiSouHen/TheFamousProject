@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+
+<CWeaponModelInfo__InitDataList>
+	<InitDatas>
+		<Item>
+			<modelName>w_ar_qbz83_mag1</modelName>
+			<txdName>w_ar_qbz83_mag1</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="175"/>
+		</Item>
+		<Item>
+			<modelName>w_ar_qbz83</modelName>
+			<txdName>w_ar_qbz83</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="175"/>
+		</Item>
+	</InitDatas>
+</CWeaponModelInfo__InitDataList>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+
+<CWeaponModelInfo__InitDataList>
+	<InitDatas>
+		<Item>
+			<modelName>w_sr_sauer_mag1</modelName>
+			<txdName>w_sr_sauer_mag1</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="175"/>
+		</Item>
+		<Item>
+			<modelName>w_sr_sauer</modelName>
+			<txdName>w_sr_sauer</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="175"/>
+		</Item>
+		<Item>
+			<modelName>w_at_scope_sauer_large</modelName>
+			<txdName>w_at_scope_sauer_large</txdName>
+			<ptfxAssetName>NULL</ptfxAssetName>
+			<lodDist value="175"/>
+		</Item>
+	</InitDatas>
+</CWeaponModelInfo__InitDataList>
