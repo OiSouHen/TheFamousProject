@@ -1204,7 +1204,7 @@ function OpenTattooshop()
 	Lasted = Tattooshop
 	TriggerEvent("hud:Active",false)
 	LocalPlayer["state"]:set("Hoverfy",false,false)
-	vRP.playAnim(true,{"mp_sleep","bind_pose_180"},true)
+	vRP.PlayAnim(true,{"mp_sleep","bind_pose_180"},true)
 
 	SendNUIMessage({ Action = "Open", Payload = { Active,Tattooshop } })
 end
@@ -1376,7 +1376,7 @@ RegisterNUICallback("HandsUp",function(Data,Callback)
 		StopAnimTask(Ped,"random@mugging3","handsup_standing_base",8.0)
 		vRP.AnimActive()
 	else
-		vRP.playAnim(true,{"random@mugging3","handsup_standing_base"},true)
+		vRP.PlayAnim(true,{"random@mugging3","handsup_standing_base"},true)
 	end
 
 	Callback("Ok")
