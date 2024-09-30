@@ -318,7 +318,7 @@ function Creative.Clothes()
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		local Consult = vRP.GetSrvData("Wardrobe:"..Passport,true)
+		local Consult = vRP.GetServerData("Wardrobe:"..Passport)
 
 		for Table,_ in pairs(Consult) do
 			Clothes[#Clothes + 1] = Table
@@ -335,7 +335,7 @@ AddEventHandler("propertys:Clothes",function(Mode)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		local Consult = vRP.GetSrvData("Wardrobe:"..Passport,true)
+		local Consult = vRP.GetServerData("Wardrobe:"..Passport)
 		local Split = splitString(Mode)
 		local Name = Split[2]
 
@@ -412,7 +412,7 @@ function Creative.Mount(Name,Mode)
 
 		local Primary = {}
 		local Inv = vRP.Inventory(Passport)
-		local Consult = vRP.GetSrvData(Mode..":"..Name,true)
+		local Consult = vRP.GetServerData(Mode..":"..Name)
 
 		for Index,v in pairs(Inv) do
 			v["name"] = ItemName(v["item"])
@@ -603,9 +603,9 @@ AddEventHandler("CharacterChosen",function(Passport,source)
 	if vRP.Scalar("propertys/Count",{ Passport = Passport }) <= 0 then
 		Increments[#Increments + 1] = "Hotel"
 	else
-		local Consult = vRP.Query("propertys/AllUser",{ Passport = Passport })
-		if Consult[1] then
-			for _,v in pairs(Consult) do
+		local All = vRP.Query("propertys/AllUser",{ Passport = Passport })
+		if All[1] then
+			for _,v in pairs(All) do
 				local Name = v["Name"]
 				if Propertys[Name] then
 					Increments[#Increments + 1] = Propertys[Name]
