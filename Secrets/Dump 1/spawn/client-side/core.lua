@@ -132,12 +132,12 @@ AddEventHandler("spawn:Finish",function(Coords,Creation)
 		if Creation then
 			SetEntityVisible(PlayerPedId(),true,0)
 			exports["barbershop"]:Creation(Creation)
-			LocalPlayer["state"]:set("Chikorita",false,false)
+			LocalPlayer["state"]:set("Invisible",false,false)
 		else
 			TriggerEvent("hud:Active",true)
 		end
 
-		TriggerServerEvent("vRP:WaitCharacters",Creation)
+		-- TriggerServerEvent("vRP:WaitCharacters",Creation)
 		SendNUIMessage({ Action = "Close" })
 		SetNuiFocus(false,false)
 
