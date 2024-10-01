@@ -1,183 +1,15 @@
------------------------------------------------------------------------------------------------------------------------------------------
--- VARIABLES
------------------------------------------------------------------------------------------------------------------------------------------
-local TheNpcControl = 0.5
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BLIPS
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Blips = {
-	{ 280.38,-584.45,43.29, 80, 59, "Hospital", 0.5 },
-	{ -247.42,6331.39,32.42, 80, 59, "Hospital", 0.5 },
-
-	{ 435.66,214.75,103.17, 475, 10, "Hotel Crastenburg", 0.7 },
-
-	{ 76.99,-194.58,54.49, 225, 43, "Garagem", 0.6 },
-	{ -1686.58,26.39,64.38, 225, 43, "Garagem", 0.6 },
-	{ -616.03,-1209.16,14.2, 225, 43, "Garagem", 0.6 },
-	{ 964.11,-1035.85,40.83, 225, 43, "Garagem", 0.6 },
-	{ 453.0,-1917.46,24.7, 225, 43, "Garagem", 0.6 },
-	{ 1700.43,3766.2,34.42, 225, 43, "Garagem", 0.6 },
-	{ -197.57,6233.16,31.49, 225, 43, "Garagem", 0.6 },
-	{ 1109.02,2660.88,37.98, 225, 43, "Garagem", 0.6 },
-
-	{ -1204.85,-1564.27,4.6, 126, 13, "Academia", 0.6 },
-
-	{ 426.57,-981.71,30.7, 60, 10, "Departamento Policial", 0.6 },
-
-	{ 232.58,215.65,106.29, 108, 82, "Banco Central", 0.7 },
-	{ -109.85,6463.8,31.63, 108, 82, "Banco Central", 0.7 },
-
-	{ 128.13,-1710.26,29.28, 500, 41, "Bottom Dollar", 0.7 },
-	{ -1412.87,-655.29,28.68, 500, 41, "Bottom Dollar", 0.7 },
-	{ 485.85,-943.21,27.13, 500, 41, "Bottom Dollar", 0.7 },
-	{ -65.63,6506.31,31.53, 500, 41, "Bottom Dollar", 0.7 },
-	{ 122.81,13.44,68.29, 500, 41, "Bottom Dollar", 0.7 },
-
-	{ 29.2,-1351.89,29.34, 59, 0, "Lojas 24/7", 0.6 },
-	{ 2561.74,385.22,108.61, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1160.21,-329.4,69.03, 59, 0, "Lojas 24/7", 0.6 },
-	{ -711.99,-919.96,19.01, 59, 0, "Lojas 24/7", 0.6 },
-	{ -54.56,-1758.56,29.05, 59, 0, "Lojas 24/7", 0.6 },
-	{ 375.87,320.04,103.42, 59, 0, "Lojas 24/7", 0.6 },
-	{ -3237.48,1004.72,12.45, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1730.64,6409.67,35.0, 59, 0, "Lojas 24/7", 0.6 },
-	{ 543.51,2676.85,42.14, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1966.53,3737.95,32.18, 59, 0, "Lojas 24/7", 0.6 },
-	{ 2684.73,3281.2,55.23, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1696.12,4931.56,42.07, 59, 0, "Lojas 24/7", 0.6 },
-	{ -1820.18,785.69,137.98, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1395.35,3596.6,34.86, 59, 0, "Lojas 24/7", 0.6 },
-	{ -2977.14,391.22,15.03, 59, 0, "Lojas 24/7", 0.6 },
-	{ -3034.99,590.77,7.8, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1144.46,-980.74,46.19, 59, 0, "Lojas 24/7", 0.6 },
-	{ 1166.06,2698.17,37.95, 59, 0, "Lojas 24/7", 0.6 },
-	{ -1493.12,-385.55,39.87, 59, 0, "Lojas 24/7", 0.6 },
-	{ -1228.6,-899.7,12.27, 59, 0, "Lojas 24/7", 0.6 },
-
-	{ 1692.27,3760.91,34.69, 76, 6, "Ammunation", 0.5 },
-	{ 253.8,-50.47,69.94, 76, 6, "Ammunation", 0.5 },
-	{ 842.54,-1035.25,28.19, 76, 6, "Ammunation", 0.5 },
-	{ -331.67,6084.86,31.46, 76, 6, "Ammunation", 0.5 },
-	{ -662.37,-933.58,21.82, 76, 6, "Ammunation", 0.5 },
-	{ -1304.12,-394.56,36.7, 76, 6, "Ammunation", 0.5 },
-	{ -1118.98,2699.73,18.55, 76, 6, "Ammunation", 0.5 },
-	{ 2567.98,292.62,108.73, 76, 6, "Ammunation", 0.5 },
-	{ -3173.51,1088.35,20.84, 76, 6, "Ammunation", 0.5 },
-	{ 22.53,-1105.52,29.79, 76, 6, "Ammunation", 0.5 },
-	{ 810.22,-2158.99,29.62, 76, 6, "Ammunation", 0.5 },
-
-	{ -815.12,-184.15,37.57, 71, 62, "Barbearia", 0.5 },
-	{ 139.56,-1704.12,29.05, 71, 62, "Barbearia", 0.5 },
-	{ -1278.11,-1116.66,6.75, 71, 62, "Barbearia", 0.5 },
-	{ 1928.89,3734.04,32.6, 71, 62, "Barbearia", 0.5 },
-	{ 1217.05,-473.45,65.96, 71, 62, "Barbearia", 0.5 },
-	{ -34.08,-157.01,56.83, 71, 62, "Barbearia", 0.5 },
-	{ -274.5,6225.27,31.45, 71, 62, "Barbearia", 0.5 },
-
-	{ -1081.43,-249.57,37.76, 489, 51, "Life Invader", 0.7 },
-
-	{ 220.98,-1844.86,27.18, 478, 31, "Loja de Usados", 0.7 },
-
-	{ 86.06,-1391.64,29.23, 366, 42, "Loja de Roupas", 0.6 },
-	{ -719.94,-158.18,37.0, 366, 42, "Loja de Roupas", 0.6 },
-	{ -152.79,-306.79,38.67, 366, 42, "Loja de Roupas", 0.6 },
-	{ -816.39,-1081.22,11.12, 366, 42, "Loja de Roupas", 0.6 },
-	{ -1206.51,-781.5,17.12, 366, 42, "Loja de Roupas", 0.6 },
-	{ -1458.26,-229.79,49.2, 366, 42, "Loja de Roupas", 0.6 },
-	{ -2.41,6518.29,31.48, 366, 42, "Loja de Roupas", 0.6 },
-	{ 1682.59,4819.98,42.04, 366, 42, "Loja de Roupas", 0.6 },
-	{ 129.46,-205.18,54.51, 366, 42, "Loja de Roupas", 0.6 },
-	{ 618.49,2745.54,42.01, 366, 42, "Loja de Roupas", 0.6 },
-	{ 1197.93,2698.21,37.96, 366, 42, "Loja de Roupas", 0.6 },
-	{ -3165.74,1061.29,20.84, 366, 42, "Loja de Roupas", 0.6 },
-	{ -1093.76,2703.99,19.04, 366, 42, "Loja de Roupas", 0.6 },
-	{ 414.86,-807.57,29.34, 366, 42, "Loja de Roupas", 0.6 },
-
-	{ -1728.06,-1050.69,1.71, 356, 62, "Embarcações", 0.6 },
-	{ -776.72,-1495.02,2.29, 356, 62, "Embarcações", 0.6 },
-	{ -893.97,5687.78,3.29, 356, 62, "Embarcações", 0.6 },
-	{ 1509.64,3788.7,33.51, 356, 62, "Embarcações", 0.6 },
-
-	{ 91.9,-230.88,54.66, 403, 34, "Farmácia", 0.7 },
-
-	{ 2044.86,3195.82,45.19, 467, 11, "Reciclagem", 0.7 },
-
-	{ 408.98,-1622.71,29.28, 357, 9, "Reboque", 0.6 },
-
-	{ 731.49,-1088.87,21.82, 402, 18, "Los Santos Customs", 0.7 },
-
-	{ 562.36,2741.56,42.87, 273, 11, "Animal Park", 0.5 },
-
-	{ 827.1,5426.91,485.51, 141, 51, "Área de Caça", 0.7 },
-	{ -2080.6,1357.4,257.87, 141, 51, "Área de Caça", 0.7 },
-
-	{ -679.13,5839.52,17.3, 141, 51, "Cabana de Caça", 0.7 },
-
-	{ -1663.58,-749.36,10.21, 496, 11, "Área Perigosa", 0.7 },
-	{ 922.22,-1923.63,30.89, 496, 11, "Área Perigosa", 0.7 },
-	{ 1770.85,3652.74,34.41, 496, 11, "Área Perigosa", 0.7},
-	{ -303.89,6229.39,31.46, 496, 11, "Área Perigosa", 0.7},
-	{ -88.0,249.04,100.0, 496, 11, "Área Perigosa", 0.7 },
-
-	{ 1689.49,2602.64,45.56, 307, 1, "Área Aérea", 0.7 },
-
-	{ -3260.22,3907.64,27.25, 307, 55, "Aircraft Carrier 96", 0.8 },
-
-	{ 2954.97,2807.08,41.75, 274, 1, "Área Contaminada", 0.7 },
-	{ 3533.77,3720.49,28.36, 274, 1, "Área Contaminada", 0.7 },
-	
-	{ 265.05,-1262.65,29.3, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 819.02,-1027.96,26.41, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1208.61,-1402.43,35.23, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1181.48,-330.26,69.32, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 621.01,268.68,103.09, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 2581.09,361.79,108.47, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 175.08,-1562.12,29.27, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -319.76,-1471.63,30.55, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 49.42,2778.8,58.05, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 264.09,2606.56,44.99, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1039.38,2671.28,39.56, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1207.4,2659.93,37.9, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 2539.19,2594.47,37.95, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 2679.95,3264.18,55.25, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 2005.03,3774.43,32.41, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1687.07,4929.53,42.08, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1701.53,6415.99,32.77, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 180.1,6602.88,31.87, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -94.46,6419.59,31.48, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -2555.17,2334.23,33.08, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -1800.09,803.54,138.72, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -1437.0,-276.8,46.21, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -2096.3,-320.17,13.17, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -724.56,-935.97,19.22, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -525.26,-1211.19,18.19, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -70.96,-1762.21,29.54, 361, 41, "Posto de Gasolina", 0.5 },
-	{ 1776.7,3330.56,41.32, 361, 41, "Posto de Gasolina", 0.5 },
-	{ -1112.4,-2884.08,13.93, 361, 41, "Posto de Gasolina", 0.5 },
-
-	{ 1327.98,-1654.78,52.03, 75, 13, "Loja de Tatuagem", 0.5 },
-	{ -1149.04,-1428.64,4.71, 75, 13, "Loja de Tatuagem", 0.5 },
-	{ 322.01,186.24,103.34, 75, 13, "Loja de Tatuagem", 0.5 },
-	{ -3175.64,1075.54,20.58, 75, 13, "Loja de Tatuagem", 0.5 },
-	{ 1866.01,3748.07,32.79, 75, 13, "Loja de Tatuagem", 0.5 },
-	{ -295.51,6199.21,31.24, 75, 13, "Loja de Tatuagem", 0.5 },
-
-	{ -1177.93,-884.13,13.88, 439, 62, "Restaurante", 0.7 },
-
-	{ -365.86,-248.13,36.08, 351, 16, "Central de Empregos", 0.9 },
-
-	{ -70.49,-1104.59,26.12, 89, 66, "Concessionária", 0.5 },
-	{ 1224.78,2728.01,38.0, 89, 66, "Concessionária", 0.5 },
-
-	{ -535.04,-221.34,37.64, 267, 5,  "Prefeitura", 0.6 },
-
-	{ -37.95,-205.64,45.78, 380, 81, "Auto Escola", 0.8 },
-
-	{ -628.79,-238.7,38.05, 617, 84, "Joalheria", 0.6 },
-
-	{ -237.81,6545.23,2.07, 68, 18, "Pescador", 0.7 },
-
-	{ 282.23,6792.7,15.69, 78, 21, "Mergulhador", 0.6 }
+	{ -815.12,-184.15,37.57,71,62,"Barbearia",0.5 },
+	{ 139.56,-1704.12,29.05,71,62,"Barbearia",0.5 },
+	{ -1278.11,-1116.66,6.75,71,62,"Barbearia",0.5 },
+	{ 1928.89,3734.04,32.6,71,62,"Barbearia",0.5 },
+	{ 1217.05,-473.45,65.96,71,62,"Barbearia",0.5 },
+	{ -34.08,-157.01,56.83,71,62,"Barbearia",0.5 },
+	{ -274.5,6225.27,31.45,71,62,"Barbearia",0.5 },
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ALPHAS
@@ -409,12 +241,6 @@ CreateThread(function()
 			end
 		end
 
-		InvalidateIdleCam()
-		InvalidateVehicleIdleCam()
-
-		SetCreateRandomCops(false)
-		CancelCurrentPoliceReport()
-		BlockWeaponWheelThisFrame()
 		DisableControlAction(0,37,true)
 		DisableControlAction(0,204,true)
 		DisableControlAction(0,211,true)
@@ -430,11 +256,23 @@ CreateThread(function()
 		DisableControlAction(0,164,true)
 		DisableControlAction(0,165,true)
 
-		SetVehicleDensityMultiplierThisFrame(TheNpcControl)
-		SetRandomVehicleDensityMultiplierThisFrame(TheNpcControl)
-		SetParkedVehicleDensityMultiplierThisFrame(TheNpcControl)
-		SetScenarioPedDensityMultiplierThisFrame(TheNpcControl, TheNpcControl)
-		SetPedDensityMultiplierThisFrame(TheNpcControl)
+		DisableVehicleDistantlights(true)
+		SetArtificialLightsState(false)
+		SetAllVehicleGeneratorsActive()
+		CancelCurrentPoliceReport()
+		BlockWeaponWheelThisFrame()
+		InvalidateVehicleIdleCam()
+		SetCreateRandomCops(false)
+		SetPoliceRadarBlips(false)
+		DistantCopCarSirens(false)
+		SetPauseMenuActive(false)
+		InvalidateIdleCam()
+
+		SetVehicleDensityMultiplierThisFrame(0.2)
+		SetRandomVehicleDensityMultiplierThisFrame(0.2)
+		SetParkedVehicleDensityMultiplierThisFrame(0.2)
+		SetScenarioPedDensityMultiplierThisFrame(1.0,1.0)
+		SetPedDensityMultiplierThisFrame(1.0)
 
 		if IsPedArmed(Ped,6) then
 			DisableControlAction(1,140,true)
@@ -446,13 +284,8 @@ CreateThread(function()
 			SetPedUsingActionMode(Ped,-1,-1,1)
 		end
 
-		if IsPedInAnyVehicle(Ped) then
-			DisableControlAction(0,345,true)
-		end
-
-		SetPauseMenuActive(false)
-		DisablePlayerVehicleRewards(Pid)
 		SetPedInfiniteAmmoClip(Ped,false)
+		SetPlayerLockonRangeOverride(Pid,0.0)
 		SetCreateRandomCopsOnScenarios(false)
 		SetCreateRandomCopsNotOnScenarios(false)
 
@@ -460,12 +293,13 @@ CreateThread(function()
 			ClearPlayerWantedLevel(Pid)
 		end
 
+		if IsPedInAnyVehicle(Ped) then
+			DisableControlAction(0,345,true)
+		end
+
 		if not DisableTargetMode then
 			SetPlayerLockonRangeOverride(Pid, 0.0)
 		end
-
-		SetArtificialLightsState(GlobalState["Blackout"])
-		SetArtificialLightsStateAffectsVehicles(false)
 
 		if LocalPlayer["state"]["Active"] then
 			NetworkOverrideClockTime(GlobalState["Hours"], GlobalState["Minutes"], 00)
