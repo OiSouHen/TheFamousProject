@@ -13,18 +13,18 @@ CreateThread(function()
 		local Coords = GetEntityCoords(Ped)
 
 		if not Active then
-			if (LocalPlayer["state"]["Route"] == 0 or LocalPlayer["state"]["Propertys"]) then
+			if LocalPlayer["state"]["Route"] == 0 then
 				for Number,v in pairs(Displays) do
 					if #(Coords - v["Coords"]) <= v["Distance"] then
 						Active = Number
 						Payload = { v["Key"], v["Title"], v["Legend"] }
-						SendNUIMessage({ name = "Show", payload = Payload })
+						SendNUIMessage({ Action = "Show", Payload = Payload })
 					end
 				end
 			end
 		else
 			if Displays[Active] and #(Coords - Displays[Active]["Coords"]) > Displays[Active]["Distance"] then
-				SendNUIMessage({ name = "Hide" })
+				SendNUIMessage({ Action = "Hide" })
 				Active = false
 			end
 		end
@@ -50,12 +50,12 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDSTATEBAGCHANGEHANDLER
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddStateBagChangeHandler("Hoverfy",("player:%s"):format(LocalPlayer["state"]["Source"]),function(Name,Key,Value)
+AddStateBagChangeHandler("Hoverfy",("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
 	if Displays[Active] then
 		if Value then
-			SendNUIMessage({ name = "Show", payload = Payload })
+			SendNUIMessage({ Action = "Show", Payload = Payload })
 		else
-			SendNUIMessage({ name = "Hide" })
+			SendNUIMessage({ Action = "Hide" })
 		end
 	end
 end)
