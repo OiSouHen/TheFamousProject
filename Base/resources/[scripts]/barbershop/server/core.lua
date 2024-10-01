@@ -19,7 +19,7 @@ function Hensa.Update(Table,Creation)
 		vRP.Query("playerdata/SetData",{ Passport = Passport, Name = "Barbershop", Information = json.encode(Table) })
 
 		if Creation then
-			-- vRP.SpawnCreation(source)
+			vRP.Query("playerdata/SetData",{ Passport = Passport, Name = "Creator", Information = json.encode(1) })
 		end
 	end
 end
