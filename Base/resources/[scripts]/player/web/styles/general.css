@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+    user-select: none;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-user-drag: none;
+}
+
+html {
+    resize: none;
+}
+
+:root {
+    --body-color: #cbd5e1;
+    --clr-segunadry: rgba(15,15,15,.75);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Rajdhani';
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    color: #fff;
+}
+
+.container {
+    width: 60vw;
+    height: 60vh;
+    flex-direction: column;
+    background: rgba(15,15,15,.75);
+    border-radius: 5px;
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    inset: 0;
+    z-index: -1;
+    background: rgb(0,0,0);
+    background: radial-gradient(circle, rgba(0,0,0,0.1825105042016807) 0%, rgba(35, 38, 53, 0.8) 100%);
+}
+
+.title {
+    margin-top: 3vh;
+    font-size: 3.5vh;
+    font-weight: bold;
+    line-height: 5.5vh;
+    text-align: center;
+}
+
+.slides {
+    display: grid;
+    grid-template-columns: 20vw 30vw;
+    gap: 4vw 8vw;
+    margin-left: 4vw;
+    margin-top: 1vw;
+}
+
+.slidecontainer h1 {
+    font-size: 3vh;
+    font-weight: 100;
+    text-transform: uppercase;
+    letter-spacing: 0.1vw;
+    color: var(--body-color);
+}
+
+.slidecontainer {
+    width: 30vw;
+}
+  
+.slider {
+    appearance: none;
+    width: 80%;
+    height: 2.5vh; 
+    border-radius: 5px;
+    outline: none;
+    background: #6fa9dc;
+}
+  
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 1.3020833333333333vw; 
+    height: 1.3020833333333333vw; 
+    background-color: var(--clr-segunadry);
+    box-shadow: 0 0 1vw var(--clr-segunadry);
+    border-radius: 10vw;
+    cursor: grab;
+}
+
+@media (max-width: 800px),
+(max-width: 1024px),
+(max-width: 1280px) {
+    .container {
+        width: 65vw;
+        height: 65vh;
+    }
+}

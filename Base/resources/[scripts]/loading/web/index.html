@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+	    <title>Hensa</title>
+	    <link href="style.css" rel="stylesheet" type="text/css" />	
+    </head>
+		<audio autoplay loop id="music">
+			<source src="audio.mp3" type="audio/mpeg">
+		</audio>
+
+		<script type="text/javascript">
+			var music = document.getElementById("music");
+			music.volume = 0.2;
+			document.addEventListener("keypress",(event) => {
+				if(event.key == "p"){
+					if(music.paused){
+						music.play();
+					} else {
+						music.pause();
+					}
+				}
+			});
+		</script>
+
+		<video autoplay muted loop id="Hensa">
+		    <source src="Hensa.webm" type="video/webm">
+		</video>
+    </body>
+</html>

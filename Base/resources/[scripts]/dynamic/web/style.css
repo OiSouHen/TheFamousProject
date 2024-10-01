@@ -1,0 +1,134 @@
+::-webkit-scrollbar {
+	width: 0;
+}
+
+::selection {
+	background: transparent;
+}
+
+::-moz-selection {
+	background: transparent;
+}
+
+body,
+html {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	transition: all 0.2s;
+	font-family: "Roboto";
+	justify-content: center;
+}
+
+b {
+	font-weight: 300;
+}
+
+.Body {
+	max-width: 320px;
+	max-height: 435px;
+	position: absolute;
+	display: block;
+	overflow-y: auto;
+	left: 2rem;
+}
+
+.Container {
+	margin: 1rem;
+}
+
+.btn {
+	color: #ccc;
+	outline: none;
+	display: block;
+	font-size: 16px;
+	min-height: 30px;
+	max-height: 58px;
+	min-width: 280px;
+	margin-bottom: 5px;
+	position: relative;
+	border-radius: 5px;
+	padding: 20px 16px 12px 13px;
+	background: rgba(15,15,15,0.5);
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(111,169,220,0.35);
+}
+
+.btn:hover,
+.normalbutton:hover {
+	color: #fff;
+	background: rgba(15,15,15,0.75);
+	text-shadow: 1px 1px rgba(0,0,0,0.75);
+	border: 1px solid rgba(111,169,220,0.70);
+}
+
+.title {
+	float: left;
+	font-size: 15px;
+	margin-top: -9px;
+	text-align: left;
+	letter-spacing: 2px;
+}
+
+.description {
+	font-size: 11px;
+	margin-top: 13px;
+	text-align: left;
+	letter-spacing: 0.8px;
+}
+
+.btn:hover .description,
+.normalbutton:hover .description {
+	color: #c8dfff;
+}
+
+.btn:hover .title {
+	/* color: #fff; */
+}
+
+.description blue,
+.description b {
+	color: #6fa9dc;
+}
+
+.normalbutton {
+	color: #ccc;
+	display: block;
+	font-size: 15px;
+	cursor: default;
+	min-width: 245px;
+	margin-bottom: 5px;
+	position: relative;
+	border-radius: 5px;
+    letter-spacing: 1px;
+	padding: 20px 16px 12px 13px;
+	background: rgba(15,15,15,0.5);
+	text-shadow: 1px 1px rgba(0,0,0,0.5);
+	border: 1px solid rgba(111,169,220,0.35);
+}
+
+.blue {
+	color: #362d09;
+	background: rgba(15,15,15,0.5);
+	text-shadow: 1px 1px rgba(0,0,0,0.75);
+	border: 1px solid rgba(111,169,220,0.35);
+}
+
+.blue:hover,
+.blue:hover .description {
+	color: #c8dfff;
+}
+
+.blue .description {
+	color: #ccc;
+}
+
+.titleBack {
+	color: #ccc;
+	float: left;
+	font-size: 15px;
+	margin-top: -9px;
+	text-align: left;
+	letter-spacing: 2px;
+}

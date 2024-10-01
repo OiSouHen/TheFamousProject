@@ -1,0 +1,58 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	color: #fff;
+	cursor: default;
+	font-size: 13px;
+	overflow: hidden;
+	box-sizing: border-box;
+	background: transparent;
+	font-family: "Jura", sans-serif;
+}
+
+:focus {
+	outline: 0;
+}
+
+u {
+	text-decoration: none;
+}
+
+::-webkit-scrollbar {
+	width: 0;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: transparent;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+#First {
+	width: 100%;
+	bottom: 100px;
+	position: fixed;
+}
+
+#Autoschool {
+	bottom: 80px;
+	margin: 0 auto;
+	font-size: 20px;
+	text-align: center;
+	display: none;
+	color: rgba(255, 255, 255, 0.9);
+	text-shadow: 1px 1px #000;
+}

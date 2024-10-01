@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sMapZoomData>
+	<zoomLevels>
+		<Item>
+			<fZoomScale value="2.75" />
+			<fZoomSpeed value="0.9" />
+			<fScrollSpeed value="0.08" />
+			<vTiles x="0.0" y="0.0" />	
+		</Item>
+
+		<Item>
+			<fZoomScale value="2.8" />
+			<fZoomSpeed value="0.9" />
+			<fScrollSpeed value="0.08" />
+			<vTiles x="0.0" y="0.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="8.0" />
+			<fZoomSpeed value="0.9" />
+			<fScrollSpeed value="0.08" />
+			<vTiles x="0.0" y="0.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="20.0" />
+			<fZoomSpeed value="0.9" />
+			<fScrollSpeed value="0.08" />
+			<vTiles x="0.0" y="0.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="35.0" />
+			<fZoomSpeed value="0.9" />
+			<fScrollSpeed value="0.08" />	
+			<vTiles x="0.0" y="0.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="55.0" />
+			<fZoomSpeed value="0.0" />
+			<fScrollSpeed value="0.1" />
+			<vTiles x="2.0" y="1.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="450.0" />
+			<fZoomSpeed value="0.0" />
+			<fScrollSpeed value="0.1" />
+			<vTiles x="1.0" y="1.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="4.5" />
+			<fZoomSpeed value="0.0" />
+			<fScrollSpeed value="0.0" />
+			<vTiles x="0.0" y="0.0" />
+		</Item>
+
+		<Item>
+			<fZoomScale value="11.0" />
+			<fZoomSpeed value="0.0" />
+			<fScrollSpeed value="0.0" />
+			<vTiles x="2.0" y="3.0" />
+		</Item>
+	</zoomLevels>
+</sMapZoomData>

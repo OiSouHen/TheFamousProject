@@ -1,0 +1,259 @@
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Hensa</title>
+		<link rel="stylesheet" href="style.css" />
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css">
+		<script src="jquery.js"></script>
+	</head>
+	<body>
+		<div id="Textform"></div>
+
+		<div id="Body">
+			<div class="NameServer">
+				<img src="images/Logo.png">
+			</div>
+
+			<div id="NaviTop">
+				<div class="InfoUser">
+					<div class="InfoRow">
+						<div class="InfoBlock">
+							<i class="Hensa mdi mdi-clock-outline"></i> <span class="Date">00:00</span>
+						</div>
+
+						<div class="InfoBlock">
+							<i class="Hensa mdi mdi-weather-cloudy"></i> <span class="Weather">Normal</span>
+						</div>
+
+						<div class="InfoBlock">
+							<i class="Hensa mdi mdi-temperature-celsius"></i> <span class="Temperature">Calculando</span>
+						</div>
+					</div>
+
+					<div class="InfoRow">
+						<div class="InfoBlock">
+							<i class="Hensa mdi mdi-contactless-payment"></i> <span class="Radio">Offline</span>
+						</div>
+
+						<div class="InfoBlock">
+							<i class="Hensa mdi mdi-headphones"></i> <span class="Voip">Normal</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="NaviWeapons">
+				<div class="NameWeapon"></div>
+				<div class="NameAmmos"></div>
+			</div>
+
+			<div id="NaviMiddle">
+				<div class="NaviBlock">
+					<div class="NaviButton Staminas" style="display: none;">
+						<img src="images/Stamina.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Staminas" cx="60" cy="60" r="53" stroke="#FCBF49" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Oxigen" style="display: none;">
+						<img src="images/Oxigen.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Oxigen" cx="60" cy="60" r="53" stroke="#778899" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Armour" style="display: none;">
+						<img src="images/Armour.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Armour" cx="60" cy="60" r="53" stroke="#a27eba" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Health Blink" style="display: none;">
+						<img src="images/Health.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Health" cx="60" cy="60" r="53" stroke="#ac223e" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Hunger" style="display: none;">
+						<img src="images/Hunger.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Hunger" cx="60" cy="60" r="53" stroke="#fc913a" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Thirst" style="display: none;">
+						<img src="images/Thirst.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Thirst" cx="60" cy="60" r="53" stroke="#6fa9dc" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Stress" style="display: none;">
+						<img src="images/Stress.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Stress" cx="60" cy="60" r="53" stroke="#ffffff40" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Cough" style="display: none;">
+						<img src="images/Cough.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Cough" cx="60" cy="60" r="53" stroke="#c6d637" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Lucks" style="display: none;">
+						<img src="images/Luck.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Luck" cx="60" cy="60" r="53" stroke="#727e94" pathLength="100" />
+						</svg>
+					</div>
+
+					<div class="NaviButton Dexteritys" style="display: none;">
+						<img src="images/Dexterity.png">
+
+						<svg viewBox="0 0 120 120">
+							<circle class="Fill" cx="60" cy="60" r="58" />
+							<circle class="Circle Dexterity" cx="60" cy="60" r="53" stroke="#c4b408" pathLength="100" />
+						</svg>
+					</div>
+				</div>
+			</div>
+
+			<div id="NaviBottom">
+				<div class="NaviText Progress">
+					<u class="ProgressTimer">100%</u>
+					<span class="ProgressText">Carregando</span>
+				</div>
+
+				<div class="NaviIcon Progress">
+					<i class="Hensa mdi mdi-av-timer"></i>
+				</div><br>
+
+				<div class="NaviText Reposed">
+					<u class="ReposedTimer">00:00</u>
+					<span>Repouso</span>
+				</div>
+
+				<div class="NaviIcon Reposed">
+					<i class="Hensa mdi mdi-hospital-box"></i>
+				</div><br>
+
+				<div class="NaviText Wanted">
+					<u class="WantedTimer">00:00</u>
+					<span>Procurado</span>
+				</div>
+
+				<div class="NaviIcon Wanted">
+					<i class="Hensa mdi mdi-alert"></i>
+				</div><br>
+
+				<div class="NaviText" id="Streets">
+					<u class="UpStreet">Alta-Street</u>
+					<span class="DownStreet">Hawick Avenue</span>
+				</div>
+
+				<div class="NaviIcon Street" id="StreetsIcon">
+					<i class="Hensa mdi mdi-map-marker"></i>
+				</div>
+			</div>
+
+			<div id="Vehicle">
+				<div class="SpeedoBox">
+					<div class="circles">
+						<svg class="march" viewBox="0 0 120 120">
+							<circle cx="70" cy="70" r="60"></circle>
+							<circle class="MarchProgress" cx="70" cy="70" r="60"></circle>
+						</svg>
+						<p class="NumMarch">N</p>
+
+						<div class="VisorSpeed">
+							<p class="NumSpeed">000</p>
+							<div>MPH</div>
+						</div>
+
+						<svg class="speed" viewBox="0 0 120 120">
+							<circle cx="70" cy="70" r="60"></circle>
+							<circle class="SpeedProgress" cx="70" cy="70" r="60"></circle>
+						</svg>
+
+						<svg class="fuel" viewBox="0 0 120 120">
+							<circle cx="70" cy="70" r="60"></circle>
+							<circle class="FuelProgress" cx="70" cy="70" r="60"></circle>
+						</svg>
+
+						<div class="stats">
+							<div class="FuelStats">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#fff">
+									<path d="M22.917 12.5a4.158 4.158 0 0 0-4.167 4.167v66.666c0 2.084 2.083 4.167 4.167 4.167h37.5c2.083 0 4.166-2.083 4.166-4.167V62.5h2.084c2.083 0 2.083 2.083 2.083 2.083v8.334c0 4.166 2.083 6.25 6.25 6.25s6.25-2.084 6.25-6.25V50c0-4.167-8.333-8.333-8.333-12.5V25H68.75l-4.167-4.167v-4.166a4.158 4.158 0 0 0-4.166-4.167zm4.166 8.333H56.25V37.5H27.083zm37.5 12.5h4.167v6.25c0 4.167 8.333 8.334 8.333 12.5v20.834C77.083 75 75 75 75 75s-2.083 0-2.083-2.083V62.5c0-2.083-2.084-4.167-4.167-4.167h-4.167z"></path>
+								</svg>
+							</div>
+
+							<div class="NaviButton">
+								<img src="images/Nitro.png">
+
+								<svg viewBox="0 0 120 120">
+									<circle class="Fill" cx="60" cy="60" r="40" />
+									<circle class="Circle Nitro" cx="60" cy="60" r="40" stroke="#999" pathLength="100" />
+								</svg>
+							</div>
+						</div>
+
+						<div class="SpeedoIcons">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ccc" class="Seatbelt">
+								<path d="M12,2C13.11,2 14,2.9 14,4C14,5.11 13.11,6 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M12.39,14.79C14.03,14.79 15.46,14.89 16.64,15.04C16.7,12.32 16.46,9.92 16,9C15.87,8.73 15.69,8.5 15.5,8.3L7.43,15.22C8.79,15 10.5,14.79 12.39,14.79M7.46,17C7.59,18.74 7.85,20.5 8.27,22H10.34C10.05,21.12 9.84,20.09 9.68,19C9.68,19 12,18.56 14.32,19C14.16,20.09 13.95,21.12 13.66,22H15.73C16.17,20.45 16.43,18.61 16.56,16.79C15.41,16.65 14,16.54 12.39,16.54C10.46,16.54 8.78,16.75 7.46,17M12,7C12,7 9,7 8,9C7.66,9.68 7.44,11.15 7.37,12.96L13.92,7.34C12.93,7 12,7 12,7M18.57,5.67L17.43,4.34L13.92,7.35C14.47,7.54 15.05,7.84 15.5,8.3L18.57,5.67M20.67,15.83C20.58,15.8 19.14,15.33 16.64,15.04C16.63,15.61 16.6,16.2 16.56,16.79C18.81,17.07 20.1,17.5 20.12,17.5L20.67,15.83M7.37,12.96L3.43,16.34L4.32,17.82C4.34,17.81 5.5,17.36 7.46,17C7.35,15.59 7.32,14.2 7.37,12.96Z" />
+							</svg>
+
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ccc" class="Handbrake">
+								<path d="M11,15H13V17H11V15M11,7H13V13H11V7M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A9,9 0 0,0 21,12A9,9 0 0,0 12,3M12,19C8.14,19 5,15.86 5,12C5,8.14 8.14,5 12,5C15.86,5 19,8.14 19,12C19,15.86 15.86,19 12,19M20.5,20.5C22.66,18.31 24,15.31 24,12C24,8.69 22.66,5.69 20.5,3.5L19.42,4.58C21.32,6.5 22.5,9.11 22.5,12C22.5,14.9 21.32,17.5 19.42,19.42L20.5,20.5M4.58,19.42C2.68,17.5 1.5,14.9 1.5,12C1.5,9.11 2.68,6.5 4.58,4.58L3.5,3.5C1.34,5.69 0,8.69 0,12C0,15.31 1.34,18.31 3.5,20.5L4.58,19.42Z" />
+							</svg>
+
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ccc" class="Tyres">
+								<path d="M11,13H13V15H11V13M11,5H13V11H11V5M17,4.76C18.86,6.19 20,8.61 20,11C20,14 18.33,16.64 15.86,18H8.14C5.67,16.64 4,14 4,11C4,8.61 5.09,6.17 7,4.76V2H5V3.86C3.15,5.68 2,8.2 2,11C2,13.8 3.15,16.32 5,18.14V22H7V20H9V22H11V20H13V22H15V20H17V22H19V18.14C20.85,16.32 22,13.8 22,11C22,8.2 20.85,5.68 19,3.86V2H17V4.76Z" />
+							</svg>
+
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ccc" class="Drift">
+								<path d="M12 5C15.86 5 19 8.14 19 12S15.86 19 12 19 5 15.86 5 12 8.14 5 12 5M12 3C7.03 3 3 7.03 3 12S7.03 21 12 21 21 16.97 21 12 16.97 3 12 3M4.58 4.58L3.5 3.5C2.37 4.65 1.47 6.03 .861 7.55L2.3 8C2.84 6.71 3.61 5.56 4.58 4.58M1.71 14.1C1.57 13.42 1.5 12.72 1.5 12C1.5 11.28 1.57 10.58 1.71 9.9L.275 9.46C.098 10.28 0 11.13 0 12S.098 13.72 .275 14.54L1.71 14.1M23.14 7.55C22.53 6.03 21.63 4.65 20.5 3.5L19.42 4.58C20.39 5.56 21.16 6.71 21.7 8L23.14 7.55M.861 16.45C1.47 18 2.37 19.35 3.5 20.5L4.58 19.42C3.61 18.44 2.84 17.29 2.3 16L.861 16.45M19.42 19.42L20.5 20.5C21.63 19.35 22.53 18 23.14 16.45L21.7 16C21.16 17.29 20.39 18.44 19.42 19.42M22.29 9.9C22.43 10.58 22.5 11.28 22.5 12C22.5 12.72 22.43 13.42 22.29 14.1L23.73 14.54C23.9 13.72 24 12.87 24 12S23.9 10.28 23.73 9.46L22.29 9.9Z" />
+							</svg>
+
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="#ccc" class="Locked">
+								<path d="M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14A6,6 0 0,1 2,8A6,6 0 0,1 8,2A6,6 0 0,1 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5Z" />
+							</svg>
+
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#ccc">
+								<path d="M17.1416 7.1405C16.818 7.1405 16.5557 7.40285 16.5557 7.72644V8.31238H15.3838V7.72644C15.3838 7.40285 15.1214 7.1405 14.7979 7.1405H13.8687L12.8684 6.14023C12.7585 6.03035 12.6095 5.96863 12.4541 5.96863H11.8682V4.79675H12.4541C12.7777 4.79675 13.04 4.53441 13.04 4.21082C13.04 3.88722 12.7777 3.62488 12.4541 3.62488H6.5166C6.19301 3.62488 5.93066 3.88722 5.93066 4.21082C5.93066 4.53441 6.19301 4.79675 6.5166 4.79675H7.10254V5.96863H6.5166C6.36117 5.96863 6.21219 6.03035 6.1023 6.14023L5.10203 7.1405H3.00098C2.67738 7.1405 2.41504 7.40285 2.41504 7.72644V10.0702H1.24316V7.72644C1.24316 7.40285 0.98082 7.1405 0.657227 7.1405C0.333633 7.1405 0.0712891 7.40285 0.0712891 7.72644V13.5858C0.0712891 13.9094 0.333633 14.1718 0.657227 14.1718C0.98082 14.1718 1.24316 13.9094 1.24316 13.5858V11.2421H2.41504V13.5858C2.41504 13.9094 2.67738 14.1718 3.00098 14.1718H5.10203L7.27418 16.3439C7.38406 16.4538 7.53305 16.5155 7.68848 16.5155H13.626C13.8479 16.5155 14.0508 16.3901 14.1501 16.1916L15.16 14.1718H16.5557V14.7577C16.5557 15.0813 16.818 15.3436 17.1416 15.3436C18.757 15.3436 20.0713 14.0294 20.0713 12.4139V10.0702C20.0713 8.45476 18.757 7.1405 17.1416 7.1405ZM4.75879 12.9999H3.58691V8.31238H4.75879V12.9999ZM8.27441 4.79675H10.6963V5.96863H8.27441V4.79675ZM14.2119 13.4475L13.2638 15.3436H7.93117L5.93066 13.3431V7.96914L6.7593 7.1405C6.99762 7.1405 12.0013 7.1405 12.2114 7.1405L13.2116 8.14078C13.3216 8.25066 13.4705 8.31238 13.626 8.31238H14.2119C14.2119 8.55195 14.2119 13.2568 14.2119 13.4475ZM16.5557 12.9999H15.3838V9.48425H16.5557V12.9999ZM18.8994 12.4139C18.8994 13.1778 18.4096 13.8295 17.7275 14.0714C17.7275 13.6599 17.7275 8.56792 17.7275 8.41281C18.4096 8.65464 18.8994 9.30628 18.8994 10.0702V12.4139Z"/><path d="M11.2818 10.6562H9.88614L10.634 9.16038C10.7788 8.87092 10.6614 8.51897 10.372 8.37424C10.0825 8.22952 9.73059 8.34686 9.58586 8.63628L8.41399 10.98C8.21965 11.3687 8.50254 11.828 8.93805 11.828H10.3337L9.58582 13.3238C9.4411 13.6133 9.55844 13.9652 9.84785 14.11C10.1374 14.2547 10.4893 14.1372 10.634 13.8479L11.8059 11.5042C12.0002 11.1155 11.7173 10.6562 11.2818 10.6562Z"/>
+							</svg>
+
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" fill="#ccc" class="Headlight">
+								<path d="M13,4.8C9,4.8 9,19.2 13,19.2C17,19.2 22,16.5 22,12C22,7.5 17,4.8 13,4.8M13.1,17.2C12.7,16.8 12,15 12,12C12,9 12.7,7.2 13.1,6.8C16,6.9 20,8.7 20,12C20,15.3 16,17.1 13.1,17.2M2,5H9.5C9.3,5.4 9,5.8 8.9,6.4C8.8,6.6 8.8,6.8 8.7,7H2V5M8,11H2V9H8.2C8.1,9.6 8.1,10.3 8,11M8.7,17C8.9,17.8 9.2,18.4 9.6,19H2.1V17H8.7M8.2,15H2V13H8C8.1,13.7 8.1,14.4 8.2,15Z"/>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
