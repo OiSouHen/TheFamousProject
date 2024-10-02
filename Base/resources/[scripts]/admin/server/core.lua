@@ -48,7 +48,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("admin:Coords")
 AddEventHandler("admin:Coords",function(Coords)
-	vRP.Archive("coordenadas.txt",mathLength(Coords["x"])..","..mathLength(Coords["y"])..","..mathLength(Coords["z"]))
+	vRP.Archive("coordenadas.txt",Optimize(Coords["x"])..","..Optimize(Coords["y"])..","..Optimize(Coords["z"]))
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADMIN:COPYCOORDS
@@ -58,7 +58,7 @@ AddEventHandler("admin:CopyCoords",function(Coords)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		vKEYBOARD.Copy(source,"Cordenadas:",mathLength(Coords["x"])..","..mathLength(Coords["y"])..","..mathLength(Coords["z"]))
+		vKEYBOARD.Copy(source,"Cordenadas:",Optimize(Coords["x"])..","..Optimize(Coords["y"])..","..Optimize(Coords["z"]))
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ function Hensa.buttonTxt()
 			local Coords = GetEntityCoords(Ped)
 			local heading = GetEntityHeading(Ped)
 
-			vRP.Archive(Passport..".txt",mathLength(Coords["x"])..","..mathLength(Coords["y"])..","..mathLength(Coords["z"])..","..mathLength(heading))
+			vRP.Archive(Passport..".txt",Optimize(Coords["x"])..","..Optimize(Coords["y"])..","..Optimize(Coords["z"])..","..Optimize(heading))
 		end
 	end
 end
@@ -86,9 +86,9 @@ function Hensa.RaceConfig(Left,Center,Right,Distance)
 	if Passport then
 		vRP.Archive(Passport..".txt","{")
 
-		vRP.Archive(Passport..".txt","['Left'] = vec3("..mathLength(Left["x"])..","..mathLength(Left["y"])..","..mathLength(Left["z"]).."),")
-		vRP.Archive(Passport..".txt","['Center'] = vec3("..mathLength(Center["x"])..","..mathLength(Center["y"])..","..mathLength(Center["z"]).."),")
-		vRP.Archive(Passport..".txt","['Right'] = vec3("..mathLength(Right["x"])..","..mathLength(Right["y"])..","..mathLength(Right["z"]).."),")
+		vRP.Archive(Passport..".txt","['Left'] = vec3("..Optimize(Left["x"])..","..Optimize(Left["y"])..","..Optimize(Left["z"]).."),")
+		vRP.Archive(Passport..".txt","['Center'] = vec3("..Optimize(Center["x"])..","..Optimize(Center["y"])..","..Optimize(Center["z"]).."),")
+		vRP.Archive(Passport..".txt","['Right'] = vec3("..Optimize(Right["x"])..","..Optimize(Right["y"])..","..Optimize(Right["z"]).."),")
 		vRP.Archive(Passport..".txt","['Distance'] = "..Distance)
 
 		vRP.Archive(Passport..".txt","},")
