@@ -43,78 +43,34 @@ function ClassWeather(Type)
 	return Weather
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CLASSWORK
+-- LEVELS
 -----------------------------------------------------------------------------------------------------------------------------------------
-function ClassWork(Work)
-	local Result = "Nenhum"
-
-	if Work == "Bus" then
-		Result = "Motorista de Ônibus"
-	elseif Work == "Taxi" then
-		Result = "Taxista"
-	elseif Work == "Transporter" then
-		Result = "Transportador de Valores"
-	elseif Work == "Lumberman" then
-		Result = "Lenhador"
-	elseif Work == "Fruitman" then
-		Result = "Agricultor"
-	elseif Work == "Milkman" then
-		Result = "Entregador de Leite"
-	elseif Work == "Trucker" then
-		Result = "Caminhoneiro"
-	elseif Work == "Garbageman" then
-		Result = "Lixeiro"
-	elseif Work == "Tows" then
-		Result = "Rebocador"
-	elseif Work == "Diver" then
-		Result = "Mergulhador"
-	elseif Work == "PostOp" then
-		Result = "Correios"
-	elseif Work == "Cleaner" then
-		Result = "Jardineiro"
-	elseif Work == "Farmer" then
-		Result = "Fazendeiro"
-	elseif Work == "Minerman" then
-		Result = "Minerador"
-	elseif Work == "Hunter" then
-		Result = "Caçador"
-	end
-
-	return Result
-end
+local Levels = { 0,250,500,1000,2000,3500,5000,7500,10000,15000 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CLASSCATEGORY
 -----------------------------------------------------------------------------------------------------------------------------------------
-function ClassCategory(Number)
-	local Level = 1
+function ClassCategory(Experience)
+	local Return = 1
 
-	if Number >= 250 and Number <= 500 then
-		Level = 2
-	elseif Number >= 501 and Number <= 1000 then
-		Level = 3
-	elseif Number >= 1001 and Number <= 2000 then
-		Level = 4
-	elseif Number >= 2001 and Number <= 3500 then
-		Level = 5
-	elseif Number >= 3501 and Number <= 5000 then
-		Level = 6
-	elseif Number >= 5001 and Number <= 7500 then
-		Level = 7
-	elseif Number >= 7501 and Number <= 10000 then
-		Level = 8
-	elseif Number >= 10001 and Number <= 15000 then
-		Level = 9
-	elseif Number >= 15001 then
-		Level = 10
+	for Table = 1,#Levels do
+		if Experience >= Levels[Table] then
+			Return = Table
+		end
 	end
 
-	return Level
+	return Return
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- RANDCOLOR
+-- TABLELEVEL
 -----------------------------------------------------------------------------------------------------------------------------------------
-function RandColor()
-	return math.random(255)
+function TableLevel()
+	return Levels
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- EMPTYSPACE
+-----------------------------------------------------------------------------------------------------------------------------------------
+function EmptySpace(Message)
+	return Message:gsub("%s+","")
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SANGUINE
@@ -145,7 +101,7 @@ end
 function CountTable(Table)
 	local Number = 0
 
-	for _,v in pairs(Table) do
+	for _ in pairs(Table) do
 		Number = Number + 1
 	end
 
@@ -155,25 +111,26 @@ end
 -- MODULE
 -----------------------------------------------------------------------------------------------------------------------------------------
 local modules = {}
-function module(Resource,patchs)
-	if not patchs then
-		patchs = Resource
+function module(Resource,Patch)
+	if not Patch then
+		Patch = Resource
 		Resource = "vrp"
 	end
 
-	local key = Resource..patchs
-	local checkModule = modules[key]
-	if checkModule then
-		return checkModule
+	local Key = Resource..Patch
+	local Module = modules[Key]
+	if Module then
+		return Module
 	else
-		local code = LoadResourceFile(Resource,patchs..".lua")
-		if code then
-			local floats = load(code,Resource.."/"..patchs..".lua")
-			if floats then
-				local resAccept,resUlts = xpcall(floats,debug.traceback)
-				if resAccept then
-					modules[key] = resUlts
-					return resUlts
+		local File = LoadResourceFile(Resource,Patch..".lua")
+		if File then
+			local Float = load(File,Resource.."/"..Patch..".lua")
+			if Float then
+				local Accept,Result = xpcall(Float,debug["traceback"])
+				if Accept then
+					modules[Key] = Result
+
+					return Result
 				end
 			end
 		end
@@ -184,10 +141,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 local function wait(self)
 	local rets = Citizen.Await(self.p)
-	if not rets then
-		if self.r then
-			rets = self.r
-		end
+	if not rets and self.r then
+		rets = self.r
 	end
 
 	return table.unpack(rets,1,table.maxn(rets))
@@ -212,46 +167,19 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PARSEINT
 -----------------------------------------------------------------------------------------------------------------------------------------
-function parseInt(Value,Force)
-	local Number = tonumber(Value) or 0
-
+function parseInt(Number,Force)
+	Number = tonumber(Number) or 0
 	if Force and Number <= 0 then
 		Number = 1
 	end
 
-	if Number and Number > 0 then
-		Number = math.floor(Number)
-	end
-
-	return Number
+	return math.floor(Number)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SANITIZESTRING
 -----------------------------------------------------------------------------------------------------------------------------------------
-local sanitize_tmp = {}
-function sanitizeString(str,strchars,allow_policy)
-	local r = ""
-	local chars = sanitize_tmp[strchars]
-	if not chars then
-		chars = {}
-		local size = string.len(strchars)
-		for i = 1,size do
-			local char = string.sub(strchars,i,i)
-			chars[char] = true
-		end
-
-		sanitize_tmp[strchars] = chars
-	end
-
-	size = string.len(str)
-	for i = 1,size do
-		local char = string.sub(str,i,i)
-		if (allow_policy and chars[char]) or (not allow_policy and not chars[char]) then
-			r = r..char
-		end
-	end
-
-	return r
+function sanitizeString(String,Characteres)
+	return String:gsub("[^"..Characteres.."]","")
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SPLITSTRING
@@ -280,6 +208,16 @@ function SplitOne(Name,Symbol)
 	return splitString(Name,Symbol)[1]
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- SPLITBOOLEAN
+-----------------------------------------------------------------------------------------------------------------------------------------
+function SplitBoolean(Name,String,Symbol)
+	if not Symbol then
+		Symbol = "-"
+	end
+
+	return splitString(Name,Symbol)[1] == String and true or false
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- SPLITTWO
 -----------------------------------------------------------------------------------------------------------------------------------------
 function SplitTwo(Name,Symbol)
@@ -290,9 +228,17 @@ function SplitTwo(Name,Symbol)
 	return splitString(Name,Symbol)[2]
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- MATHLEGTH
+-- SPLITUNIQUE
 -----------------------------------------------------------------------------------------------------------------------------------------
-function mathLength(Number)
+function SplitUnique(Item)
+	local Name = splitString(Item,"-")
+
+	return Name[1]..":"..Name[3]
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- OPTIMIZE
+-----------------------------------------------------------------------------------------------------------------------------------------
+function Optimize(Number)
 	return math.ceil(Number * 100) / 100
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -301,7 +247,6 @@ end
 function Dotted(Value)
 	local Value = parseInt(Value)
 	local Left,Number,Right = string.match(Value,"^([^%d]*%d)(%d*)(.-)$")
-
 	return Left..(Number:reverse():gsub("(%d%d%d)","%1."):reverse())..Right
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -310,116 +255,33 @@ end
 function CompleteTimers(Seconds)
 	local Seconds = parseInt(Seconds)
 	local Days = math.floor(Seconds / 86400)
-	Seconds = Seconds - Days * 86400
+	Seconds = Seconds % 86400
 	local Hours = math.floor(Seconds / 3600)
-	Seconds = Seconds - Hours * 3600
+	Seconds = Seconds % 3600
 	local Minutes = math.floor(Seconds / 60)
-	Seconds = Seconds - Minutes * 60
+	Seconds = Seconds % 60
 
 	if Days > 0 then
-		return string.format("<b>%d Dias</b>, <b>%d Horas</b>, <b>%d Minutos</b>",Days,Hours,Minutes)
+		if Hours > 0 then
+			return string.format("%d Dias e %d Horas",Days,Hours)
+		else
+			return string.format("%d Dias",Days)
+		end
 	elseif Hours > 0 then
-		return string.format("<b>%d Horas</b>, <b>%d Minutos</b> e <b>%d Segundos</b>",Hours,Minutes,Seconds)
+		if Minutes > 0 then
+			return string.format("%d Horas e %d Minutos",Hours,Minutes)
+		else
+			return string.format("%d Horas",Hours)
+		end
 	elseif Minutes > 0 then
-		return string.format("<b>%d Minutos</b> e <b>%d Segundos</b>",Minutes,Seconds)
-	elseif Seconds > 0 then
-		return string.format("<b>%d Segundos</b>",Seconds)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- MINIMALTIMERS
------------------------------------------------------------------------------------------------------------------------------------------
-function MinimalTimers(Seconds)
-	local Seconds = parseInt(Seconds)
-	local Days = math.floor(Seconds / 86400)
-	Seconds = Seconds - Days * 86400
-	local Hours = math.floor(Seconds / 3600)
-	Seconds = Seconds - Hours * 3600
-	local Minutes = math.floor(Seconds / 60)
-	Seconds = Seconds - Minutes * 60
-
-	if Days > 0 then
-		return string.format("%d Dias e %d Horas",Days,Hours)
-	elseif Hours > 0 then
-		return string.format("%d Horas e %d Minutos",Hours,Minutes)
-	elseif Minutes > 0 then
-		return string.format("%d Minutos",Minutes)
-	elseif Seconds > 0 then
+		if Seconds > 0 then
+			return string.format("%d Minutos e %d Segundos",Minutes,Seconds)
+		else
+			return string.format("%d Minutos",Minutes)
+		end
+	else
 		return string.format("%d Segundos",Seconds)
 	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- NUMBERZERO
------------------------------------------------------------------------------------------------------------------------------------------
-function NumberZero(Number)
-	if Number <= 9 then
-		Number = "0"..Number
-	end
-
-	return Number
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- NUMBERPOKEMON
------------------------------------------------------------------------------------------------------------------------------------------
-function NumberPokemon(Number)
-	if Number <= 9 then
-		Number = "00"..Number
-	elseif Number >= 10 and Number <= 99 then
-		Number = "0"..Number
-	end
-
-	return Number
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- NUMBERTIMERS
------------------------------------------------------------------------------------------------------------------------------------------
-function NumberTimers(Seconds)
-	local Seconds = parseInt(Seconds)
-	local Days = math.floor(Seconds / 86400)
-	Seconds = Seconds - Days * 86400
-	local Hours = math.floor(Seconds / 3600)
-	Seconds = Seconds - Hours * 3600
-	local Minutes = math.floor(Seconds / 60)
-	Seconds = Seconds - Minutes * 60
-
-	return NumberZero(Days)..":"..NumberZero(Hours)..":"..NumberZero(Minutes)..":"..NumberZero(Seconds)
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- NUMBERDAYS
------------------------------------------------------------------------------------------------------------------------------------------
-function NumberDays(Seconds)
-	local Seconds = parseInt(Seconds)
-	local Days = math.floor(Seconds / 86400)
-	Seconds = Seconds - Days * 86400
-	local Hours = math.floor(Seconds / 3600)
-	Seconds = Seconds - Hours * 3600
-	local Minutes = math.floor(Seconds / 60)
-	Seconds = Seconds - Minutes * 60
-
-	return NumberZero(Hours)..":"..NumberZero(Minutes)..":"..NumberZero(Seconds)
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- NUMBERHOURS
------------------------------------------------------------------------------------------------------------------------------------------
-function NumberHours(Seconds)
-	local Seconds = parseInt(Seconds)
-	local Days = math.floor(Seconds / 86400)
-	Seconds = Seconds - Days * 86400
-	local Hours = math.floor(Seconds / 3600)
-	Seconds = Seconds - Hours * 3600
-	local Minutes = math.floor(Seconds / 60)
-	Seconds = Seconds - Minutes * 60
-
-	return NumberZero(Minutes)..":"..NumberZero(Seconds)
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- NUMBERMINUTES
------------------------------------------------------------------------------------------------------------------------------------------
-function NumberMinutes(Seconds)
-	local Seconds = parseInt(Seconds)
-	local Minutes = math.floor(Seconds / 60)
-
-	return NumberZero(Minutes)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BONES
@@ -508,83 +370,6 @@ function Bone(Number)
 	return Bones[Number] or false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- BLOCKITEM
------------------------------------------------------------------------------------------------------------------------------------------
-local BlockItem = {
-	["anchovy"] = true,
-	["catfish"] = true,
-	["herring"] = true,
-	["orangeroughy"] = true,
-	["salmon"] = true,
-	["sardine"] = true,
-	["smallshark"] = true,
-	["smalltrout"] = true,
-	["yellowperch"] = true,
-	["nigirizushi"] = true,
-	["sushi"] = true,
-	["cupcake"] = true,
-	["milkshake"] = true,
-	["milkshakepeanut"] = true,
-	["cappuccino"] = true,
-	["applelove"] = true,
-	["guarananatural"] = true,
-	["water"] = true,
-	["coffee"] = true,
-	["coffeemilk"] = true,
-	["energetic"] = true,
-	["cola"] = true,
-	["tacos"] = true,
-	["fries"] = true,
-	["friesbacon"] = true,
-	["soda"] = true,
-	["cookies"] = true,
-	["orangejuice"] = true,
-	["tangejuice"] = true,
-	["grapejuice"] = true,
-	["strawberryjuice"] = true,
-	["bananajuice"] = true,
-	["acerolajuice"] = true,
-	["passionjuice"] = true,
-	["hamburger"] = true,
-	["hamburger2"] = true,
-	["hamburger3"] = true,
-	["onionrings"] = true,
-	["chickenfries"] = true,
-	["pizzamozzarella"] = true,
-	["pizzabanana"] = true,
-	["pizzachocolate"] = true,
-	["calzone"] = true,
-	["hotdog"] = true,
-	["donut"] = true,
-	["chocolate"] = true,
-	["sandwich"] = true,
-	["absolut"] = true,
-	["chandon"] = true,
-	["dewars"] = true,
-	["hennessy"] = true
-}
------------------------------------------------------------------------------------------------------------------------------------------
--- BLOCKCHEST
------------------------------------------------------------------------------------------------------------------------------------------
-function BlockChest(Item)
-	local Item = SplitOne(Item)
-
-	if BlockItem[Item] then
-		return true
-	end
-
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- PERCENTAGE
------------------------------------------------------------------------------------------------------------------------------------------
-function Percentage(Number,Percent)
-	local Number = parseInt(Number)
-	local Percent = parseInt(Percent)
-
-	return parseInt(Number * (Percent / 100))
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- RANDPERCENTAGE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function RandPercentage(Table)
@@ -596,6 +381,9 @@ function RandPercentage(Table)
 	local Selected = math.random(1,PoolSize)
 	for Index,v in pairs(Table) do
 		Selected = Selected - v["Chance"]
+		if v["Min"] and v["Max"] then
+			Table[Index]["Valuation"] = math.random(v["Min"],v["Max"])
+		end
 
 		if (Selected <= 0) then
 			return Table[Index]
