@@ -379,7 +379,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 				local Coords = GetEntityCoords(Ped)
 				local Heading = GetEntityHeading(Ped)
 
-				vKEYBOARD.Copy(source,"Cordenadas:",mathLength(Coords["x"])..","..mathLength(Coords["y"])..","..mathLength(Coords["z"])..","..mathLength(Heading))
+				vKEYBOARD.Copy(source,"Cordenadas:",Optimize(Coords["x"])..","..Optimize(Coords["y"])..","..Optimize(Coords["z"])..","..Optimize(Heading))
 			else
 				TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
 			end
