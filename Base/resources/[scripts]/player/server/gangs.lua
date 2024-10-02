@@ -69,7 +69,7 @@ AddEventHandler("player:GangsWithdraw", function(Gang)
 							end
 						end
 					else
-						local Cooldown = MinimalTimers(GangsBank[Passport] - os.time())
+						local Cooldown = CompleteTimers(GangsBank[Passport] - os.time())
 						TriggerClientEvent("Notify", source, "azul", "Aguarde <b>"..Cooldown.."</b>.", false, 5000)
 					end
 				else
