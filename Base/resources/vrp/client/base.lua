@@ -1,15 +1,36 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
-local Proxy = module("vrp", "lib/Proxy")
+local Tunnel = module("vrp","lib/Tunnel")
+local Proxy = module("vrp","lib/Proxy")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 tvRP = {}
-Proxy.addInterface("vRP", tvRP)
-Tunnel.bindInterface("vRP", tvRP)
+Proxy.addInterface("vRP",tvRP)
+Tunnel.bindInterface("vRP",tvRP)
 vRPS = Tunnel.getInterface("vRP")
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THEME
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNUICallback("Theme",function(Data,Callback)
+	Callback(Theme)
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- LOADTEXTURES
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	local YTD = CreateRuntimeTxd("Textures")
+	local Textures = vRPS.FilesDirectory("resources/vrp/config/textures/target")
+
+	for _,Name in pairs(Textures) do
+		local TEXTURE = CreateRuntimeTexture(YTD,Name,512,512)
+		local PNG = LoadResourceFile("vrp","config/textures/target/"..Name..".png")
+		local DICT = "data:image/png;base64,"..Base64(PNG)
+
+		SetRuntimeTextureImage(TEXTURE,DICT)
+	end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -183,10 +204,11 @@ function DrawText3D(Coords, Text, Weight)
 
 	if onScreen then
 		SetTextFont(4)
+		SetTextDropShadow()
 		SetTextCentre(true)
 		SetTextProportional(1)
-		SetTextScale(0.35, 0.35)
-		SetTextColour(255, 255, 255, 150)
+		SetTextScale(0.35,0.35)
+		SetTextColour(255,255,255,200)
 
 		SetTextEntry("STRING")
 		AddTextComponentString(Text)
