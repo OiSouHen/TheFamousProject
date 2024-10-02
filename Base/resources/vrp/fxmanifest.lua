@@ -24,7 +24,6 @@ client_scripts {
 
 	"client/base.lua",
 	"client/gui.lua",
-	"client/hits.lua",
 	"client/iplloader.lua",
 	"client/noclip.lua",
 	"client/objects.lua",
