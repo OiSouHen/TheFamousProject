@@ -122,18 +122,19 @@ function Hensa.SpawnPosition(Select)
 
 		Slot = tostring(Checks)
 		if GaragesCoords[Select] and GaragesCoords[Select][Slot] then
-			local _, CoordsZ = GetGroundZFor_3dCoord(GaragesCoords[Select][Slot][1], GaragesCoords[Select][Slot][2], GaragesCoords[Select][Slot][3])
-			Selected = { GaragesCoords[Select][Slot][1], GaragesCoords[Select][Slot][2], CoordsZ, GaragesCoords[Select][Slot][4] }
-			Position = GetClosestVehicle(Selected[1], Selected[2], Selected[3], 2.5, 0, 71)
+			Selected = vec4(GaragesCoords[Select][Slot][1],GaragesCoords[Select][Slot][2],GaragesCoords[Select][Slot][3],GaragesCoords[Select][Slot][4])
+			Position = GetClosestVehicle(GaragesCoords[Select][Slot][1],GaragesCoords[Select][Slot][2],GaragesCoords[Select][Slot][3],2.75,0,127)
 		end
 	until not DoesEntityExist(Position) or not GaragesCoords[Select][Slot]
 
 	if not GaragesCoords[Select][tostring(Checks)] then
 		TriggerEvent("Notify", "amarelo", "Vagas estão ocupadas.", "Atenção", 5000)
+
 		return false
 	end
 
-	SendNUIMessage({ name = "Close" })
+	SendNUIMessage({ Action = "Close" })
+	SetNuiFocus(false,false)
 
 	return Selected
 end
@@ -239,9 +240,6 @@ function Hensa.CreateVehicle(Model, Network, Engine, Health, Customize, Windows,
 			SetModelAsNoLongerNeeded(Model)
 		end
 	end
-
-	SendNUIMessage({ action = "Visible", data = false })
-	SetNuiFocus(false, false)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GARAGES:DELETE
@@ -291,6 +289,10 @@ function Hensa.SearchBlip(Coords)
 		Searched = nil
 	end
 
+	if type(Coords) == "string" then
+		Coords = vec3(GaragesCoords[Coords]["x"],GaragesCoords[Coords]["y"],GaragesCoords[Coords]["z"])
+	end
+
 	Searched = AddBlipForCoord(Coords["x"], Coords["y"], Coords["z"])
 	SetBlipSprite(Searched, 225)
 	SetBlipColour(Searched, 77)
@@ -309,20 +311,20 @@ end
 -- STARTHOTWIRED
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.StartHotwired()
-	Hotwired = true
-
-	if LoadAnim(Dict) then
-		TaskPlayAnim(PlayerPedId(), Dict, Anim, 8.0, 8.0, -1, 49, 1, 0, 0, 0)
+	local Ped = PlayerPedId()
+	if not Hotwired and LoadAnim(Dict) then
+		TaskPlayAnim(Ped, Dict, Anim, 8.0, 8.0, -1, 49, 1, 0, 0, 0)
+		Hotwired = true
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- STOPHOTWIRED
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.StopHotwired(Vehicle)
-	Hotwired = false
-
-	if LoadAnim(Dict) then
-		StopAnimTask(PlayerPedId(), Dict, Anim, 8.0)
+	local Ped = PlayerPedId()
+	if Hotwired and LoadAnim(Dict) then
+		StopAnimTask(Ped, Dict, Anim, 8.0)
+		Hotwired = false
 	end
 
 	if Vehicle then
@@ -385,7 +387,7 @@ AddEventHandler("garages:Impound", function()
 			exports["dynamic"]:AddButton(v["Name"], "Clique para efetuar a liberação.", "garages:Impound", v["Model"], false, true)
 		end
 
-		exports["dynamic"]:Open()
+		exports["dynamic"]:openMenu()
 	else
 		TriggerEvent("Notify", "amarelo", "Você não possui veículos apreendidos.", "Atenção", 5000)
 	end
@@ -408,7 +410,7 @@ CreateThread(function()
                 if Distance <= 5.0 then
                     isNearGarage = true
                     TimeDistance = 1
-                    DrawMarker(27, v["x"], v["y"], v["z"] - 0.95, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.30, 1.30, 0.0, 224, 29, 99, 100, 0, 0, 0, 0)
+					DrawMarker(23, v["x"], v["y"], v["z"] - 0.95, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.75, 1.75, 0.0, 88, 101, 242, 175, 0, 0, 0, 0)
 
                     if Distance <= 1.25 and IsControlJustPressed(1, 38) then
                         if not exports["hud"]:Wanted() and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Target"] then
@@ -419,8 +421,7 @@ CreateThread(function()
                                     Opened = Number
                                     SetNuiFocus(true, true)
                                     TriggerEvent("target:Debug")
-                                    SendNUIMessage({ action = "Visible", data = true })
-                                    SendNUIMessage({ action = "OpenGarage", data = Vehicles })
+									SendNUIMessage({ Action = "Open", Payload = Vehicles })
                                 end
                             end
                         end
@@ -440,31 +441,30 @@ end)
 -- GARAGES:CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("garages:Close")
-AddEventHandler("garages:Close", function()
-	SendNUIMessage({ action = "Visible", data = false })
-	SetNuiFocus(false, false)
+AddEventHandler("garages:Close",function()
+	SendNUIMessage({ Action = "Close" })
+	SetNuiFocus(false,false)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Close", function(Data, Callback)
-	SendNUIMessage({ action = "Visible", data = false })
-	SetNuiFocus(false, false)
+RegisterNUICallback("Close",function(Data,Callback)
+	SetNuiFocus(false,false)
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- TAKEVEHICLE
+-- SPAWN
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("takeVehicle", function(Data, Callback)
-	vSERVER.Spawn(Data["model"], Opened)
+RegisterNUICallback("Spawn",function(Data,Callback)
+	vSERVER.Spawn(Data["Model"], Opened)
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- STOREVEHICLE
+-- DELETE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("storeVehicle", function(Data, Callback)
+RegisterNUICallback("Delete",function(Data,Callback)
 	local Ped = PlayerPedId()
 	local Coords = GetEntityCoords(Ped)
 
@@ -480,35 +480,26 @@ RegisterNUICallback("storeVehicle", function(Data, Callback)
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- SELLVEHICLE
+-- SELL
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("sellVehicle", function(Data, Callback)
-	SendNUIMessage({ action = "Visible", data = false })
-	SetNuiFocus(false, false)
-
-	vSERVER.Sell(Data["model"])
+RegisterNUICallback("Sell",function(Data,Callback)
+	vSERVER.Sell(Data["Model"])
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- TRANSFERVEHICLE
+-- TRANSFER
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("transferVehicle", function(Data, Callback)
-	SendNUIMessage({ action = "Visible", data = false })
-	SetNuiFocus(false, false)
-
-	vSERVER.Transfer(Data["model"])
+RegisterNUICallback("Transfer",function(Data,Callback)
+	vSERVER.Transfer(Data["Model"])
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- TAXVEHICLE
+-- TAX
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("taxVehicle", function(Data, Callback)
-	SendNUIMessage({ action = "Visible", data = false })
-	SetNuiFocus(false, false)
-
-	vSERVER.Tax(Data["model"])
+RegisterNUICallback("Tax",function(Data,Callback)
+	vSERVER.Tax(Data["Model"])
 
 	Callback("Ok")
 end)
