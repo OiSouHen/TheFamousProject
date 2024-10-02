@@ -44,7 +44,7 @@ AddEventHandler("warehouse:Password",function(Name)
 		if Warehouse[1] and Warehouse[1]["Passport"] == Passport then
 			local Keyboard = vKEYBOARD.Password(source,"Nova Senha")
 			if Keyboard then
-				local Password = sanitizeString(Keyboard[1],"0123456789",true)
+				local Password = sanitizeString(Keyboard[1],"0123456789")
 				if string.len(Password) >= 4 and string.len(Password) <= 20 then
 					vRP.Query("warehouse/Password",{ Name = Name, Password = Password })
 					TriggerClientEvent("Notify",source,"verde","Senha atualizada.","Sucesso",5000)
@@ -93,7 +93,7 @@ function Hensa.Warehouse(Name)
 			if vRP.Request(source,"Armazém","Gostaria de comprar o armazém por <b>$100.000</b>?") then
 				local Keyboard = vKEYBOARD.Password(source,"Senha")
 				if Keyboard then
-					local Password = sanitizeString(Keyboard[1],"0123456789",true)
+					local Password = sanitizeString(Keyboard[1],"0123456789")
 					if string.len(Password) >= 4 and string.len(Password) <= 20 then
 						if vRP.Request(source,"Armazém","Finalizar a compra usando a senha <b>"..Password.."</b>?") then
 							if vRP.PaymentFull(Passport,100000) then
@@ -167,11 +167,11 @@ function Hensa.Request(Name)
 
 						if Number == Passport and Split[1] == "identity" then
 							if Identity["Premium"] > os.time() then
-								v["Premium"] = MinimalTimers(Identity["Premium"] - os.time())
+								v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
 							end
 
 							if Identity["Medic"] > os.time() then
-								v["Medic"] = MinimalTimers(Identity["Medic"] - os.time())
+								v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
 							end
 
 							if Identity["Rolepass"] > 0 then
@@ -306,11 +306,11 @@ function Hensa.Request(Name)
 
 						if Number == Passport and Split[1] == "identity" then
 							if Identity["Premium"] > os.time() then
-								v["Premium"] = MinimalTimers(Identity["Premium"] - os.time())
+								v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
 							end
 
 							if Identity["Medic"] > os.time() then
-								v["Medic"] = MinimalTimers(Identity["Medic"] - os.time())
+								v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
 							end
 
 							if Identity["Rolepass"] > 0 then
