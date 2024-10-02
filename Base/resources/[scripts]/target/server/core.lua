@@ -153,7 +153,7 @@ AddEventHandler("target:Call", function(Service)
 				end
 			end
 		else
-			local Cooldown = MinimalTimers(Calls[Service] - os.time())
+			local Cooldown = CompleteTimers(Calls[Service] - os.time())
 			TriggerClientEvent("Notify", source, "azul", "Aguarde <b>"..Cooldown.."</b> segundos.", false, 5000)
 		end
 	end
