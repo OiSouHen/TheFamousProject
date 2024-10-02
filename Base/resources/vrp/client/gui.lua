@@ -1,108 +1,67 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Walk = nil
+local Binded = {}
 local Object = nil
 local Point = false
 local Crouch = false
+local Persistent = nil
+local PersistentList = {}
 local Button = GetGameTimer()
-local AnimVars = { nil, nil, false, 49 }
+local AnimVars = { nil,nil,false,49 }
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADBLOCK
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	local HensaBinds = GetResourceKvpString("HensaBinds")
+	Binded = (HensaBinds and json.decode(HensaBinds)) or {}
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- WALKERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Walkers = {
-	"move_m@alien", "anim_group_move_ballistic", "move_f@arrogant@a", "move_m@brave", "move_m@casual@a", "move_m@casual@b", "move_m@casual@c", "move_m@casual@d", "move_m@casual@e", "move_m@casual@f", "move_f@chichi", "move_m@confident", "move_m@business@a", "move_m@business@b", "move_m@business@c", "move_m@drunk@a", "move_m@drunk@slightlydrunk", "move_m@buzzed", "move_m@drunk@verydrunk", "move_f@femme@", "move_characters@franklin@fire", "move_characters@michael@fire", "move_m@fire", "move_f@flee@a", "move_p_m_one", "move_m@gangster@generic", "move_m@gangster@ng", "move_m@gangster@var_e", "move_m@gangster@var_f", "move_m@gangster@var_i", "anim@move_m@grooving@", "move_f@heels@c", "move_m@hipster@a", "move_m@hobo@a", "move_f@hurry@a", "move_p_m_zero_janitor", "move_p_m_zero_slow", "move_m@jog@", "anim_group_move_lemar_alley", "move_heist_lester", "move_f@maneater", "move_m@money", "move_m@posh@", "move_f@posh@", "move_m@quick", "female_fast_runner", "move_m@sad@a", "move_m@sassy", "move_f@sassy", "move_f@scared", "move_f@sexy@a", "move_m@shadyped@a", "move_characters@jimmy@slow@", "move_m@swagger", "move_m@tough_guy@", "move_f@tough_guy@", "move_p_m_two", "move_m@bag", "move_m@injured", "move_m@intimidation@cop@unarmed"
+	"move_m@alien","anim_group_move_ballistic","move_f@arrogant@a","move_m@brave","move_m@casual@a","move_m@casual@b","move_m@casual@c",
+	"move_m@casual@d","move_m@casual@e","move_m@casual@f","move_f@chichi","move_m@confident","move_m@business@a","move_m@business@b",
+	"move_m@business@c","move_m@drunk@a","move_m@drunk@slightlydrunk","move_m@buzzed","move_m@drunk@verydrunk","move_f@femme@",
+	"move_characters@franklin@fire","move_characters@michael@fire","move_m@fire","move_f@flee@a","move_p_m_one","move_m@gangster@generic",
+	"move_m@gangster@ng","move_m@gangster@var_e","move_m@gangster@var_f","move_m@gangster@var_i","anim@move_m@grooving@","move_f@heels@c",
+	"move_m@hipster@a","move_m@hobo@a","move_f@hurry@a","move_p_m_zero_janitor","move_p_m_zero_slow","move_m@jog@","anim_group_move_lemar_alley",
+	"move_heist_lester","move_f@maneater","move_m@money","move_m@posh@","move_f@posh@","move_m@quick","female_fast_runner","move_m@sad@a",
+	"move_m@sassy","move_f@sassy","move_f@scared","move_f@sexy@a","move_m@shadyped@a","move_characters@jimmy@slow@","move_m@swagger",
+	"move_m@tough_guy@","move_f@tough_guy@","move_p_m_two","move_m@bag","move_m@intimidation@cop@unarmed"
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDSTATEBAGCHANGEHANDLER
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddStateBagChangeHandler("Walk", ("player:%s"):format(LocalPlayer["state"]["Player"]), function(Name, Key, Value)
+AddStateBagChangeHandler("Walk",("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
 	if Value then
 		if LoadMovement(Value) then
-			SetPedMovementClipset(PlayerPedId(), Value, 0.5)
+			SetPedMovementClipset(PlayerPedId(),Value,0.5)
 			Walk = Value
 		end
 	else
-		ResetPedMovementClipset(PlayerPedId(), 0.5)
-		Walk = nil
+		ResetPedMovementClipset(PlayerPedId(),0.5)
+		Walk = false
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ANDAR
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("andar", function(source, Message)
-	if not LocalPlayer["state"]["Walk"] and exports["chat"]:Open() then
+RegisterCommand("andar",function(source,Message)
+	if not LocalPlayer["state"]["Walk"] then
 		local Ped = PlayerPedId()
 
 		if Message[1] then
 			local Mode = parseInt(Message[1])
 
 			if Walkers[Mode] and LoadMovement(Walkers[Mode]) then
-				SetPedMovementClipset(Ped, Walkers[Mode], 0.5)
 				Walk = Walkers[Mode]
+				SetPedMovementClipset(Ped,Walk,0.5)
 			end
 		else
-			ResetPedMovementClipset(Ped, 0.5)
-			Walk = nil
+			ResetPedMovementClipset(Ped,0.5)
+			Walk = false
 		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- FACES
------------------------------------------------------------------------------------------------------------------------------------------
-local Faces = {
-	["normal"] = "mood_normal_1",
-	["triste"] = "mood_smug_1",
-	["estressado"] = "mood_stressed_1",
-	["rapido"] = "mood_drivefast_1",
-	["leve"] = "mood_skydive_1",
-	["bravo"] = "mood_angry_1",
-	["bebado"] = "mood_drunk_1",
-	["feliz"] = "mood_happy_1",
-	["sulk"] = "mood_sulk_1",
-	["atirando"] = "mood_aiming_1",
-	["choque"] = "shocked_1",
-	["choque2"] = "shocked_2",
-	["sonolento"] = "mood_sleeping_1",
-	["caindo"] = "mood_knockout_1",
-	["morto"] = "dead_1",
-	["morto2"] = "dead_2",
-	["forte"] = "effort_1",
-	["forte2"] = "effort_2",
-	["forte3"] = "effort_3",
-	["bemforte"] = "melee_effort_1",
-	["bemforte1"] = "melee_effort_2",
-	["bemforte2"] = "melee_effort_3",
-	["machucado"] = "mood_injured_1",
-	["machucado2"] = "pain_1",
-	["machucado3"] = "pain_2",
-	["machucado4"] = "pain_3",
-	["machucado5"] = "pain_4",
-	["machucado6"] = "pain_5",
-	["machucado7"] = "pain_6",
-	["morrendo"] = "die_1",
-	["morrendo2"] = "die_2",
-	["queimando"] = "burning_1",
-	["eletrocutado"] = "electrocuted_1",
-	["comendo"] = "eating_1",
-	["bebendo"] = "drinking_1",
-	["fumando"] = "smoking_inhale_1",
-	["fumando2"] = "smoking_exhale_1",
-	["fumando3"] = "smoking_hold_1",
-	["tossindo"] = "coughing_1"
-}
------------------------------------------------------------------------------------------------------------------------------------------
--- THREADBLOCK
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("rosto", function(source, Message)
-	if Message[1] and exports["chat"]:Open() then
-		if Faces[Message[1]] then
-			SetFacialIdleAnimOverride(GetPlayerPed(-1), Faces[Message[1]])
-		else
-			TriggerEvent("Notify", "amarelo", "Rosto inválido.", "Atenção", 5000)
-		end
-	else
-		return false
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -114,15 +73,15 @@ CreateThread(function()
 		local Ped = PlayerPedId()
 		if LocalPlayer["state"]["Active"] and LocalPlayer["state"]["Cancel"] then
 			TimeDistance = 1
-			DisableControlAction(0, 24, true)
-			DisableControlAction(0, 25, true)
-			DisableControlAction(0, 38, true)
-			DisableControlAction(0, 47, true)
-			DisableControlAction(0, 257, true)
-			DisableControlAction(0, 140, true)
-			DisableControlAction(0, 142, true)
-			DisableControlAction(0, 137, true)
-			DisablePlayerFiring(Ped, true)
+			DisableControlAction(0,24,true)
+			DisableControlAction(0,25,true)
+			DisableControlAction(0,38,true)
+			DisableControlAction(0,47,true)
+			DisableControlAction(0,257,true)
+			DisableControlAction(0,140,true)
+			DisableControlAction(0,142,true)
+			DisableControlAction(0,137,true)
+			DisablePlayerFiring(Ped,true)
 		end
 
 		Wait(TimeDistance)
@@ -135,43 +94,23 @@ CreateThread(function()
 	while true do
 		local TimeDistance = 999
 		local Ped = PlayerPedId()
-		if UsingLbPhone then
-			if LocalPlayer["state"]["Active"] and (exports["lb-phone"]:IsOpen() or AnimVars[3]) then
-				TimeDistance = 1
-				DisableControlAction(0, 18, true)
-				DisableControlAction(0, 24, true)
-				DisableControlAction(0, 25, true)
-				DisableControlAction(0, 68, true)
-				DisableControlAction(0, 70, true)
-				DisableControlAction(0, 91, true)
-				DisableControlAction(0, 140, true)
-				DisableControlAction(0, 142, true)
-				DisableControlAction(0, 143, true)
-				DisableControlAction(0, 257, true)
-				DisablePlayerFiring(Ped, true)
+		-- if LocalPlayer["state"]["Active"] and (exports["lb-phone"]:IsOpen() or AnimVars[3]) then
+		if LocalPlayer["state"]["Active"] and AnimVars[3] then
+			TimeDistance = 1
+			DisableControlAction(0,18,true)
+			DisableControlAction(0,24,true)
+			DisableControlAction(0,25,true)
+			DisableControlAction(0,68,true)
+			DisableControlAction(0,70,true)
+			DisableControlAction(0,91,true)
+			DisableControlAction(0,140,true)
+			DisableControlAction(0,142,true)
+			DisableControlAction(0,143,true)
+			DisableControlAction(0,257,true)
+			DisablePlayerFiring(Ped,true)
 
-				if AnimVars[3] and not IsEntityPlayingAnim(Ped, AnimVars[1], AnimVars[2], 3) then
-					TaskPlayAnim(Ped, AnimVars[1], AnimVars[2], 8.0, 8.0, -1, AnimVars[4], 1, 0, 0, 0)
-				end
-			end
-		else
-			if LocalPlayer["state"]["Active"] and (LocalPlayer["state"]["Phone"] or LocalPlayer["state"]["usingPhone"] or AnimVars[3]) then
-				TimeDistance = 1
-				DisableControlAction(0, 18, true)
-				DisableControlAction(0, 24, true)
-				DisableControlAction(0, 25, true)
-				DisableControlAction(0, 68, true)
-				DisableControlAction(0, 70, true)
-				DisableControlAction(0, 91, true)
-				DisableControlAction(0, 140, true)
-				DisableControlAction(0, 142, true)
-				DisableControlAction(0, 143, true)
-				DisableControlAction(0, 257, true)
-				DisablePlayerFiring(Ped, true)
-
-				if AnimVars[3] and not IsEntityPlayingAnim(Ped, AnimVars[1], AnimVars[2], 3) then
-					TaskPlayAnim(Ped, AnimVars[1], AnimVars[2], 8.0, 8.0, -1, AnimVars[4], 1, 0, 0, 0)
-				end
+			if AnimVars[3] and not IsEntityPlayingAnim(Ped,AnimVars[1],AnimVars[2],3) then
+				TaskPlayAnim(Ped,AnimVars[1],AnimVars[2],8.0,8.0,-1,AnimVars[4],1,0,0,0)
 			end
 		end
 
@@ -193,10 +132,7 @@ function tvRP.CreateObjects(Dict, Anim, Prop, Flag, Hands, Height, Pos1, Pos2, P
 			TaskPlayAnim(Ped, Dict, Anim, 8.0, 8.0, -1, Flag, 1, 0, 0, 0)
 		end
 
-		AnimVars[4] = Flag
-		AnimVars[3] = true
-		AnimVars[1] = Dict
-		AnimVars[2] = Anim
+		AnimVars = { Dict,Anim,true,Flag }
 	end
 
 	if not IsPedInAnyVehicle(Ped) then
@@ -205,6 +141,9 @@ function tvRP.CreateObjects(Dict, Anim, Prop, Flag, Hands, Height, Pos1, Pos2, P
 		if Progression then
 			Object = LoadNetwork(Network)
 			if Object then
+				SetEntityLodDist(Object,0xFFFF)
+				SetModelAsNoLongerNeeded(Prop)
+
 				if Height then
 					AttachEntityToEntity(Object, Ped, GetPedBoneIndex(Ped, Hands), Height, Pos1, Pos2, Pos3, Pos4, Pos5, true, true, false, true, 1, true)
 				else
@@ -213,8 +152,6 @@ function tvRP.CreateObjects(Dict, Anim, Prop, Flag, Hands, Height, Pos1, Pos2, P
 			else
 				Object = nil
 			end
-
-			SetModelAsNoLongerNeeded(Prop)
 		end
 	end
 end
@@ -244,6 +181,10 @@ function tvRP.Destroy(Mode)
 	if DoesEntityExist(Object) then
 		TriggerServerEvent("DeleteObject", ObjToNet(Object))
 		Object = nil
+	end
+
+	if Persistent then
+		TriggerEvent("emotes",Persistent["Anim"])
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -293,137 +234,74 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CANCEL
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Cancel", function()
+RegisterCommand("Cancel",function()
 	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Handcuff"] and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-			TriggerEvent("inventory:Cancel")
-		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-			TriggerEvent("inventory:Cancel")
-		end
+	if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Handcuff"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
+		TriggerServerEvent("inventory:Cancel")
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- HANDSUP
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("HandsUp", function()
+RegisterCommand("HandsUp",function()
 	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
+	if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
 
-			if IsEntityPlayingAnim(Ped, "random@mugging3", "handsup_standing_base", 3) then
-				StopAnimTask(Ped, "random@mugging3", "handsup_standing_base", 8.0)
-				tvRP.AnimActive()
-			else
-				tvRP.PlayAnim(true, { "random@mugging3", "handsup_standing_base" }, true)
-			end
-		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-
-			if IsEntityPlayingAnim(Ped, "random@mugging3", "handsup_standing_base", 3) then
-				StopAnimTask(Ped, "random@mugging3", "handsup_standing_base", 8.0)
-				tvRP.AnimActive()
-			else
-				tvRP.PlayAnim(true, { "random@mugging3", "handsup_standing_base" }, true)
-			end
+		if IsEntityPlayingAnim(Ped,"random@mugging3","handsup_standing_base",3) then
+			StopAnimTask(Ped,"random@mugging3","handsup_standing_base",8.0)
+			tvRP.AnimActive()
+		else
+			tvRP.PlayAnim(true,{"random@mugging3","handsup_standing_base"},true)
 		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- POINT
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Point", function()
+RegisterCommand("Point",function()
 	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
+	if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
 
-			if not Point then
-				Point = true
-				tvRP.AnimActive()
-				SetPedConfigFlag(Ped, 36, true)
+		if not Point then
+			Point = true
+			tvRP.AnimActive()
+			SetPedConfigFlag(Ped,36,true)
 
-				if LoadAnim("anim@mp_point") then
-					TaskMoveNetwork(Ped, "task_mp_pointing", 0.5, 0, "anim@mp_point", 24)
-				end
-			else
-				RequestTaskMoveNetworkStateTransition(Ped, "Stop")
-				if not IsPedInjured(Ped) then
-					ClearPedSecondaryTask(Ped)
-				end
-
-				SetPedConfigFlag(Ped, 36, false)
-				ClearPedSecondaryTask(Ped)
-				Point = false
+			if LoadAnim("anim@mp_point") then
+				TaskMoveNetwork(Ped,"task_mp_pointing",0.5,0,"anim@mp_point",24)
 			end
-		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-
-			if not Point then
-				Point = true
-				tvRP.AnimActive()
-				SetPedConfigFlag(Ped, 36, true)
-
-				if LoadAnim("anim@mp_point") then
-					TaskMoveNetwork(Ped, "task_mp_pointing", 0.5, 0, "anim@mp_point", 24)
-				end
-			else
-				RequestTaskMoveNetworkStateTransition(Ped, "Stop")
-				if not IsPedInjured(Ped) then
-					ClearPedSecondaryTask(Ped)
-				end
-
-				SetPedConfigFlag(Ped, 36, false)
+		else
+			RequestTaskMoveNetworkStateTransition(Ped,"Stop")
+			if not IsPedInjured(Ped) then
 				ClearPedSecondaryTask(Ped)
-				Point = false
 			end
+
+			SetPedConfigFlag(Ped,36,false)
+			ClearPedSecondaryTask(Ped)
+			Point = false
 		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ENGINE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Engine", function()
+RegisterCommand("Engine",function()
 	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
+	if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
 
-			local Vehicle = GetVehiclePedIsUsing(Ped)
-			if GetPedInVehicleSeat(Vehicle, -1) == Ped then
-				local Running = GetIsVehicleEngineRunning(Vehicle)
-				SetVehicleEngineOn(Vehicle, not Running, true, true)
+		local Vehicle = GetVehiclePedIsUsing(Ped)
+		if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+			local Running = GetIsVehicleEngineRunning(Vehicle)
+			SetVehicleEngineOn(Vehicle,not Running,true,true)
 
-				if Running then
-					SetVehicleUndriveable(Vehicle, true)
-				else
-					SetVehicleUndriveable(Vehicle, false)
-				end
-			end
-		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-
-			local Vehicle = GetVehiclePedIsUsing(Ped)
-			if GetPedInVehicleSeat(Vehicle, -1) == Ped then
-				local Running = GetIsVehicleEngineRunning(Vehicle)
-				SetVehicleEngineOn(Vehicle, not Running, true, true)
-
-				if Running then
-					SetVehicleUndriveable(Vehicle, true)
-				else
-					SetVehicleUndriveable(Vehicle, false)
-				end
+			if Running then
+				SetVehicleUndriveable(Vehicle,true)
+			else
+				SetVehicleUndriveable(Vehicle,false)
 			end
 		end
 	end
@@ -431,233 +309,151 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CROUCH
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Crouch", function()
-	DisableControlAction(0, 36, true)
+RegisterCommand("Crouch",function()
+	DisableControlAction(0,36,true)
 
 	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
+	if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
 
-			if Crouch then
-				Crouch = false
-				ResetPedStrafeClipset(Ped)
-				ResetPedMovementClipset(Ped, 0.5)
+		if Crouch then
+			Crouch = false
+			ResetPedStrafeClipset(Ped)
+			ResetPedMovementClipset(Ped,0.5)
 
-				if Walk and LoadMovement(Walk) then
-					SetPedMovementClipset(Ped, Walk, 0.5)
-				end
-			else
-				if LoadMovement("move_ped_crouched") and LoadMovement("move_ped_crouched_strafing") then
-					SetPedStrafeClipset(Ped, "move_ped_crouched_strafing")
-					SetPedMovementClipset(Ped, "move_ped_crouched", 0.5)
-					Crouch = true
+			if Walk and LoadMovement(Walk) then
+				SetPedMovementClipset(Ped,Walk,0.5)
+			end
+		else
+			if LoadMovement("move_ped_crouched") and LoadMovement("move_ped_crouched_strafing") then
+				SetPedStrafeClipset(Ped,"move_ped_crouched_strafing")
+				SetPedMovementClipset(Ped,"move_ped_crouched",0.5)
+				Crouch = true
 
-					while Crouch do
-						DisablePlayerFiring(Ped, true)
-						Wait(1)
-					end
+				while Crouch do
+					DisablePlayerFiring(Ped,true)
+					Wait(1)
 				end
 			end
 		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- FASTBINDS
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("FastBinds",function(source,Message)
+	local Ped = PlayerPedId()
+	if (parseInt(Message[1]) >= 101 and parseInt(Message[1]) <= 103) and LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
+		TriggerEvent("inventory:Use",Message[1])
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- NUMBINDS
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("NumBinds",function(source,Message)
+	local Ped = PlayerPedId()
+	if Message[1] and (Binded[Message[1]] or Message[1] == "0") and LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped,7) and not IsPedSwimming(Ped) then
+		Button = GetGameTimer() + 500
 
-			if Crouch then
-				Crouch = false
-				ResetPedStrafeClipset(Ped)
-				ResetPedMovementClipset(Ped, 0.5)
-
-				if Walk and LoadMovement(Walk) then
-					SetPedMovementClipset(Ped, Walk, 0.5)
-				end
-			else
-				if LoadMovement("move_ped_crouched") and LoadMovement("move_ped_crouched_strafing") then
-					SetPedStrafeClipset(Ped, "move_ped_crouched_strafing")
-					SetPedMovementClipset(Ped, "move_ped_crouched", 0.5)
-					Crouch = true
-
-					while Crouch do
-						DisablePlayerFiring(Ped, true)
-						Wait(1)
-					end
-				end
-			end
+		if Message[1] == "0" then
+			SetPedToRagdoll(Ped,2500,2500,0,0,0,0)
+		else
+			TriggerEvent("emotes",Binded[Message[1]])
 		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BINDS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Binds", function(source, Message)
-	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-
-			if parseInt(Message[1]) >= 1 and parseInt(Message[1]) <= 5 then
-				TriggerEvent("inventory:Use", Message[1], 1)
-			elseif Message[1] == "6" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "anim@heists@heist_corona@single_team", "single_team_loop_boss", 3) then
-						StopAnimTask(Ped, "anim@heists@heist_corona@single_team", "single_team_loop_boss", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "anim@heists@heist_corona@single_team", "single_team_loop_boss" }, true)
-					end
-				end
-			elseif Message[1] == "7" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "mini@strip_club@idles@bouncer@base", "base", 3) then
-						StopAnimTask(Ped, "mini@strip_club@idles@bouncer@base", "base", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "mini@strip_club@idles@bouncer@base", "base" }, true)
-					end
-				end
-			elseif Message[1] == "8" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "anim@mp_player_intupperfinger", "idle_a_fp", 3) then
-						StopAnimTask(Ped, "anim@mp_player_intupperfinger", "idle_a_fp", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "anim@mp_player_intupperfinger", "idle_a_fp" }, true)
-					end
-				end
-			elseif Message[1] == "9" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "random@arrests@busted", "idle_a", 3) then
-						StopAnimTask(Ped, "random@arrests@busted", "idle_a", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "random@arrests@busted", "idle_a" }, true)
-					end
-				end
-			elseif Message[1] == "left" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "anim@mp_player_intupperthumbs_up", "enter" }, false)
-				end
-			elseif Message[1] == "right" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "anim@mp_player_intcelebrationmale@face_palm", "face_palm" }, false)
-				end
-			elseif Message[1] == "up" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "anim@mp_player_intcelebrationmale@salute", "salute" }, false)
-				end
-			elseif Message[1] == "down" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "rcmnigel1c", "hailing_whistle_waive_a" }, false)
-				end
-			end
-		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-
-			if parseInt(Message[1]) >= 1 and parseInt(Message[1]) <= 5 then
-				TriggerEvent("inventory:Use", Message[1], 1)
-			elseif Message[1] == "6" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "anim@heists@heist_corona@single_team", "single_team_loop_boss", 3) then
-						StopAnimTask(Ped, "anim@heists@heist_corona@single_team", "single_team_loop_boss", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "anim@heists@heist_corona@single_team", "single_team_loop_boss" }, true)
-					end
-				end
-			elseif Message[1] == "7" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "mini@strip_club@idles@bouncer@base", "base", 3) then
-						StopAnimTask(Ped, "mini@strip_club@idles@bouncer@base", "base", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "mini@strip_club@idles@bouncer@base", "base" }, true)
-					end
-				end
-			elseif Message[1] == "8" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "anim@mp_player_intupperfinger", "idle_a_fp", 3) then
-						StopAnimTask(Ped, "anim@mp_player_intupperfinger", "idle_a_fp", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "anim@mp_player_intupperfinger", "idle_a_fp" }, true)
-					end
-				end
-			elseif Message[1] == "9" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					if IsEntityPlayingAnim(Ped, "random@arrests@busted", "idle_a", 3) then
-						StopAnimTask(Ped, "random@arrests@busted", "idle_a", 8.0)
-						tvRP.AnimActive()
-					else
-						tvRP.PlayAnim(true, { "random@arrests@busted", "idle_a" }, true)
-					end
-				end
-			elseif Message[1] == "left" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "anim@mp_player_intupperthumbs_up", "enter" }, false)
-				end
-			elseif Message[1] == "right" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "anim@mp_player_intcelebrationmale@face_palm", "face_palm" }, false)
-				end
-			elseif Message[1] == "up" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "anim@mp_player_intcelebrationmale@salute", "salute" }, false)
-				end
-			elseif Message[1] == "down" and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Commands"] then
-				if not IsPedInAnyVehicle(Ped) and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) then
-					tvRP.PlayAnim(true, { "rcmnigel1c", "hailing_whistle_waive_a" }, false)
-				end
-			end
-		end
+RegisterCommand("binds",function(source,Message)
+	if Message[1] and Message[2] and parseInt(Message[1]) >= 1 and parseInt(Message[1]) <= 9 then
+		Binded[Message[1]] = Message[2]
+		SetResourceKvp("HensaBinds",json.encode(Binded))
+		TriggerEvent("Notify","Animações","A animação <b>"..Message[2].."</b> foi salvo na tecla <b>"..Message[1].."</b>.","verde",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LOCK
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Lock", function()
+RegisterCommand("Lock",function()
 	local Ped = PlayerPedId()
-	if UsingLbPhone then
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not exports["lb-phone"]:IsOpen() and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
+	if LocalPlayer["state"]["Active"] and not LocalPlayer["state"]["BlockLocked"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
+		Button = GetGameTimer() + 500
 
-			local Vehicle, Network, Plate, Model = tvRP.VehicleList(5)
-			if Vehicle then
-				TriggerServerEvent("garages:Lock", Network, Plate, Model)
-			end
-		end
-	else
-		if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
-			Button = GetGameTimer() + 500
-
-			local Vehicle, Network, Plate, Model = tvRP.VehicleList(5)
-			if Vehicle then
-				TriggerServerEvent("garages:Lock", Network, Plate, Model)
-			end
+		local Vehicle, Network, Plate, Model = tvRP.VehicleList(5)
+		if Vehicle then
+			TriggerServerEvent("garages:Lock", Network, Plate, Model)
 		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- PERSISTENTBLOCK
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.PersistentBlock(Item,Animation)
+	local Item = SplitOne(Item)
+
+	if not Persistent then
+		Persistent = {
+			["Item"] = Item,
+			["Anim"] = Animation
+		}
+
+		TriggerEvent("emotes",Animation)
+	elseif Persistent and Item ~= Persistent["Item"] then
+		PersistentList[#PersistentList + 1] = {
+			["Item"] = Item,
+			["Anim"] = Animation
+		}
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PERSISTENTNONE
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.PersistentNone(Item)
+	local Item = SplitOne(Item)
+
+	if Persistent and Item == Persistent["Item"] then
+		Persistent = nil
+		tvRP.Destroy()
+	else
+		for Index,v in pairs(PersistentList) do
+			if Item == v["Item"] then
+				PersistentList[Index] = nil
+
+				break
+			end
+		end
+	end
+
+	for Index,v in pairs(PersistentList) do
+		tvRP.PersistentBlock(v["Item"],v["Anim"])
+		PersistentList[Index] = nil
+
+		break
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- KEYMAPPING
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterKeyMapping("Cancel", "Cancelar todas as ações.", "keyboard", "F6")
-RegisterKeyMapping("HandsUp", "Levantar as mãos.", "keyboard", "X")
-RegisterKeyMapping("Point", "Apontar os dedos.", "keyboard", "B")
-RegisterKeyMapping("Crouch", "Agachar.", "keyboard", "LCONTROL")
-RegisterKeyMapping("Engine", "Ligar o veículo.", "keyboard", "Z")
-RegisterKeyMapping("Binds 1", "Interação do botão 1.", "keyboard", "1")
-RegisterKeyMapping("Binds 2", "Interação do botão 2.", "keyboard", "2")
-RegisterKeyMapping("Binds 3", "Interação do botão 3.", "keyboard", "3")
-RegisterKeyMapping("Binds 4", "Interação do botão 4.", "keyboard", "4")
-RegisterKeyMapping("Binds 5", "Interação do botão 5.", "keyboard", "5")
-RegisterKeyMapping("Binds 6", "Interação do botão 6.", "keyboard", "6")
-RegisterKeyMapping("Binds 7", "Interação do botão 7.", "keyboard", "7")
-RegisterKeyMapping("Binds 8", "Interação do botão 8.", "keyboard", "8")
-RegisterKeyMapping("Binds 9", "Interação do botão 9.", "keyboard", "9")
-RegisterKeyMapping("Binds left", "Interação da seta esquerda.", "keyboard", "LEFT")
-RegisterKeyMapping("Binds right", "Interação da seta direita.", "keyboard", "RIGHT")
-RegisterKeyMapping("Binds up", "Interação da seta pra cima.", "keyboard", "UP")
-RegisterKeyMapping("Binds down", "Interação da seta pra baixo.", "keyboard", "DOWN")
-RegisterKeyMapping("Lock", "Trancar/Destrancar o veículo.", "keyboard", "L")
+RegisterKeyMapping("Cancel","Cancelar todas as ações.","keyboard","F6")
+RegisterKeyMapping("HandsUp","Levantar as mãos.","keyboard","X")
+RegisterKeyMapping("Point","Apontar os dedos.","keyboard","B")
+RegisterKeyMapping("Crouch","Agachar.","keyboard","LCONTROL")
+RegisterKeyMapping("Engine","Ligar o veículo.","keyboard","Z")
+RegisterKeyMapping("Lock","Trancar/Destrancar.","keyboard","L")
+
+RegisterKeyMapping("FastBinds 101","Interação do botão 1.","keyboard","1")
+RegisterKeyMapping("FastBinds 102","Interação do botão 2.","keyboard","2")
+RegisterKeyMapping("FastBinds 103","Interação do botão 3.","keyboard","3")
+
+RegisterKeyMapping("NumBinds 0","Interação de animação 0.","keyboard","NUMPAD0")
+RegisterKeyMapping("NumBinds 1","Interação de animação 1.","keyboard","NUMPAD1")
+RegisterKeyMapping("NumBinds 2","Interação de animação 2.","keyboard","NUMPAD2")
+RegisterKeyMapping("NumBinds 3","Interação de animação 3.","keyboard","NUMPAD3")
+RegisterKeyMapping("NumBinds 4","Interação de animação 4.","keyboard","NUMPAD4")
+RegisterKeyMapping("NumBinds 5","Interação de animação 5.","keyboard","NUMPAD5")
+RegisterKeyMapping("NumBinds 6","Interação de animação 6.","keyboard","NUMPAD6")
+RegisterKeyMapping("NumBinds 7","Interação de animação 7.","keyboard","NUMPAD7")
+RegisterKeyMapping("NumBinds 8","Interação de animação 8.","keyboard","NUMPAD8")
+RegisterKeyMapping("NumBinds 9","Interação de animação 9.","keyboard","NUMPAD9")
