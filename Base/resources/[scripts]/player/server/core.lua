@@ -45,7 +45,7 @@ AddEventHandler("player:Charge", function(Entity)
 						local senderBank = vRP.GetBank(Entity)
 
 						if senderBank >= amount then
-							TriggerClientEvent("NotifyItens", Entity, { "-", "dollars", formattedAmount, "Dólares" })
+							TriggerClientEvent("NotifyItem", Entity, { "-", "dollars", formattedAmount, "Dólares" })
 							vRP.RemoveBank(OtherPassport, amount)
 							vRP.GiveBank(Passport, amount)
 						else

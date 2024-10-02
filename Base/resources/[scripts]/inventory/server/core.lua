@@ -790,7 +790,7 @@ function Hensa.Use(Slot,Amount)
 						end
 					end
 
-					TriggerClientEvent("NotifyItens",source,{ "-",ItemIndex(Weapon),1,ItemName(Weapon) })
+					TriggerClientEvent("NotifyItem",source,{ "-",ItemIndex(Weapon),1,ItemName(Weapon) })
 				end
 			else
 				local Skin = nil
@@ -810,7 +810,7 @@ function Hensa.Use(Slot,Amount)
 				end
 
 				if vCLIENT.TakeWeapon(source,Item,AmmoClip,Attach,false,Skin) then
-					TriggerClientEvent("NotifyItens",source,{ "+",ItemIndex(Full),1,ItemName(Full) })
+					TriggerClientEvent("NotifyItem",source,{ "+",ItemIndex(Full),1,ItemName(Full) })
 				end
 			end
 		elseif ItemTypeCheck(Full,"Munição") then
@@ -834,7 +834,7 @@ function Hensa.Use(Slot,Amount)
 
 					Users["Ammos"][Passport][Item] = AmmoClip + Amount
 
-					TriggerClientEvent("NotifyItens",source,{ "+",ItemIndex(Full),Amount,ItemName(Full) })
+					TriggerClientEvent("NotifyItem",source,{ "+",ItemIndex(Full),Amount,ItemName(Full) })
 					TriggerClientEvent("inventory:Update",source,"Backpack")
 					vCLIENT.Reloading(source,Weapon,Amount)
 				end
@@ -859,11 +859,11 @@ function Hensa.Use(Slot,Amount)
 						end
 					end
 
-					TriggerClientEvent("NotifyItens",source,{ "-",ItemIndex(Weapon),1,ItemName(Weapon) })
+					TriggerClientEvent("NotifyItem",source,{ "-",ItemIndex(Weapon),1,ItemName(Weapon) })
 				end
 			else
 				if vCLIENT.TakeWeapon(source,Item,1,nil,Full) then
-					TriggerClientEvent("NotifyItens",source,{ "+",ItemIndex(Full),1,ItemName(Full) })
+					TriggerClientEvent("NotifyItem",source,{ "+",ItemIndex(Full),1,ItemName(Full) })
 				end
 			end
 		elseif ItemTypeCheck(Full,"Attachs") then
@@ -881,7 +881,7 @@ function Hensa.Use(Slot,Amount)
 
 					if not Users["Attachs"][Passport][Weapon][Item] then
 						if vRP.TakeItem(Passport,Full,1,false,Slot) then
-							TriggerClientEvent("NotifyItens",source,{ "+",ItemIndex(Full),1,ItemName(Full) })
+							TriggerClientEvent("NotifyItem",source,{ "+",ItemIndex(Full),1,ItemName(Full) })
 							TriggerClientEvent("inventory:Update",source,"Backpack")
 							Users["Attachs"][Passport][Weapon][Item] = true
 							vCLIENT.GiveComponent(source,Component)

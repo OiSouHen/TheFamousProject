@@ -565,7 +565,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 				if Keyboard then
 					vRP.RemoveBank(Keyboard[1],Keyboard[2])
 					TriggerClientEvent("Notify",source,"verde","Remoção concluída.","Sucesso",5000)
-					TriggerClientEvent("NotifyItens",source,{ "-", "dollars", Dotted(Keyboard[2]), "Dólares" })
+					TriggerClientEvent("NotifyItem",source,{ "-", "dollars", Dotted(Keyboard[2]), "Dólares" })
 				end
 			else
 				TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)

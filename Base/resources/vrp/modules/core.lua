@@ -1619,7 +1619,7 @@ function vRP.GiveItem(Passport, Item, Amount, Notify, Slot)
 			end
 
 			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItens", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 			end
 		else
 			Slot = tostring(Slot)
@@ -1633,7 +1633,7 @@ function vRP.GiveItem(Passport, Item, Amount, Notify, Slot)
 			end
 
 			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItens", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 			end
 		end
 	end
@@ -1671,7 +1671,7 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
 			end
 
 			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItens", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 			end
 		else
 			Slot = tostring(Slot)
@@ -1685,7 +1685,7 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
 			end
 
 			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItens", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 			end
 		end
 	end
@@ -1731,7 +1731,7 @@ function vRP.TakeItem(Passport, Item, Amount, Notify, Slot)
 					end
 
 					if Notify and ItemExist(Item) then
-						TriggerClientEvent("NotifyItens", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+						TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 					end
 
 					SelfReturn[Passport] = true
@@ -1751,7 +1751,7 @@ function vRP.TakeItem(Passport, Item, Amount, Notify, Slot)
 			end
 
 			if Notify and ItemExist(Item) then
-				TriggerClientEvent("NotifyItens", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 			end
 
 			SelfReturn[Passport] = true
@@ -1785,7 +1785,7 @@ function vRP.RemoveItem(Passport, Item, Amount, Notify)
 				end
 
 				if Notify and ItemIndex(Item) then
-					TriggerClientEvent("NotifyItens", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+					TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
 				end
 
 				break
@@ -2316,7 +2316,7 @@ function vRP.GiveBank(Passport, Amount)
 
 		if Characters[source] then
 			Characters[source]["Bank"] = (Characters[source]["Bank"] or 0) + intValue
-			TriggerClientEvent("NotifyItens", source, { "+", DefaultDollars1, intValue, ItemName(DefaultDollars1) })
+			TriggerClientEvent("NotifyItem", source, { "+", DefaultDollars1, intValue, ItemName(DefaultDollars1) })
 		end
 	end
 end
@@ -2407,7 +2407,7 @@ function vRP.PaymentBank(Passport, Amount)
 
     if Amount > 0 and Characters[Source] and Amount <= Characters[Source]["Bank"] then
         vRP.RemoveBank(Passport, Amount)
-        TriggerClientEvent("NotifyItens", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
+        TriggerClientEvent("NotifyItem", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
         return true
     end
 
@@ -2441,7 +2441,7 @@ function vRP.PaymentFull(Passport, Amount)
 			if vRP.ConsultItem(Passport, "bankcard", 1) then
 				if not GlobalState["Blackout"] then
 					vRP.RemoveBank(Passport, Amount)
-					TriggerClientEvent("NotifyItens", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
+					TriggerClientEvent("NotifyItem", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
 					return true
 				else
 					TriggerClientEvent("Notify", Source, "vermelho", "No momento não estamos aceitando <b>" .. ItemName("bankcard") .. "</b> pois estamos sem eletricidade.", "Aviso", 5000)
