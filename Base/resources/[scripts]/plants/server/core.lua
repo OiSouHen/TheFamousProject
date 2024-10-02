@@ -36,7 +36,7 @@ exports("Plants", function(Model, Owner, Coords, Route, Points, Type)
 		["Model"] = Model,
 		["Type"] = Type,
 		["Owner"] = Owner,
-		["Coords"] = {mathLength(Coords.x), mathLength(Coords.y), mathLength(Coords.z)},
+		["Coords"] = {Optimize(Coords.x), Optimize(Coords.y), Optimize(Coords.z)},
 		["Time"] = os.time() + 10800,
 		["Points"] = Points,
 		["Fertilizer"] = 0,
