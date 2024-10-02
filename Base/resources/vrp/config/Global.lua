@@ -46,9 +46,9 @@ ShowNPCDamages = true   -- mostrar danos em npcs
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- MONEY
 -----------------------------------------------------------------------------------------------------------------------------------------
-DefaultDollars1 = "dollars"   -- nome do item de dinheiro padrão da base
-DefaultDollars2 = "dollars2"  -- nome do item de dinheiro sujo padrão da base
-DefaultDollars3 = "dollars3"  -- nome do item de dinheiro falso padrão da base
+DefaultDollars1 = "dollar"   -- nome do item de dinheiro padrão da base
+DefaultDollars2 = "dirtydollar"  -- nome do item de dinheiro sujo padrão da base
+DefaultDollars3 = "wetdollar"  -- nome do item de dinheiro falso padrão da base
 DefaultSpecialMoney = "gemstone"   -- nome do item de dinheiro vip padrão da base
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- MIRA
