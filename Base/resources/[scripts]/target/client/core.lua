@@ -1274,7 +1274,7 @@ function TargetEnable()
 			for Index,v in pairs(Zones) do
 				if #(Coords - Zones[Index]["center"]) <= 10 then
 					SetDrawOrigin(Zones[Index]["center"]["x"],Zones[Index]["center"]["y"],Zones[Index]["center"]["z"])
-					DrawSprite("Targets","Point-Green",0,0,0.02,0.02 * GetAspectRatio(false),0,255,255,255,255)
+					DrawSprite("Targets","Normal",0,0,0.02,0.02 * GetAspectRatio(false),0,255,255,255,255)
 					ClearDrawOrigin()
 				end
 
@@ -1521,7 +1521,7 @@ function TargetEnable()
 							local OtherCoords = GetEntityCoords(Entitys)
 							if #(Coords - OtherCoords) <= 10 then
 								SetDrawOrigin(OtherCoords["x"],OtherCoords["y"],OtherCoords["z"] + 1)
-								DrawSprite("Targets","Point-Green",0,0,0.02,0.02 * GetAspectRatio(false),0,255,255,255,255)
+								DrawSprite("Targets","Normal",0,0,0.02,0.02 * GetAspectRatio(false),0,255,255,255,255)
 								ClearDrawOrigin()
 							end
 
