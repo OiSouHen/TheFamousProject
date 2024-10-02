@@ -37,7 +37,7 @@ function Hensa.Verify(Number)
 
 	if BankVerification then
 		if exports["bank"]:CheckFines(Passport) or exports["bank"]:CheckTaxs(Passport) then
-			TriggerClientEvent("Notify",source,"amarelo","Você está temporariamente proibido de utilizar esse sistema por pendências com o <b>Banco</b>.","Atenção",5000)
+			TriggerClientEvent("Notify",source,"Atenção","Você está temporariamente proibido de utilizar esse sistema por pendências com o <b>Banco</b>.","amarelo",5000)
 			return false
 		end
 	end
@@ -45,10 +45,10 @@ function Hensa.Verify(Number)
 	if Garages[Number]["license"] then
 		local driverLicense = vRP.GetDriverLicense(Passport)
 		if driverLicense == 0 then
-			TriggerClientEvent("Notify", source, "amarelo", "Você não possui <b>Carteira de Habilitação</b>.", "Atenção", 5000)
+			TriggerClientEvent("Notify", source, "Atenção", "Você não possui <b>Carteira de Habilitação</b>.", "amarelo", 5000)
 			return false
 		elseif driverLicense == 2 then
-			TriggerClientEvent("Notify", source, "amarelo", "Sua <b>Carteira de Habilitação</b> está <b>apreendida</b>.", "Atenção", 5000)
+			TriggerClientEvent("Notify", source, "Atenção", "Sua <b>Carteira de Habilitação</b> está <b>apreendida</b>.", "amarelo", 5000)
 			return false
 		end
 	end
@@ -198,7 +198,7 @@ function Hensa.Vehicles(Number)
 			if Consult[1] then
 				if parseInt(Consult[1]["Passport"]) == Passport or vRP.InventoryFull(Passport, "propertys-" .. Consult[1]["Serial"]) then
 					if os.time() > Consult[1]["Tax"] then
-						TriggerClientEvent("Notify", source, "amarelo", "Aluguel atrasado, procure um <b>Corretor de Imóveis</b>.", "Atenção", 5000)
+						TriggerClientEvent("Notify", source, "Atenção", "Aluguel atrasado, procure um <b>Corretor de Imóveis</b>.", "amarelo", 5000)
 						return false
 					end
 				else
@@ -216,27 +216,27 @@ function Hensa.Vehicles(Number)
 				if VehicleExist(v) then
 					if VehicleResult[1] then
 						Vehicle[#Vehicle + 1] = {
-							["model"] = v,
-							["name"] = VehicleName(v),
-							["type"] = VehicleMode(v),
-							["engine"] = VehicleResult[1]["Engine"],
-							["chassi"] = VehicleResult[1]["Health"],
-							["body"] = VehicleResult[1]["Body"],
-							["gas"] = VehicleResult[1]["Fuel"],
-							["chest"] = Dotted(VehicleWeight(v)),
-							["tax"] = Dotted(VehiclePrice(v) * 0.10)
+							["Model"] = v,
+							["Name"] = VehicleName(v),
+							["Type"] = VehicleMode(v),
+							["Engine"] = VehicleResult[1]["Engine"],
+							["Chassi"] = VehicleResult[1]["Health"],
+							["Body"] = VehicleResult[1]["Body"],
+							["Fuel"] = VehicleResult[1]["Fuel"],
+							["Weight"] = Dotted(VehicleWeight(v)),
+							["Tax"] = Dotted(VehiclePrice(v) * 0.10)
 						}
 					else
 						Vehicle[#Vehicle + 1] = {
-							["model"] = v,
-							["name"] = VehicleName(v),
-							["type"] = VehicleMode(v),
-							["engine"] = 1000,
-							["chassi"] = 1000,
-							["body"] = 1000,
-							["gas"] = 100,
-							["chest"] = Dotted(VehicleWeight(v)),
-							["tax"] = Dotted(VehiclePrice(v) * 0.10)
+							["Model"] = v,
+							["Name"] = VehicleName(v),
+							["Type"] = VehicleMode(v),
+							["Engine"] = 1000,
+							["Chassi"] = 1000,
+							["Body"] = 1000,
+							["Fuel"] = 100,
+							["Weight"] = Dotted(VehicleWeight(v)),
+							["Tax"] = Dotted(VehiclePrice(v) * 0.10)
 						}
 					end
 				end
@@ -248,21 +248,21 @@ function Hensa.Vehicles(Number)
 					if v["Mode"] == "dismantle" and v["Dismantle"] <= os.time() then
 						TriggerClientEvent("Progress", source, "Removendo veículo", 10000)
 						vRP.Query("vehicles/removeVehicles", { Passport = Passport, Vehicle = v["Vehicle"] })
-						TriggerClientEvent("Notify", source, "azul", "Estamos recuperando o veículo <b>" .. VehicleName(v["Vehicle"]) .. "</b>, espere um pouco para abrir a garagem.", "Jimmy Jango", 10000)
+						TriggerClientEvent("Notify", source, "Jimmy Jango", "Estamos recuperando o veículo <b>" .. VehicleName(v["Vehicle"]) .. "</b>, espere um pouco para abrir a garagem.", "azul", 10000)
 						return false
 					end
 
 					if v["Work"] == "false" then
 						Vehicle[#Vehicle + 1] = {
-							["model"] = v["Vehicle"],
-							["name"] = VehicleName(v["Vehicle"]),
-							["type"] = VehicleMode(v["Vehicle"]),
-							["engine"] = v["Engine"],
-							["chassi"] = v["Health"],
-							["body"] = v["Body"],
-							["gas"] = v["Fuel"],
-							["chest"] = Dotted(VehicleWeight(v["Vehicle"])),
-							["tax"] = Dotted(VehiclePrice(v["Vehicle"]) * 0.10)
+							["Model"] = v["Vehicle"],
+							["Name"] = VehicleName(v["Vehicle"]),
+							["Type"] = VehicleMode(v["Vehicle"]),
+							["Engine"] = v["Engine"],
+							["Chassi"] = v["Health"],
+							["Body"] = v["Body"],
+							["Fuel"] = v["Fuel"],
+							["Weight"] = Dotted(VehicleWeight(v["Vehicle"])),
+							["Tax"] = Dotted(VehiclePrice(v["Vehicle"]) * 0.10)
 						}
 					end
 				end
@@ -310,7 +310,7 @@ AddEventHandler("garages:Impound", function(Name)
 		if vRP.Request(source, "Garagem", "A liberação do veículo tem o custo de <b>$" .. Dotted(VehiclePrice) .. "</b> dólares, deseja prosseguir com a liberação do mesmo?") then
 			if vRP.PaymentFull(Passport, VehiclePrice) then
 				vRP.Query("vehicles/paymentArrest", { Passport = Passport, Vehicle = Name })
-				TriggerClientEvent("Notify", source, "verde", "Veículo liberado.", "Sucesso", 5000)
+				TriggerClientEvent("Notify", source, "Sucesso", "Veículo liberado.", "verde", 5000)
 			end
 		end
 	end
@@ -342,11 +342,11 @@ function Hensa.Tax(Name)
 				if vRP.Request(source, "Garagem", "As taxas do veículo estão em <b>$" .. Dotted(Price) .. " dólares, deseja prosseguir com a liberação do mesmo?") then
 					if vRP.PaymentFull(Passport, Price) then
 						vRP.Query("vehicles/updateVehiclesTax", { Passport = Passport, Vehicle = Name })
-						TriggerClientEvent("Notify", source, "verde", "Pagamento concluído.", "Sucesso", 5000)
+						TriggerClientEvent("Notify", source, "Sucesso", "Pagamento concluído.", "verde", 5000)
 					end
 				end
 			else
-				TriggerClientEvent("Notify", source, "amarelo", "O veículo ainda não venceu.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Atenção", "O veículo ainda não venceu.", "amarelo", 5000)
 			end
 		end
 	end
@@ -366,7 +366,7 @@ function Hensa.Sell(Name)
 		local Consult = vRP.Query("vehicles/selectVehicles", { Passport = Passport, Vehicle = Name })
 		if Consult[1] then
 			if Consult[1]["Mode"] == "dismantle" then
-				TriggerClientEvent("Notify", source, "amarelo", "Jimmy Jango contratou você para o resgate, você não pode vender o veículo dele.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Atenção", "Jimmy Jango contratou você para o resgate, você não pode vender o veículo dele.", "amarelo", 5000)
 				return
 			end
 
@@ -398,7 +398,7 @@ function Hensa.Transfer(Name)
 		local MyVehicle = vRP.Query("vehicles/selectVehicles", { Passport = Passport, Vehicle = Name })
 		if MyVehicle[1] then
 			if MyVehicle[1]["Mode"] == "dismantle" then
-				TriggerClientEvent("Notify", source, "amarelo", "Jimmy Jango contratou você para o resgate, você não pode transferir o veículo dele.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Atenção", "Jimmy Jango contratou você para o resgate, você não pode transferir o veículo dele.", "amarelo", 5000)
 				return
 			end
 
@@ -408,12 +408,12 @@ function Hensa.Transfer(Name)
 				local Identity = vRP.Identity(OtherPassport)
 				if Identity and OtherPassport then
 					if OtherPassport == Passport then
-						TriggerClientEvent("Notify", source, "vermelho", "Você não pode transferir para você mesmo.", "Aviso", 5000)
+						TriggerClientEvent("Notify", source, "Aviso", "Você não pode transferir para você mesmo.", "vermelho", 5000)
 					else
 						if vRP.Request(source, "Garagem", "Transferir o veículo <b>" .. VehicleName(Name) .. "</b> para <b>" .. Identity["Name"] .. " " .. Identity["Lastname"] .. "</b>?") then
 							local Vehicle = vRP.Query("vehicles/selectVehicles", { Passport = parseInt(OtherPassport), Vehicle = Name })
 							if Vehicle[1] then
-								TriggerClientEvent("Notify", source, "amarelo", "<b>" .. Identity["Name"] .. " " .. Identity["Lastname"] .. "</b> já possui este modelo de veículo.", "Atenção", 5000)
+								TriggerClientEvent("Notify", source, "Atenção", "<b>" .. Identity["Name"] .. " " .. Identity["Lastname"] .. "</b> já possui este modelo de veículo.", "amarelo", 5000)
 							else
 								vRP.Query("vehicles/moveVehicles", { Passport = Passport, OtherPassport = parseInt(OtherPassport), Vehicle = Name })
 
@@ -427,7 +427,7 @@ function Hensa.Transfer(Name)
 								vRP.SetServerData("Chest:" .. OtherPassport .. ":" .. Name, Datatable)
 								vRP.RemoveServerData("Chest:" .. Passport .. ":" .. Name)
 
-								TriggerClientEvent("Notify", source, "verde", "Transferência concluída.", "Sucesso", 5000)
+								TriggerClientEvent("Notify", source, "Sucesso", "Transferência concluída.", "verde", 5000)
 							end
 						end
 					end
@@ -450,7 +450,7 @@ function Hensa.Spawn(Name, Number)
 				TriggerClientEvent("garages:Close", source)
 
 				local Cooldown = CompleteTimers(SpawnVehicle[Number] - os.time())
-				TriggerClientEvent("Notify", source, "azul", "Aguarde <b>" .. Cooldown .. "</b>.", false, 5000)
+				TriggerClientEvent("Notify", source, "Garagem", "Aguarde <b>" .. Cooldown .. "</b>.", "azul", 5000)
 				return
 			end
 		else
@@ -467,10 +467,10 @@ function Hensa.Spawn(Name, Number)
 				if vRP.Request(source, "Garagem", "Alugar o veículo <b>" .. VehicleName(Name) .. "</b> por <b>" .. Gemstone .. "</b> "..ItemName(DefaultSpecialMoney).."?") then
 					if vRP.PaymentGems(Passport, Gemstone) then
 						vRP.Query("vehicles/rentalVehicles", { Passport = Passport, Vehicle = Name, Plate = vRP.GeneratePlate(), Work = "true" })
-						TriggerClientEvent("Notify", source, "verde", "Aluguel do veículo <b>" .. VehicleName(Name) .. "</b> concluído.", "Sucesso", 5000)
+						TriggerClientEvent("Notify", source, "Sucesso", "Aluguel do veículo <b>" .. VehicleName(Name) .. "</b> concluído.", "verde", 5000)
 						vehicle = vRP.Query("vehicles/selectVehicles", { Passport = Passport, Vehicle = Name })
 					else
-						TriggerClientEvent("Notify", source, "vermelho", "<b>"..ItemName(DefaultSpecialMoney).."</b> insuficientes.", "Aviso", 5000)
+						TriggerClientEvent("Notify", source, "Aviso", "<b>"..ItemName(DefaultSpecialMoney).."</b> insuficientes.", "vermelho", 5000)
 						return
 					end
 				else
@@ -513,7 +513,7 @@ function Hensa.Spawn(Name, Number)
 						local Network = NetworkGetEntityFromNetworkId(Network)
 						if DoesEntityExist(Network) and not IsPedAPlayer(Network) and GetEntityType(Network) == 2 then
 							vCLIENT.SearchBlip(source, GetEntityCoords(Network))
-							TriggerClientEvent("Notify", source, "default", "Rastreador do veículo foi ativado por <b>30</b> segundos, lembrando que se o mesmo estiver em movimento a localização pode ser imprecisa.", false, 10000)
+							TriggerClientEvent("Notify", source, "Garagem", "Rastreador do veículo foi ativado por <b>30</b> segundos, lembrando que se o mesmo estiver em movimento a localização pode ser imprecisa.", default, 10000)
 						else
 							if Spawn[Plate] then
 								Spawn[Plate] = nil
@@ -524,20 +524,20 @@ function Hensa.Spawn(Name, Number)
 								GlobalState:set("Plates", Plates, true)
 							end
 
-							TriggerClientEvent("Notify", source, "verde", "A seguradora efetuou o resgate do seu veículo e o mesmo já se encontra disponível para retirada.", "Sucesso", 5000)
+							TriggerClientEvent("Notify", source, "Sucesso", "A seguradora efetuou o resgate do seu veículo e o mesmo já se encontra disponível para retirada.", "verde", 5000)
 						end
 					else
-						TriggerClientEvent("Notify", source, "azul", "Rastreador só pode ser ativado a cada <b>60</b> segundos.", "Observação", 5000)
+						TriggerClientEvent("Notify", source, "Observação", "Rastreador só pode ser ativado a cada <b>60</b> segundos.", "azul", 5000)
 					end
 				else
-					TriggerClientEvent("Notify", source, "amarelo", "Rastreador está desativado.", "Atenção", 5000)
+					TriggerClientEvent("Notify", source, "Atenção", "Rastreador está desativado.", "amarelo", 5000)
 				end
 			else
 				if vehicle[1]["Tax"] <= os.time() then
-					TriggerClientEvent("Notify", source, "amarelo", "Taxa do veículo atrasada.", "Atenção", 5000)
+					TriggerClientEvent("Notify", source, "Atenção", "Taxa do veículo atrasada.", "amarelo", 5000)
 					TriggerClientEvent("garages:Close", source)
 				elseif vehicle[1]["Arrest"] >= os.time() then
-					TriggerClientEvent("Notify", source, "amarelo", "Veículo apreendido, dirija-se até o <b>Impound</b> e efetue o pagamento da liberação do mesmo.", "Atenção", 10000)
+					TriggerClientEvent("Notify", source, "Atenção", "Veículo apreendido, dirija-se até o <b>Impound</b> e efetue o pagamento da liberação do mesmo.", "amarelo", 10000)
 					TriggerClientEvent("garages:Close", source)
 				else
 					if vehicle[1]["Rental"] ~= 0 then
@@ -547,9 +547,9 @@ function Hensa.Spawn(Name, Number)
 							if vRP.Request(source, "Garagem", "Atualizar o aluguel do veículo <b>" .. VehicleName(Name) .. "</b> por <b>" .. Dotted( Gemstone ) .. " "..ItemName(DefaultSpecialMoney).."</b>?") then
 								if vRP.PaymentGems(Passport, Gemstone) then
 									vRP.Query("vehicles/rentalVehiclesUpdate", { Passport = Passport, Vehicle = Name })
-									TriggerClientEvent("Notify", source, "verde", "Aluguel do veículo <b>" .. VehicleName(Name) .. "</b> atualizado.", "Sucesso", 5000)
+									TriggerClientEvent("Notify", source, "Sucesso", "Aluguel do veículo <b>" .. VehicleName(Name) .. "</b> atualizado.", "verde", 5000)
 								else
-									TriggerClientEvent("Notify", source, "vermelho", "<b>"..ItemName(DefaultSpecialMoney).."</b> insuficientes.", "Aviso", 5000)
+									TriggerClientEvent("Notify", source, "Aviso", "<b>"..ItemName(DefaultSpecialMoney).."</b> insuficientes.", "vermelho", 5000)
 									return
 								end
 							else
@@ -576,7 +576,7 @@ function Hensa.Spawn(Name, Number)
 									local Networked = NetworkGetEntityFromNetworkId(Network)
 
 									vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
-									TriggerClientEvent("Notify", source, "azul", CompleteTimers(vehicle[1]["Tax"] - os.time()), "Próximo pagamento", 5000)
+									TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 									Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 									TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
 									Spawn[Plate] = { Passport, Name, Network }
@@ -598,7 +598,7 @@ function Hensa.Spawn(Name, Number)
 										local Networked = NetworkGetEntityFromNetworkId(Network)
 
 										vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
-										TriggerClientEvent("Notify", source, "azul", CompleteTimers(vehicle[1]["Dismantle"] - os.time()), "Vencimento", 5000)
+										TriggerClientEvent("Notify", source, "Vencimento", CompleteTimers(vehicle[1]["Dismantle"] - os.time()), "azul", 5000)
 										Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 										TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
 										Spawn[Plate] = { Passport, Name, Network }
@@ -623,7 +623,7 @@ function Hensa.Spawn(Name, Number)
 											local Networked = NetworkGetEntityFromNetworkId(Network)
 
 											vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
-											TriggerClientEvent("Notify", source, "azul", CompleteTimers(vehicle[1]["Tax"] - os.time()), "Próximo pagamento", 5000)
+											TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 											Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 											TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
 											Spawn[Plate] = { Passport, Name, Network }
@@ -645,7 +645,7 @@ function Hensa.Spawn(Name, Number)
 													local Networked = NetworkGetEntityFromNetworkId(Network)
 
 													vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
-													TriggerClientEvent("Notify", source, "azul", CompleteTimers(vehicle[1]["Tax"] - os.time()), "Próximo pagamento", 5000)
+													TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 													Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 													TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
 													Spawn[Plate] = { Passport, Name, Network }
@@ -670,7 +670,7 @@ function Hensa.Spawn(Name, Number)
 								local Networked = NetworkGetEntityFromNetworkId(Network)
 
 								vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
-								TriggerClientEvent("Notify", source, "azul", CompleteTimers(vehicle[1]["Tax"] - os.time()), "Próximo pagamento", 5000)
+								TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 								Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 								TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
 								Spawn[Plate] = { Passport, Name, Network }
@@ -695,7 +695,7 @@ end
 RegisterCommand("car", function(source, Message)
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if vRP.HasGroup(Passport, "Admin") and Message[1] then
+		if vRP.HasGroup(Passport, CarPermission) and Message[1] then
 			local VehicleName = Message[1]
 			local Ped = GetPlayerPed(source)
 			local Coords = GetEntityCoords(Ped)
@@ -732,7 +732,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("dv", function(source)
 	local Passport = vRP.Passport(source)
-	if Passport and vRP.HasGroup(Passport, "Admin", 2) then
+	if Passport and vRP.HasGroup(Passport, DvPermission) then
 		TriggerClientEvent("garages:Delete", source)
 
 		if Logs then
@@ -766,14 +766,14 @@ AddEventHandler("garages:Lock", function(Network, Plate, Model)
 		if Player(source)["state"]["Taxi"] then
 			if Model == "taxi" then
 				TriggerEvent("garages:OnlyUnlockVehicle", source, Network)
-				TriggerClientEvent("Notify", source, "amarelo", "Para a segurança de todos, durante o serviço de <b>Taxista</b> o veículo não pode ser trancado.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Atenção", "Para a segurança de todos, durante o serviço de <b>Taxista</b> o veículo não pode ser trancado.", "amarelo", 5000)
 			else
 				TriggerEvent("garages:LockVehicle", source, Network)
 			end
 		elseif Player(source)["state"]["Corrections"] then
 			if Model == "pbus" then
 				TriggerEvent("garages:OnlyUnlockVehicle", source, Network)
-				TriggerClientEvent("Notify", source, "amarelo", "Para a segurança de todos, durante o serviço de <b>Transporte de Prisioneiro</b> o veículo não pode ser trancado.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Atenção", "Para a segurança de todos, durante o serviço de <b>Transporte de Prisioneiro</b> o veículo não pode ser trancado.", "amarelo", 5000)
 			else
 				TriggerEvent("garages:LockVehicle", source, Network)
 			end
@@ -790,11 +790,11 @@ AddEventHandler("garages:LockVehicle", function(source, Network)
 	local Doors = GetVehicleDoorLockStatus(Network)
 
 	if parseInt(Doors) <= 1 then
-		TriggerClientEvent("Notify", source, "verde", "O veículo foi <b>trancado</b>.", "Sucesso", 5000)
+		TriggerClientEvent("Notify", source, "Sucesso", "O veículo foi <b>trancado</b>.", "verde", 5000)
 		TriggerClientEvent("sounds:Private", source, "locked", 0.7)
 		SetVehicleDoorsLocked(Network, 2)
 	else
-		TriggerClientEvent("Notify", source, "amarelo", "O veículo foi <b>destrancado</b>.", "Atenção", 5000)
+		TriggerClientEvent("Notify", source, "Atenção", "O veículo foi <b>destrancado</b>.", "amarelo", 5000)
 		TriggerClientEvent("sounds:Private", source, "unlocked", 0.7)
 		SetVehicleDoorsLocked(Network, 1)
 	end
@@ -890,9 +890,9 @@ AddEventHandler("garages:DeleteVehicle", function(Network, Plate)
 				if Player(source)["state"]["Dismantle"] then
 					local Vehicle = vRP.Query("vehicles/selectVehicles", { Passport = Passport, Vehicle = Player(source)["state"]["DismantleModel"] })
 					if Vehicle[1] then
-						TriggerClientEvent("Notify", source, "amarelo", "Este veículo não foi adicionado em sua garagem pois você já possui um <b>" .. VehicleName(Player(source)["state"]["DismantleModel"]) .. "</b>.", "Jimmy Jango", 10000)
+						TriggerClientEvent("Notify", source, "Jimmy Jango", "Este veículo não foi adicionado em sua garagem pois você já possui um <b>" .. VehicleName(Player(source)["state"]["DismantleModel"]) .. "</b>.", "amarelo", 10000)
 					else
-						TriggerClientEvent("Notify", source, "azul", "Você escondeu o veículo <b>" .. VehicleName(Player(source)["state"]["DismantleModel"]) .. "</b> em sua garagem, o mesmo pode ser usado durante um período de <b>24 Horas</b>.", "Jimmy Jango", 10000)
+						TriggerClientEvent("Notify", source, "Jimmy Jango", "Você escondeu o veículo <b>" .. VehicleName(Player(source)["state"]["DismantleModel"]) .. "</b> em sua garagem, o mesmo pode ser usado durante um período de <b>24 Horas</b>.", "azul", 10000)
 						vRP.Query("vehicles/dismantleVehicles", { Passport = Passport, Vehicle = Player(source)["state"]["DismantleModel"], Plate = vRP.GeneratePlate(), Work = "false" })
 					end
 				end
@@ -938,7 +938,7 @@ AddEventHandler("garages:dismantleVehicle", function(Network, Plate)
 			local source = vRP.Source(Passport)
 			if source then
 				TriggerClientEvent("target:DismantleReset", source)
-				TriggerClientEvent("Notify", source, "verde", "O seu serviço foi finalizado com sucesso, e você pode assinar um novo contrato quando quiser.", "Jimmy Jango", 10000)
+				TriggerClientEvent("Notify", source, "Jimmy Jango", "O seu serviço foi finalizado com sucesso, e você pode assinar um novo contrato quando quiser.", "verde", 10000)
 			end
 		end
 
@@ -957,13 +957,13 @@ AddEventHandler("garages:Propertys", function(Name)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		TriggerClientEvent("dynamic:Close", source)
-		TriggerClientEvent("Notify", source, "amarelo", "Selecione o local da garagem.", "Atenção", 5000)
+		TriggerClientEvent("Notify", source, "Atenção", "Selecione o local da garagem.", "amarelo", 5000)
 
 		local Hash = "prop_offroad_tyres02"
 		local Application, Coords, Heading = vRPC.ObjectControlling(source, Hash)
 		if Application then
 			if #(Coords - exports["propertys"]:Coords(Name)) <= 25 then
-				TriggerClientEvent("Notify", source, "amarelo", "Selecione o local do veículo.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Atenção", "Selecione o local do veículo.", "amarelo", 5000)
 
 				local Open = Coords
 				local Hash = "patriot"
@@ -987,11 +987,11 @@ AddEventHandler("garages:Propertys", function(Name)
 						vRP.Query("propertys/Garage", { Name = Name, Garage = json.encode(New) })
 						TriggerClientEvent("garages:Propertys", -1, Propertys)
 					else
-						TriggerClientEvent("Notify", source, "vermelho", "A garagem precisa ser próximo da entrada.", "Aviso", 5000)
+						TriggerClientEvent("Notify", source, "Aviso", "A garagem precisa ser próximo da entrada.", "vermelho", 5000)
 					end
 				end
 			else
-				TriggerClientEvent("Notify", source, "vermelho", "A garagem precisa ser próximo da entrada.", "Aviso", 5000)
+				TriggerClientEvent("Notify", source, "Aviso", "A garagem precisa ser próximo da entrada.", "vermelho", 5000)
 			end
 		end
 	end
