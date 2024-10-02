@@ -449,7 +449,7 @@ function Hensa.Spawn(Name, Number)
 			else
 				TriggerClientEvent("garages:Close", source)
 
-				local Cooldown = MinimalTimers(SpawnVehicle[Number] - os.time())
+				local Cooldown = CompleteTimers(SpawnVehicle[Number] - os.time())
 				TriggerClientEvent("Notify", source, "azul", "Aguarde <b>" .. Cooldown .. "</b>.", false, 5000)
 				return
 			end
@@ -971,8 +971,8 @@ AddEventHandler("garages:Propertys", function(Name)
 				if Application then
 					if #(Coords - exports["propertys"]:Coords(Name)) <= 25 then
 						local New = {
-							["1"] = { mathLength(Open["x"]), mathLength(Open["y"]), mathLength(Open["z"] + 1) },
-							["2"] = { mathLength(Coords["x"]), mathLength(Coords["y"]), mathLength(Coords["z"] + 1), mathLength(Heading) }
+							["1"] = { Optimize(Open["x"]), Optimize(Open["y"]), Optimize(Open["z"] + 1) },
+							["2"] = { Optimize(Coords["x"]), Optimize(Coords["y"]), Optimize(Coords["z"] + 1), Optimize(Heading) }
 						}
 
 						Garages[Name] = { name = "Garage", payment = false, license = false }
