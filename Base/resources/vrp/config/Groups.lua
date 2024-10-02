@@ -7,7 +7,9 @@ Groups = {
 			["Admin"] = true
 		},
 		["Hierarchy"] = { "Administrador", "Moderador", "Suporte" },
-		["Service"] = {}
+		["Service"] = {},
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Premium"] = {
 		["Parent"] = {
@@ -15,7 +17,9 @@ Groups = {
 		},
 		["Hierarchy"] = { "Ouro", "Prata", "Bronze" },
 		["Salary"] = { 10000, 5000, 2500 },
-		["Service"] = {}
+		["Service"] = {},
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Policia"] = {
 		["Parent"] = {
@@ -24,73 +28,91 @@ Groups = {
 		["Hierarchy"] = { "Chefe", "Capitão", "Tenente", "Sargento", "Corporal", "Oficial", "Cadete" },
 		["Salary"] = { 2500, 2250, 2000, 1750, 1500, 1500, 1500 },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Paramedico"] = {
 		["Parent"] = {
 			["Paramedico"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Conselheiro", "Membro" },
-		["Salary"] = { 2500, 2250, 2000 },
+		["Hierarchy"] = { "Chefe", "Médico", "Enfermeiro", "Residente" },
+		["Salary"] = { 6050, 6050, 4000, 4000 },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Mecanico"] = {
 		["Parent"] = {
 			["Mecanico"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
-		["Salary"] = { 2500, 2250, 2000, 1750, 1500 },
+		["Hierarchy"] = { "Chefe", "Mecânico", "Borracheiro", "Estagiário" },
+		["Salary"] = { 2500, 2250, 2000, 1750 },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Burgershot"] = {
 		["Parent"] = {
 			["Burgershot"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
+		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Ballas"] = {
 		["Parent"] = {
 			["Ballas"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
+		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Vagos"] = {
 		["Parent"] = {
 			["Vagos"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
+		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Families"] = {
 		["Parent"] = {
 			["Families"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
+		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Aztecas"] = {
 		["Parent"] = {
 			["Aztecas"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
+		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Bloods"] = {
 		["Parent"] = {
 			["Bloods"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Sub-Chefe", "Gerente", "Conselheiro", "Membro" },
+		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Work",
+		["Client"] = true,
+		["Chat"] = true
 	},
 	["Emergencia"] = {
 		["Parent"] = {
