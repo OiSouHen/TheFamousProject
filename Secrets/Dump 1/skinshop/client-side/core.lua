@@ -185,7 +185,7 @@ function OpenSkinshop()
 	SetNuiFocus(true,true)
 	TriggerEvent("hud:Active",false)
 	LocalPlayer["state"]:set("Hoverfy",false,false)
-	vRP.PlayAnim(true,{"mp_sleep","bind_pose_180"},true)
+	vRP.playAnim(true,{"mp_sleep","bind_pose_180"},true)
 	SendNUIMessage({ Action = "Open", Payload = { Skinshop,MaxValues(),Model } })
 
 	CameraActive()

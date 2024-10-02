@@ -178,7 +178,7 @@ function OpenBarbershop(Mode)
 		end
 	end
 
-	vRP.PlayAnim(true,{"mp_sleep","bind_pose_180"},true)
+	vRP.playAnim(true,{"mp_sleep","bind_pose_180"},true)
 	LocalPlayer["state"]:set("Hoverfy",false,false)
 	TriggerEvent("hud:Active",false)
 	Lasted = Barbershop

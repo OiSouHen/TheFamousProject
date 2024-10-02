@@ -46,8 +46,7 @@ Citizen.CreateThread(function()
 			Wait(5000)
 
 			SetEntityCoords(Ped,233.85,-1387.59,29.55,false,false,false,false)
-			-- LocalPlayer["state"]:set("Cyndaquil",true,false)
-			LocalPlayer["state"]:set("Blastoise", true, false)
+			LocalPlayer["state"]:set("Cyndaquil",true,false)
 			FreezeEntityPosition(Ped,true)
 			SetEntityInvincible(Ped,true)
 			SetEntityHeading(Ped,136.07)
@@ -64,8 +63,7 @@ Citizen.CreateThread(function()
 			if parseInt(#Characters) > 0 then
 				Customization(Characters[1])
 			else
-				-- LocalPlayer["state"]:set("Chikorita",true,false)
-				LocalPlayer["state"]:set("Invisible", true, false)
+				LocalPlayer["state"]:set("Chikorita",true,false)
 				SetEntityVisible(Ped,false,0)
 			end
 
@@ -132,12 +130,12 @@ AddEventHandler("spawn:Finish",function(Coords,Creation)
 		if Creation then
 			SetEntityVisible(PlayerPedId(),true,0)
 			exports["barbershop"]:Creation(Creation)
-			LocalPlayer["state"]:set("Invisible",false,false)
+			LocalPlayer["state"]:set("Chikorita",false,false)
 		else
 			TriggerEvent("hud:Active",true)
 		end
 
-		-- TriggerServerEvent("vRP:WaitCharacters",Creation)
+		TriggerServerEvent("vRP:WaitCharacters",Creation)
 		SendNUIMessage({ Action = "Close" })
 		SetNuiFocus(false,false)
 
