@@ -178,14 +178,14 @@ RegisterCommand("PlayerFunctions", function()
 			if MumbleIsConnected() then
 				local Experience = vSERVER.Experience()
 				for Name,Exp in pairs(Experience) do
-					exports["dynamic"]:AddButton(Name, "Você possuí <blue>"..Exp.." pontos</blue> no nível <blue>"..ClassCategory(Exp).."</blue>.", "", "", "Experience", false)
+					exports["dynamic"]:AddButton(Name, "Você possuí <rare>"..Exp.." pontos</rare> no nível <rare>"..ClassCategory(Exp).."</rare>.", "", "", "Experience", false)
 				end
 
 				exports["dynamic"]:AddMenu("Experiência", "Todas as suas habilidades.", "Experience")
 
 				local Stats = vSERVER.PedStats()
 				for Name,Points in pairs(Stats) do
-					exports["dynamic"]:AddButton(Name, "Você possuí um total de <blue>"..Points.." "..Name.."</blue>.", "", "", "Stats", false)
+					exports["dynamic"]:AddButton(Name, "Você possuí um total de <rare>"..Points.." "..Name.."</rare>.", "", "", "Stats", false)
 				end
 
 				exports["dynamic"]:AddMenu("Estatísticas", "Estatísticas do seu personagem.", "Stats")
