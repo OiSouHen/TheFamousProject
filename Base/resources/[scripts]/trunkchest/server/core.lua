@@ -64,11 +64,11 @@ function Hensa.Request()
 
 						if Number == Passport and Split[1] == "identity" then
 							if Identity["Premium"] > os.time() then
-								v["Premium"] = MinimalTimers(Identity["Premium"] - os.time())
+								v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
 							end
 
 							if Identity["Medic"] > os.time() then
-								v["Medic"] = MinimalTimers(Identity["Medic"] - os.time())
+								v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
 							end
 
 							if Identity["Rolepass"] > 0 then
@@ -203,11 +203,11 @@ function Hensa.Request()
 
 						if Number == Passport and Split[1] == "identity" then
 							if Identity["Premium"] > os.time() then
-								v["Premium"] = MinimalTimers(Identity["Premium"] - os.time())
+								v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
 							end
 
 							if Identity["Medic"] > os.time() then
-								v["Medic"] = MinimalTimers(Identity["Medic"] - os.time())
+								v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
 							end
 
 							if Identity["Rolepass"] > 0 then
