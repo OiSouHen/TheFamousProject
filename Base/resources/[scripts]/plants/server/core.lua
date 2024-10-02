@@ -291,17 +291,17 @@ function Hensa.Informations(Number)
 		else
 			local Collect = "A coleta está disponível"
 			if currentTime < plantTime then
-				Collect = "Aguarde <blue>"..Calculate(plantTime - currentTime).."</blue>."
+				Collect = "Aguarde <rare>"..Calculate(plantTime - currentTime).."</rare>."
 			end
 
 			local cloningTime = plantTime - currentTime - 5400
 			local Cloning = "A clonagem está disponível"
 			if cloningTime > 0 then
-				Cloning = "Aguarde <blue>"..Calculate(cloningTime).."</blue>."
+				Cloning = "Aguarde <rare>"..Calculate(cloningTime).."</rare>."
 			end
 
-			local Health = "Plantação com <blue>"..parseInt(Plants[Number]["Points"]).."%</blue> de pureza."
-			local Status = "A plantação foi fertilizada <blue>"..parseInt(Plants[Number]["Fertilizer"]).."x</blue>."
+			local Health = "Plantação com <rare>"..parseInt(Plants[Number]["Points"]).."%</rare> de pureza."
+			local Status = "A plantação foi fertilizada <rare>"..parseInt(Plants[Number]["Fertilizer"]).."x</rare>."
 
 			return { Collect, Cloning, Health, Status }
 		end
