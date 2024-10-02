@@ -39,7 +39,7 @@ function Hensa.Announce(Title, Seconds, Text)
 				Active[Passport] = nil
 			end
 		else
-			TriggerClientEvent("Notify",source,"azul","Aguarde <b>"..MinimalTimers(parseInt(Announces[Passport] - os.time())).."</b>.",false,5000)
+			TriggerClientEvent("Notify",source,"azul","Aguarde <b>"..CompleteTimers(parseInt(Announces[Passport] - os.time())).."</b>.",false,5000)
 		end
 	end
 end
@@ -76,7 +76,7 @@ function Hensa.GivePsico(OtherPassport)
 					TriggerClientEvent("Notify", source, "azul", "Você acabou de entregar a <b>"..ItemName.."</b> assinada para <b>"..vRP.FullName(OtherPassport).."</b>.", false, 5000)
 				end
 			else
-				local remainingTime = MinimalTimers(tonumber(cooldownTime - currentTime))
+				local remainingTime = CompleteTimers(tonumber(cooldownTime - currentTime))
 				TriggerClientEvent("Notify", source, "azul", "Aguarde <b>"..remainingTime.."</b>.", false, 5000)
 			end
         end
