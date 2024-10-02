@@ -37,7 +37,7 @@ function Hensa.Robbery(Name,Number)
 	end
 
 	if Robbery[Name] and os.time() < Robbery[Name][Number] then
-		TriggerClientEvent("Notify",source,"azul","Aguarde <b>"..MinimalTimers(Robbery[Name][Number] - os.time()).."</b>.",false,5000)
+		TriggerClientEvent("Notify",source,"azul","Aguarde <b>"..CompleteTimers(Robbery[Name][Number] - os.time()).."</b>.",false,5000)
 
 		return false
 	end
@@ -355,7 +355,7 @@ AddEventHandler("propertys:Clothes",function(Mode)
 		if Split[1] == "save" then
 			local Keyboard = vKEYBOARD.Primary(source,"Nome")
 			if Keyboard then
-				local Check = sanitizeString(Keyboard[1],"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",true)
+				local Check = sanitizeString(Keyboard[1],"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
 
 				if not Consult[Check] then
 					Consult[Check] = vSKINSHOP.Customization(source)
@@ -472,11 +472,11 @@ function Hensa.Request(Name,Mode)
 
 							if Number == Passport and Split[1] == "identity" then
 								if Identity["Premium"] > os.time() then
-									v["Premium"] = MinimalTimers(Identity["Premium"] - os.time())
+									v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
 								end
 
 								if Identity["Medic"] > os.time() then
-									v["Medic"] = MinimalTimers(Identity["Medic"] - os.time())
+									v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
 								end
 
 								if Identity["Rolepass"] > 0 then
@@ -613,11 +613,11 @@ function Hensa.Request(Name,Mode)
 
 							if Number == Passport and Split[1] == "identity" then
 								if Identity["Premium"] > os.time() then
-									v["Premium"] = MinimalTimers(Identity["Premium"] - os.time())
+									v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
 								end
 
 								if Identity["Medic"] > os.time() then
-									v["Medic"] = MinimalTimers(Identity["Medic"] - os.time())
+									v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
 								end
 
 								if Identity["Rolepass"] > 0 then
@@ -724,11 +724,6 @@ function Hensa.Store(Item,Slot,Amount,Target,Name,Mode)
 	local Amount = parseInt(Amount)
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if (Mode == "Vault" and BlockChest(Item)) or (Mode == "Fridge" and not BlockChest(Item)) then
-			TriggerClientEvent("propertys:Update",source)
-			return false
-		end
-
 		if Name == "Hotel" then
 			if vRP.StoreChest(Passport,Mode..":Hotel:"..Passport,Amount,25,Slot,Target,true) then
 				TriggerClientEvent("propertys:Update",source)
