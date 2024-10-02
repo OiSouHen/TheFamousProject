@@ -168,18 +168,21 @@ AddEventHandler("engine:Supply",function(Entitys)
 	local Vehicle = Entitys[3]
 	Lasted = GetVehicleFuelLevel(Vehicle)
 
-	if Lasted < 99.0 then
-		-- local Gallon = Entitys[5]
-		local Gallon = Entitys[6]
-		if not DisplayNui and not Gallon then
-			SendNUIMessage({ name = "Show", payload = true })
-			DisplayNui = true
+	if Lasted <= 99.975 then
+		local Ped = PlayerPedId()
+		local Gallons = Entitys[6]
+		local Coords = GetEntityCoords(Vehicle)
+
+		if not Display and not Gallons then
+			SendNUIMessage({ Action = "Open" })
+			TriggerEvent("hud:Active",false)
+			Display = true
 		end
 
-		FuelRecharger = true
-
-		local Ped = PlayerPedId()
-		TaskTurnPedToFaceEntity(Ped,Vehicle,5000)
+		if not FuelRecharger then
+			FuelRecharger = true
+			TaskTurnPedToFaceEntity(Ped,Vehicle,5000)
+		end
 
 		while FuelRecharger do
 			DisableControlAction(0,18,true)
@@ -190,6 +193,7 @@ AddEventHandler("engine:Supply",function(Entitys)
 			DisableControlAction(0,30,true)
 			DisableControlAction(0,31,true)
 			DisableControlAction(0,140,true)
+			DisableControlAction(0,141,true)
 			DisableControlAction(0,142,true)
 			DisableControlAction(0,143,true)
 			DisableControlAction(0,257,true)
@@ -201,7 +205,7 @@ AddEventHandler("engine:Supply",function(Entitys)
 			if not Gallon then
 				Price = Price + 0.125
 				SetVehicleFuelLevel(Vehicle,VehicleFuel + 0.025)
-				SendNUIMessage({ name = "Tank", payload = { tank = floor(VehicleFuel), price = Price, lts = 0.125 * 4 } })
+				SendNUIMessage({ Action = "Tank", Payload = { floor(VehicleFuel),Price,0.125 * 4 } })
 			else
 				if GetAmmoInPedWeapon(Ped,883325847) - 0.02 * 100 > 1 then
 					SetPedAmmo(Ped,883325847,math.floor(GetAmmoInPedWeapon(Ped,883325847) - 0.02 * 100))
@@ -209,7 +213,9 @@ AddEventHandler("engine:Supply",function(Entitys)
 				end
 			end
 
-			DrawText3D(Coords,"~g~E~w~   FINALIZAR")
+			SetDrawOrigin(Coords["x"],Coords["y"],Coords["z"])
+			DrawSprite("Targets","E",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+			ClearDrawOrigin()
 
 			if not IsEntityPlayingAnim(Ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",3) and LoadAnim("timetable@gardener@filling_can") then
 				TaskPlayAnim(Ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",8.0,8.0,-1,50,1,0,0,0)
@@ -225,7 +231,7 @@ AddEventHandler("engine:Supply",function(Entitys)
 						ActiveFuel = Lasted
 					end
 
-					SendNUIMessage({ name = "Show", payload = false })
+					SendNUIMessage({ Action = "Close" })
 				else
 					Entity(Vehicle)["state"]:set("Fuel",VehicleFuel,true)
 				end
@@ -301,56 +307,56 @@ AddEventHandler("engine:Vehrify", function(Entitys)
 	local Shielding = GetVehicleMod(Vehicle,16)
 
 	if Entity(Vehicle)["state"]["Lockpick"] then
-		exports["dynamic"]:AddButton("Chassi do Veículo", "Númeração <blue>1"..Entitys[3].."3</blue> adulterada.", "", "", false, false)
+		exports["dynamic"]:AddButton("Chassi do Veículo", "Númeração <rare>1"..Entitys[3].."3</rare> adulterada.", "", "", false, false)
 	else
-		exports["dynamic"]:AddButton("Chassi do Veículo", "Numeração <blue>2"..Entitys[3].."4</blue> original.", "", "", false, false)
+		exports["dynamic"]:AddButton("Chassi do Veículo", "Numeração <rare>2"..Entitys[3].."4</rare> original.", "", "", false, false)
 	end
 
 	if Entity(Vehicle)["state"]["Drift"] then
-		exports["dynamic"]:AddButton("Kit para Drifts", "Modificações <blue>Instaladas</blue>.", "", "", false, false)
+		exports["dynamic"]:AddButton("Kit para Drifts", "Modificações <rare>Instaladas</rare>.", "", "", false, false)
 	else
-		exports["dynamic"]:AddButton("Kit para Drifts", "Modificações <blue>Desinstaladas</blue>.", "", "", false, false)
+		exports["dynamic"]:AddButton("Kit para Drifts", "Modificações <rare>Desinstaladas</rare>.", "", "", false, false)
 	end
 
 	if Engine ~= -1 then
-		exports["dynamic"]:AddButton("Motor", "Modificação atual instalada: <blue>"..(Engine + 1).."</blue> / " ..GetNumVehicleMods(Vehicle,11), "", "", false, false)
+		exports["dynamic"]:AddButton("Motor", "Modificação atual instalada: <rare>"..(Engine + 1).."</rare> / " ..GetNumVehicleMods(Vehicle,11), "", "", false, false)
 	end
 
 	if Brake ~= -1 then
-		exports["dynamic"]:AddButton("Freios", "Modificação atual instalada: <blue>"..(Brake + 1).."</blue> / " ..GetNumVehicleMods(Vehicle,12), "", "", false, false)
+		exports["dynamic"]:AddButton("Freios", "Modificação atual instalada: <rare>"..(Brake + 1).."</rare> / " ..GetNumVehicleMods(Vehicle,12), "", "", false, false)
 	end
 
 	if Transmission ~= -1 then
-		exports["dynamic"]:AddButton("Transmissão", "Modificação atual instalada: <blue>".. (Transmission + 1).."</blue> / " ..GetNumVehicleMods(Vehicle,13), "", "", false, false)
+		exports["dynamic"]:AddButton("Transmissão", "Modificação atual instalada: <rare>".. (Transmission + 1).."</rare> / " ..GetNumVehicleMods(Vehicle,13), "", "", false, false)
 	end
 
 	if Suspension ~= -1 then
-		exports["dynamic"]:AddButton("Suspensão", "Modificação atual instalada: <blue>"..(Suspension + 1).."</blue> / " ..GetNumVehicleMods(Vehicle,15), "", "", false, false)
+		exports["dynamic"]:AddButton("Suspensão", "Modificação atual instalada: <rare>"..(Suspension + 1).."</rare> / " ..GetNumVehicleMods(Vehicle,15), "", "", false, false)
 	end
 
 	if Shielding ~= -1 then
-		exports["dynamic"]:AddButton("Blindagem", "Modificação atual instalada: <blue>"..(Shielding + 1).."</blue> / " ..GetNumVehicleMods(Vehicle,16), "", "", false, false)
+		exports["dynamic"]:AddButton("Blindagem", "Modificação atual instalada: <rare>"..(Shielding + 1).."</rare> / " ..GetNumVehicleMods(Vehicle,16), "", "", false, false)
 	end
 
 	local Force = GetVehicleEngineHealth(Vehicle) / 10
-	exports["dynamic"]:AddButton("Potência", "Potência do motor se encontra em <blue>"..parseInt(Force).."%</blue>.", "", "", false, false)
+	exports["dynamic"]:AddButton("Potência", "Potência do motor se encontra em <rare>"..parseInt(Force).."%</rare>.", "", "", false, false)
 
 	local Body = GetVehicleBodyHealth(Vehicle) / 10
-	exports["dynamic"]:AddButton("Lataria", "Qualidade da lataria se encontra em <blue>"..parseInt(Body).."%</blue>.", "", "", false, false)
+	exports["dynamic"]:AddButton("Lataria", "Qualidade da lataria se encontra em <rare>"..parseInt(Body).."%</rare>.", "", "", false, false)
 
 	local Health = GetEntityHealth(Vehicle) / 10
-	exports["dynamic"]:AddButton("Chassi", "Rigidez do chassi se encontra em <blue>"..parseInt(Health).."%</blue>.", "", "", false, false)
+	exports["dynamic"]:AddButton("Chassi", "Rigidez do chassi se encontra em <rare>"..parseInt(Health).."%</rare>.", "", "", false, false)
 
 	local Brakes = vSERVER.VehicleBrakes(NetworkGetNetworkIdFromEntity(Vehicle))
 
 	local ForceBreak = parseInt((Brakes[1] * 10000) / 90)
-	exports["dynamic"]:AddButton("Freio Integral", "Freio Integral se encontra em <blue>"..ForceBreak.."%</blue>.", "", "", false, false)
+	exports["dynamic"]:AddButton("Freio Integral", "Freio Integral se encontra em <rare>"..ForceBreak.."%</rare>.", "", "", false, false)
 
 	local FrontBreak = parseInt((Brakes[2] * 10000) / 55)
-	exports["dynamic"]:AddButton("Freio Dianteiro", "Freio Dianteiro se encontra em <blue>"..FrontBreak.."%</blue>.", "", "", false, false)
+	exports["dynamic"]:AddButton("Freio Dianteiro", "Freio Dianteiro se encontra em <rare>"..FrontBreak.."%</rare>.", "", "", false, false)
 
 	local HandsBreak = parseInt((Brakes[3] * 10000) / 75)
-	exports["dynamic"]:AddButton("Freio Traseiro", "Freio Traseiro se encontra em <blue>"..HandsBreak.."%</blue>.", "", "", false, false)
+	exports["dynamic"]:AddButton("Freio Traseiro", "Freio Traseiro se encontra em <rare>"..HandsBreak.."%</rare>.", "", "", false, false)
 
 	exports["dynamic"]:Open()
 end)
