@@ -80,14 +80,14 @@ AddEventHandler("trucker:Verify",function()
 		else
 			exports["dynamic"]:AddButton("Finalizar","Clique aqui para <b>Finalizar</b> o serviço.","trucker:Status",false,false,false)
 
-			exports["dynamic"]:SubMenu("Cargas","Clique para mais ações.","trucker")
+			exports["dynamic"]:AddMenu("Cargas","Clique para mais ações.","trucker")
 			exports["dynamic"]:AddButton("Entrega de Veículos","Clique aqui para selecionar esta carga.","trucker:Vehicles",false,"trucker",false)
 			exports["dynamic"]:AddButton("Entrega de Diesel","Clique aqui para selecionar esta carga.","trucker:Diesel",false,"trucker",false)
 			exports["dynamic"]:AddButton("Entrega de Gasolina","Clique aqui para selecionar esta carga.","trucker:Fuel",false,"trucker",false)
 			exports["dynamic"]:AddButton("Entrega de Madeira","Clique aqui para selecionar esta carga.","trucker:Wood",false,"trucker",false)
 		end
 
-		exports["dynamic"]:openMenu()
+		exports["dynamic"]:Open()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
