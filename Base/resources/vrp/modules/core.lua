@@ -123,7 +123,7 @@ end
 function vRP.InsidePropertys(Passport, Coords)
 	local HensaTable = vRP.Datatable(Passport)
 	if HensaTable then
-		HensaTable["Pos"] = { x = mathLength(Coords["x"]), y = mathLength(Coords["y"]), z = mathLength(Coords["z"]) }
+		HensaTable["Pos"] = { x = Optimize(Coords["x"]), y = Optimize(Coords["y"]), z = Optimize(Coords["z"]) }
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -279,7 +279,7 @@ function Disconnect(source, Health, Armour, Coords, Reason)
 			else
 				HensaTable["Health"] = Health
 				HensaTable["Armour"] = Armour
-				HensaTable["Pos"] = { x = mathLength(Coords["x"]), y = mathLength(Coords["y"]), z = mathLength(Coords["z"]) }
+				HensaTable["Pos"] = { x = Optimize(Coords["x"]), y = Optimize(Coords["y"]), z = Optimize(Coords["z"]) }
 			end
 
 			if HensaTable["Health"] <= 100 then
@@ -3495,7 +3495,7 @@ AddEventHandler("Salary:Receive", function()
                     TriggerClientEvent("Notify", source, "vermelho", "Você não possui valores para sacar.", "Aviso", 5000)
                 end
             else
-                local cooldown = MinimalTimers(SalaryCooldown[passport] - os.time())
+                local cooldown = CompleteTimers(SalaryCooldown[passport] - os.time())
                 TriggerClientEvent("Notify", source, "azul", string.format("Aguarde <b>%s</b>.", cooldown), false, 5000)
             end
         end
