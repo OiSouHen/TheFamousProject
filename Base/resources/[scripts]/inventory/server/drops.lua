@@ -9,7 +9,7 @@ CreateThread(function()
 			for Number,v in pairs(Table) do
 				if Drops[Route] and Drops[Route][Number] and Drops[Route][Number]["timer"] <= os.time() then
 					if ItemUnique(Drops[Route][Number]["key"]) then
-						vRP.RemSrvData(SplitUnique(Drops[Route][Number]["key"]))
+						vRP.RemoveServerData(SplitUnique(Drops[Route][Number]["key"]))
 					end
 
 					TriggerClientEvent("inventory:DropsRemover",-1,Route,Number)
