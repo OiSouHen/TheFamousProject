@@ -15,11 +15,33 @@ function tvRP.ModelExist(Hash)
 	return IsModelInCdimage(Hash)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- DOSCREENFADEOUT
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.DoScreenFadeOut()
+	if IsScreenFadedIn() then
+		DoScreenFadeOut(0)
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- NEWLOADSCENESTARTSPHERE
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.NewLoadSceneStartSphere(Coords)
+	NewLoadSceneStartSphere(Coords,100,0)
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DOSCREENFADEIN
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.DoScreenFadeIn()
+	if IsScreenFadedOut() then
+		DoScreenFadeIn(2500)
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- SETHEALTH
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.SetHealth(Health)
 	local Ped = PlayerPedId()
-	SetEntityHealth(Ped, Health)
+	SetEntityHealth(Ped,Health)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPGRADEHEALTH
@@ -28,7 +50,7 @@ function tvRP.UpgradeHealth(Number)
 	local Ped = PlayerPedId()
 	local Health = GetEntityHealth(Ped)
 	if Health > 100 then
-		SetEntityHealth(Ped, Health + Number)
+		SetEntityHealth(Ped,Health + Number)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -36,15 +58,26 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.DowngradeHealth(Number)
 	local Ped = PlayerPedId()
-	local Health = GetEntityHealth(Ped)
 
-	SetEntityHealth(Ped, Health - Number)
+	ApplyDamageToPed(Ped,Number,false)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLAYINGANIM
 -----------------------------------------------------------------------------------------------------------------------------------------
-function tvRP.PlayingAnim(Dict, Name)
-	return IsEntityPlayingAnim(PlayerPedId(), Dict, Name, 3)
+function tvRP.PlayingAnim(Dict,Name)
+	return IsEntityPlayingAnim(PlayerPedId(),Dict,Name,3)
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- ISENTITYINWATER
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.IsEntityInWater()
+	return IsEntityInWater(PlayerPedId())
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- ISPEDSWIMMING
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.IsPedSwimming()
+	return IsPedSwimming(PlayerPedId())
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SKIN
@@ -56,15 +89,11 @@ function tvRP.Skin(Hash)
 		local Pid = PlayerId()
 		local Ped = PlayerPedId()
 
-		SetPlayerModel(Pid, Hash)
-		SetPedComponentVariation(Ped, 5, 0, 0, 1)
+		SetPlayerModel(Pid,Hash)
 		SetModelAsNoLongerNeeded(Hash)
 
-		if NewHensa then
-			tvRP.ReloadCharacter()
-		end
-
-		ReloadCharacter(Pid, Ped)
+		ReloadCharacter()
+		tvRP.ReloadCharacter()
 
 		LocalPlayer["state"]:set("Invisible", false, false)
 	end
@@ -87,21 +116,19 @@ AddEventHandler("vRP:Active", function(Passport, Name)
 	LocalPlayer["state"]:set("Active", true, false)
 	LocalPlayer["state"]:set("Blastoise", true, false)
 	LocalPlayer["state"]:set("Passport", Passport, false)
-
-	local Pid = PlayerId()
+	
 	local Ped = PlayerPedId()
-
-	ReloadCharacter(Pid, Ped)
-	SetLocalPlayerAsGhost(true)
-	SetEntityInvincible(Ped, true)
-	FreezeEntityPosition(Ped, false)
+	SetEntityInvincible(Ped,true)
+	FreezeEntityPosition(Ped,false)
 	NetworkSetFriendlyFireOption(true)
-	SetCanAttackFriendly(Ped, true, false)
+	SetCanAttackFriendly(Ped,true,false)
+
 	Entity(Ped)["state"]:set("Passport", Passport, true)
 
 	SetTimeout(10000, function()
-		SetLocalPlayerAsGhost(false)
-		SetEntityInvincible(Ped, false)
+		ReloadCharacter()
+		SetEntityInvincible(Ped,false)
+
 		LocalPlayer["state"]:set("Blastoise", false, false)
 	end)
 
@@ -115,15 +142,15 @@ CreateThread(function()
 		local Pid = PlayerId()
 		local Ped = PlayerPedId()
 
-		SetPlayerHealthRechargeMultiplier(Pid, 0.0)
-		SetPlayerHealthRechargeLimit(Pid, 0.0)
+		SetPlayerHealthRechargeMultiplier(Pid,0.0)
+		SetPlayerHealthRechargeLimit(Pid,0.0)
 
 		if GetPlayerMaxArmour(Ped) ~= 100 then
-			SetPlayerMaxArmour(Ped, 100)
+			SetPlayerMaxArmour(Ped,100)
 		end
 
 		if GetPlayerMaxStamina(Pid) ~= 100.0 then
-			SetPlayerMaxStamina(Pid, 100.0)
+			SetPlayerMaxStamina(Pid,100.0)
 		end
 
 		Wait(100)
@@ -132,46 +159,41 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RELOADCHARACTER
 -----------------------------------------------------------------------------------------------------------------------------------------
-function ReloadCharacter(Pid, Ped)
+function ReloadCharacter()
+	local Pid = PlayerId()
+	local Ped = PlayerPedId()
+
 	StopAudioScenes()
 	RemovePickups(Pid)
 	SetMaxWantedLevel(0)
-	SetRandomBoats(false)
-	SetRandomTrains(false)
-	DisableIdleCamera(true)
-	SetGarbageTrucks(false)
-	SetPedHelmet(Ped, false)
+	SetPedHelmet(Ped,false)
 	SetDeepOceanScaler(0.0)
-	SetPedMaxHealth(Ped, 200)
-	SetPlayerTargetingMode(DefaultTargetMode)
-	SetRandomEventFlag(false)
-	SetPoliceRadarBlips(false)
-	DistantCopCarSirens(false)
-	SetWeaponsNoAutoswap(true)
-	SetEntityMaxHealth(Ped, 200)
+	SetPedMaxHealth(Ped,200)
+	SetEntityMaxHealth(Ped,200)
 	SetAiWeaponDamageModifier(0.5)
-	SetAllVehicleGeneratorsActive()
-	SetPoliceIgnorePlayer(Ped, true)
-	SetArtificialLightsState(false)
-	SetPlayerCanUseCover(Pid, false)
-	SetPedSteersAroundPeds(Ped, true)
-	SetEveryoneIgnorePlayer(Ped, true)
-	DisableVehicleDistantlights(true)
+	SetPoliceIgnorePlayer(Ped,true)
+	SetPlayerCanUseCover(Pid,false)
+	SetPedSteersAroundPeds(Ped,true)
+	SetEveryoneIgnorePlayer(Ped,true)
 	SetAiMeleeWeaponDamageModifier(5.0)
-	SetDispatchCopsForPlayer(Ped, false)
+	SetDispatchCopsForPlayer(Ped,false)
 	SetFlashLightKeepOnWhileMoving(true)
-	SetPedDropsWeaponsWhenDead(Ped, false)
-	SetPedCanLosePropsOnDamage(Ped, false, 0)
+	SetPedDropsWeaponsWhenDead(Ped,false)
+	SetPedCanLosePropsOnDamage(Ped,false,0)
 
-	SetPedConfigFlag(Ped, 48, true)
-	SetPedConfigFlag(Ped, 35, false)
-	SetPedConfigFlag(Ped, 438, true)
-	SetForceFootstepUpdate(Ped, true)
-	SetPedAudioFootstepLoud(Ped, true)
-	SetPedAudioFootstepQuiet(Ped, true)
+	SetPedConfigFlag(Ped,48,true)
+	SetPedConfigFlag(Ped,35,false)
+	SetPedConfigFlag(Ped,438,true)
+	SetForceFootstepUpdate(Ped,true)
+	SetPedAudioFootstepLoud(Ped,true)
+	SetPedAudioFootstepQuiet(Ped,true)
 
+	DisableIdleCamera(true)
+	SetPlayerTargetingMode(0)
+	SetRandomEventFlag(false)
+	SetWeaponsNoAutoswap(true)
 	SetBlipAlpha(GetNorthRadarBlip(),0)
-	ReplaceHudColourWithRgba(116,65,130,226,255)
+	ReplaceHudColourWithRgba(116,93,161,248,225)
 
 	SetAudioFlag("ActivateSwitchWheelAudio",false)
 	SetAudioFlag("AllowAmbientSpeechInSlowMo",false)
@@ -237,18 +259,15 @@ function ReloadCharacter(Pid, Ped)
 	SetAmbientZoneListStatePersistent("AZL_DLC_Hei4_Island_Zones",true,true)
 	SetAmbientZoneListStatePersistent("AZL_DLC_Hei4_Island_Disabled_Zones",false,true)
 	SetWeaponDamageModifier("WEAPON_BAT",0.25)
-	SetWeaponDamageModifier("WEAPON_FROST",0.25)
 	SetWeaponDamageModifier("WEAPON_KATANA",0.25)
 	SetWeaponDamageModifier("WEAPON_HAMMER",0.25)
 	SetWeaponDamageModifier("WEAPON_WRENCH",0.25)
-	SetWeaponDamageModifier("WEAPON_THERMAL",0.25)
 	SetWeaponDamageModifier("WEAPON_UNARMED",0.25)
 	SetWeaponDamageModifier("WEAPON_HATCHET",0.25)
 	SetWeaponDamageModifier("WEAPON_CROWBAR",0.25)
 	SetWeaponDamageModifier("WEAPON_MACHETE",0.25)
 	SetWeaponDamageModifier("WEAPON_POOLCUE",0.25)
 	SetWeaponDamageModifier("WEAPON_KNUCKLE",0.25)
-	SetWeaponDamageModifier("WEAPON_KARAMBIT",0.25)
 	SetWeaponDamageModifier("WEAPON_GOLFCLUB",0.25)
 	SetWeaponDamageModifier("WEAPON_BATTLEAXE",0.25)
 	SetWeaponDamageModifier("WEAPON_SWITCHBLADE",0.0)
@@ -403,13 +422,13 @@ function RemovePickups(Pid)
 		`PICKUP_WEAPON_STONE_HATCHET`,
 		`PICKUP_WEAPON_STUNGUN`,
 		`PICKUP_WEAPON_SWITCHBLADE`,
-		`PICKUP_WEAPON_PENCIL`,
 		`PICKUP_WEAPON_VINTAGEPISTOL`,
 		`PICKUP_WEAPON_WRENCH`,
 		`PICKUP_WEAPON_RAYCARBINE`
 	}
 
-	for Number = 1, #Pickups do
-		ToggleUsePickupsForPlayer(Pid, Pickups[Number], false)
+	for Number = 1,#Pickups do
+		RemoveAllPickupsOfType(Pickups[Number])
+		ToggleUsePickupsForPlayer(Pid,Pickups[Number],false)
 	end
 end
