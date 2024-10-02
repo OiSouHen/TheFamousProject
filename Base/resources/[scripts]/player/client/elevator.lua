@@ -52,7 +52,7 @@ CreateThread(function()
 							exports["dynamic"]:AddButton(floor.name, "Clique para ir para o andar de número <b>"..floor.id.."</b>.", "player:Elevator", floor.coords, false, true)
 						end
 
-						exports["dynamic"]:openMenu()
+						exports["dynamic"]:Open()
 					else
 						TriggerEvent("Notify", "vermelho", "Os <b>Elevadores</b> não estão funcionando pois estamos sem eletricidade.", "Aviso", 5000)
 					end

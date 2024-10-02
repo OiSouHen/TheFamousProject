@@ -10,38 +10,33 @@ Tunnel.bindInterface("chat",Hensa)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Executive = false
+local Actived = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PERMISSIONS
+-- THREADSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Permissions = {
-	["Admin"] = true,
-	["Premium"] = true,
-	["Policia"] = true,
-	["Mecanico"] = true,
-	["Paramedico"] = true
-}
------------------------------------------------------------------------------------------------------------------------------------------
--- PERMISSIONS
------------------------------------------------------------------------------------------------------------------------------------------
-for Perm,_ in pairs(Permissions) do
-	LocalPlayer["state"]:set(Perm,false,false)
+for Permission,v in pairs(Groups) do
+	if v["Client"] then
+		LocalPlayer["state"]:set(Permission,false,false)
+	end
+
+	if v["Chat"] then
+		Actived[Permission] = true
+	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHAT
+-- CHATEVENT
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("ChatEvent",function()
-	if LocalPlayer["state"]["Active"] and not IsPauseMenuActive() and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Carry"] and not LocalPlayer["state"]["Phone"] and not LocalPlayer["state"]["usingPhone"] and not IsPedReloading(Ped) then
+	if LocalPlayer["state"]["Active"] and not IsPauseMenuActive() and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["Carry"] and not IsPedReloading(Ped) then
 		local Tags = {}
-		for Index,_ in pairs(Permissions) do
-			if Index ~= "Premium" and LocalPlayer["state"][Index] then
-				Tags[#Tags + 1] = Index
+		for Permission,_ in pairs(Actived) do
+			if LocalPlayer["state"][Permission] then
+				Tags[#Tags + 1] = Permission
 			end
 		end
 
-		SendNUIMessage({ name = "Chat", payload = { Tags,Block } })
+		SendNUIMessage({ Action = "Chat", Payload = { Tags,Block } })
 		SetNuiFocus(true,true)
-		Executive = true
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -49,17 +44,16 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("chat:ClientMessage")
 AddEventHandler("chat:ClientMessage",function(Author,Message,Mode)
-	SendNUIMessage({ name = "Message", payload = { Author,Message,Mode } })
+	SendNUIMessage({ Action = "Message", Payload = { Author,Message,Mode } })
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CHATSUBMIT
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("ChatSubmit",function(Data,Callback)
-	SetNuiFocus(false,false)
-
-	if LocalPlayer["state"]["Active"] and Data["message"] ~= "" and Executive then
+	if LocalPlayer["state"]["Active"] and Data["message"] ~= "" then
 		if Data["message"]:sub(1,1) == "/" then
 			ExecuteCommand(Data["message"]:sub(2))
+			SetNuiFocus(false,false)
 		else
 			TriggerServerEvent("chat:ServerMessage",Data["tag"],Data["message"])
 		end
@@ -68,16 +62,9 @@ RegisterNUICallback("ChatSubmit",function(Data,Callback)
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- SERVERPRINT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("__cfx_internal:serverPrint")
-AddEventHandler("__cfx_internal:serverPrint",function()
-	Executive = false
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("close",function(Data,Callback)
+RegisterNUICallback("Close",function(Data,Callback)
 	SetNuiFocus(false,false)
 
 	Callback("Ok")
@@ -86,15 +73,3 @@ end)
 -- KEYMAPPING
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterKeyMapping("ChatEvent","Abrir o chat.","keyboard","T")
------------------------------------------------------------------------------------------------------------------------------------------
--- OPEN
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Open()
-	return Executive
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- EXPORTS
------------------------------------------------------------------------------------------------------------------------------------------
-exports("Open",function()
-	return Executive
-end)

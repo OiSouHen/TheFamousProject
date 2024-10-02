@@ -45,7 +45,7 @@ AddEventHandler("pdm:Open", function()
 			SetNuiFocus(true, true)
 			SetCursorLocation(0.5, 0.5)
 			TriggerEvent("hud:Active", false)
-			TriggerEvent("dynamic:closeSystem")
+			TriggerEvent("dynamic:Close")
 			SendNUIMessage({ name = "Open", payload = VehicleList() })
 		end
 	else

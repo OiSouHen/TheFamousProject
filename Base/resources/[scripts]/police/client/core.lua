@@ -16,7 +16,7 @@ AddEventHandler("police:Open",function()
 	if LocalPlayer["state"]["Policia"] then
 		SetNuiFocus(true,true)
 		SendNUIMessage({ name = "Open" })
-		TriggerEvent("dynamic:closeSystem")
+		TriggerEvent("dynamic:Close")
 
 		local Ped = PlayerPedId()
 		if not IsPedInAnyVehicle(Ped) then

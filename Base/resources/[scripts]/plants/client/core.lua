@@ -106,7 +106,7 @@ AddEventHandler("plants:Informations", function(Number)
 			exports["dynamic"]:AddButton("Administração", "Verificar informações da plantação.", "plants:Verify", Number, false, true)
 		end
 
-		exports["dynamic"]:openMenu()
+		exports["dynamic"]:Open()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------

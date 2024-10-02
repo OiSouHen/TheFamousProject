@@ -1,212 +1,114 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
-local Proxy = module("vrp", "lib/Proxy")
+local Tunnel = module("vrp","lib/Tunnel")
+local Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 Hensa = {}
-Tunnel.bindInterface("crafting", Hensa)
-vKEYBOARD = Tunnel.getInterface("keyboard")
+Tunnel.bindInterface("crafting",Hensa)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PERMISSION
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Permission(Type)
+function Hensa.Permission(Name)
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport then
-		if List[Type]["Permission"] ~= nil then
-			if vRP.HasGroup(Passport, List[Type]["Permission"]) then
-				return true
-			end
-		else
-			return true
-		end
-	end
 
-	return false
+	return Passport and List[Name] and (not List[Name]["Permission"] or (List[Name]["Permission"] and vRP.HasPermission(Passport,List[Name]["Permission"]))) or false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHECKREPUTATION
+-- MOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.CheckReputation()
+function Hensa.Mount(Name)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		local UnLikes = vRP.GetUnLikes(Passport)
-		if UnLikes > 0 then
-			return true
-		else
-			TriggerClientEvent("Notify", source, "amarelo", "Você não possúi reputação suficiente.", "Atenção", 5000)
+		if not Name or not List[Name] or not List[Name]["List"] then
+			-- exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Request do crafting",0xa3c846,source)
 		end
 
-		return false
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- TRADEREPUTATION
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.TradeReputation()
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport then
-		local UnLikes = vRP.GetUnLikes(Passport)
-		if UnLikes > 0 then
-			if vRP.Request(source, "Reputação", "Deseja trocar seus <b>"..Dotted(UnLikes).."x Votos Negativos</b> por <b>"..Dotted(UnLikes * 2).."x "..ItemName(DefaultDollars2).."</b>?") then
-				vRP.RemoveUnlikes(Passport, UnLikes)
-				vRP.GenerateItem(Passport, DefaultDollars2, (UnLikes * 2), true)
-			end
-		else
-			TriggerClientEvent("Notify", source, "amarelo", "Você não possúi reputação suficiente.", "Atenção", 5000)
-		end
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- CRAFTING
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Crafting(Type)
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport then
-		local CraftingInventory = {}
-		for Item,v in pairs(List[Type]["List"]) do
-			local KeyList = {}
+		if List[Name] then
+			local Primary = {}
+			local Inv = vRP.Inventory(Passport)
+			for Index,v in pairs(Inv) do
+				v["name"] = ItemName(v["item"])
+				v["weight"] = ItemWeight(v["item"])
+				v["index"] = ItemIndex(v["item"])
+				v["amount"] = parseInt(v["amount"])
+				v["rarity"] = ItemRarity(v["item"])
+				v["economy"] = ItemEconomy(v["item"])
+				v["desc"] = ItemDescription(v["item"])
+				v["key"] = v["item"]
+				v["slot"] = Index
 
-			for Required,Amount in pairs(v["Required"]) do
-				KeyList[#KeyList + 1] = { index = Required, amount = Amount }
-			end
+				local Split = splitString(v["item"])
 
-			CraftingInventory[#CraftingInventory + 1] = { id = Type, name = ItemName(Item), index = ItemIndex(Item), type = ItemType(Item), economy = Dotted(ItemEconomy(Item)), key = Item, weight = ItemWeight(Item), amount = parseInt(v["Amount"]), craftable = v["Craftable"], recipeItems = KeyList, time = v["Time"] }
-		end
-
-		local UserInventory = {}
-		local inventory = vRP.Inventory(Passport)
-		for Index,v in pairs(inventory) do
-			v["amount"] = parseInt(v["amount"])
-			v["name"] = ItemName(v["item"])
-			v["weight"] = ItemWeight(v["item"])
-			v["index"] = ItemIndex(v["item"])
-			v["max"] = ItemMaxAmount(v["item"])
-			v["economy"] = Dotted(ItemEconomy(v["item"]))
-			v["key"] = v["item"]
-			v["slot"] = Index
-
-			local splitName = splitString(v["item"], "-")
-			if splitName[2] ~= nil then
-				if ItemDurability(v["item"]) then
-					v["durability"] = parseInt(os.time() - splitName[2])
-					v["days"] = ItemDurability(v["item"])
-				else
-					v["durability"] = 0
-					v["days"] = 1
-				end
-			else
-				v["durability"] = 0
-				v["days"] = 1
-			end
-
-			UserInventory[Index] = v
-		end
-
-		return CraftingInventory, UserInventory, vRP.InventoryWeight(Passport), vRP.GetWeight(Passport)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- FUNCTIONCRAFTING
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.FunctionCrafting(Type, Item, Amount)
-	local source = source
-	local Amount = parseInt(Amount)
-	local Passport = vRP.Passport(source)
-	if Passport then
-		if Amount <= 0 then Amount = 1 end
-
-		if List[Type]["List"][Item] then
-			if vRP.MaxItens(Passport, Item, List[Type]["List"][Item]["Amount"] * Amount) then
-				TriggerClientEvent("Notify", source, "amarelo", "Limite atingido.", "Atenção", 5000)
-				return
-			end
-
-			if (vRP.InventoryWeight(Passport) + (ItemWeight(Item) * List[Type]["List"][Item]["Amount"]) * Amount) <= vRP.GetWeight(Passport) then
-				for Index,v in pairs(List[Type]["List"][Item]["Required"]) do
-					local ConsultItem = vRP.InventoryItemAmount(Passport, Index)
-					if ConsultItem[1] < parseInt(v * Amount) then
-						return
-					end
-
-					if vRP.CheckDamaged(ConsultItem[2]) then
-						TriggerClientEvent("Notify", source, "vermelho", "Item danificado.", "Aviso", 5000)
-						return
+				if not v["desc"] then
+					if Split[1] == "vehkey" and Split[2] then
+						v["desc"] = "Placa do Veículo: <common>"..Split[2].."</common>"
+					elseif ItemNamed(Split[1]) and Split[2] then
+						v["desc"] = "Propriedade: <common>"..vRP.FullName(Split[2]).."</common>"
 					end
 				end
 
-				for Index,v in pairs(List[Type]["List"][Item]["Required"]) do
-					local ConsultItem = vRP.InventoryItemAmount(Passport, Index)
-					vRP.RemoveItem(Passport, ConsultItem[2], parseInt(v * Amount), CraftingNotify)
+				if Split[2] then
+					local Loaded = ItemLoads(v["item"])
+					if Loaded then
+						v["charges"] = parseInt(Split[2] * (100 / Loaded))
+					end
+
+					if ItemDurability(v["item"]) then
+						v["durability"] = parseInt(os.time() - Split[2])
+						v["days"] = ItemDurability(v["item"])
+					end
 				end
 
-				vRP.GenerateItem(Passport, Item, List[Type]["List"][Item]["Amount"] * Amount, CraftingNotify)
-			else
-				TriggerClientEvent("Notify", source, "vermelho", "Mochila cheia.", "Aviso", 5000)
+				Primary[Index] = v
 			end
+
+			return Primary,vRP.GetWeight(Passport)
 		end
 	end
 end
+---------------------------------------------------------------------------------------------------------------------------------
+-- TAKE
 -----------------------------------------------------------------------------------------------------------------------------------------
--- OWNED
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Owned(Type, Item)
+function Hensa.Take(Item,Amount,Target,Name)
 	local source = source
+	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
-	if Passport then
-		if List[Type]["List"][Item] then
-			local ItemList = {}
-			for Item,_ in pairs(List[Type]["List"][Item]["Required"]) do
-				table.insert(ItemList, { index = Item, amount = vRP.ItemAmount(Passport, Item) })
-			end
-
-			return ItemList
+	if Passport and Item and Target and List[Name] and List[Name]["List"] and List[Name]["List"][Item] then
+		if Amount > 1 and (ItemUnique(Item) or ItemLoads(Item)) then
+			Amount = 1
 		end
-	end
 
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- POPULATESLOT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("crafting:populateSlot")
-AddEventHandler("crafting:populateSlot", function(Item, Slot, Target, Amount)
-	local source = source
-	local Amount = parseInt(Amount)
-	local Passport = vRP.Passport(source)
-	if Passport then
-		if Amount <= 0 then Amount = 1 end
+		if ItemBlueprint(Item) and not exports["inventory"]:Blueprint(Passport,Item) then
+			TriggerClientEvent("inventory:Notify",source,"Aviso","Aprendizado não encontrado.","amarelo")
 
-		if vRP.TakeItem(Passport, Item, Amount, false, Slot) then
-			vRP.GiveItem(Passport, Item, Amount, false, Target)
+			return false
 		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- UPDATESLOT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("crafting:updateSlot")
-AddEventHandler("crafting:updateSlot", function(Item, Slot, Target, Amount)
-	local source = source
-	local Amount = parseInt(Amount)
-	local Passport = vRP.Passport(source)
-	if Passport then
-		if Amount <= 0 then Amount = 1 end
 
 		local Inventory = vRP.Inventory(Passport)
-		if Inventory[tostring(Slot)] and Inventory[tostring(Target)] and Inventory[tostring(Slot)]["item"] == Inventory[tostring(Target)]["item"] then
-			if vRP.TakeItem(Passport, Item, Amount, false, Slot) then
-				vRP.GiveItem(Passport, Item, Amount, false, Target)
+		local Multiplier = List[Name]["List"][Item]["Amount"] * Amount
+		if not vRP.MaxItens(Passport,Item,Multiplier) and vRP.GetWeight(Passport) and (not Inventory[Target] or (Inventory[Target] and Inventory[Target]["item"] == Item)) then
+			for Index,Value in pairs(List[Name]["List"][Item]["Required"]) do
+				if not vRP.ConsultItem(Passport,Index,Value * Amount) then
+					TriggerClientEvent("inventory:Notify",source,"Atenção","Precisa de <default>"..Dotted(Value * Amount).."x "..ItemName(Index).."</default>.","vermelho")
+
+					return false
+				end
 			end
-		else
-			vRP.SwapSlot(Passport, Slot, Target)
+
+			for Index,Value in pairs(List[Name]["List"][Item]["Required"]) do
+				local Consult = vRP.InventoryItemAmount(Passport,Index)
+				vRP.RemoveItem(Passport,Consult[2],Value * Amount)
+			end
+
+			vRP.GenerateItem(Passport,Item,Multiplier,false,Target)
 		end
 	end
-end)
+
+	TriggerClientEvent("inventory:Update",source)
+end

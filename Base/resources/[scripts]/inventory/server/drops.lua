@@ -26,9 +26,11 @@ function Hensa.Drops(Item,Slot,Amount)
 	local source = source
 	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
-	if Passport and not Active[Passport] and Amount >= 1 and not Player(source)["state"]["Handcuff"] and not exports["hud"]:Wanted(Passport) and not vRP.InsideVehicle(source) and vRP.TakeItem(Passport,Item,Amount,false,Slot) then
-		exports["inventory"]:Drops(Passport,source,Item,Amount,true)
-		TriggerClientEvent("inventory:Update",source,"Backpack")
+	if Passport and not Active[Passport] and Amount >= 1 and not Player(source)["state"]["Handcuff"] and not exports["hud"]:Wanted(Passport) then
+		if vRP.TakeItem(Passport,Item,Amount,false,Slot) then
+			exports["inventory"]:Drops(Passport,source,Item,Amount,true)
+			TriggerClientEvent("inventory:Update",source,"Backpack")
+		end
 	else
 		TriggerClientEvent("inventory:Update",source,"Backpack")
 	end
@@ -42,7 +44,7 @@ exports("Drops",function(Passport,source,Item,Amount,Force)
 	local Split = splitString(Item)
 	local Route = GetPlayerRoutingBucket(source)
 
-	Force = (Force and Item or vRP.SortNameItem(Passport,Item))
+	Force = (Force and Item)
 
 	if not Drops[Route] then
 		Drops[Route] = {}

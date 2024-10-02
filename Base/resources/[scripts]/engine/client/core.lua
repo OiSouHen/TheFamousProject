@@ -352,5 +352,5 @@ AddEventHandler("engine:Vehrify", function(Entitys)
 	local HandsBreak = parseInt((Brakes[3] * 10000) / 75)
 	exports["dynamic"]:AddButton("Freio Traseiro", "Freio Traseiro se encontra em <blue>"..HandsBreak.."%</blue>.", "", "", false, false)
 
-	exports["dynamic"]:openMenu()
+	exports["dynamic"]:Open()
 end)

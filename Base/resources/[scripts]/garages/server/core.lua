@@ -305,7 +305,7 @@ AddEventHandler("garages:Impound", function(Name)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		local VehiclePrice = VehiclePrice(Name) * PercentageArrest
-		TriggerClientEvent("dynamic:closeSystem", source)
+		TriggerClientEvent("dynamic:Close", source)
 
 		if vRP.Request(source, "Garagem", "A liberação do veículo tem o custo de <b>$" .. Dotted(VehiclePrice) .. "</b> dólares, deseja prosseguir com a liberação do mesmo?") then
 			if vRP.PaymentFull(Passport, VehiclePrice) then
@@ -616,7 +616,7 @@ function Hensa.Spawn(Name, Number)
 
 									local VehiclePrice = VehiclePrice(Name)
 									if vRP.HasGroup(Passport, "Premium") then
-										TriggerClientEvent("dynamic:closeSystem", source)
+										TriggerClientEvent("dynamic:Close", source)
 										local Exist, Network = Hensa.ServerVehicle(Name, Coords[1], Coords[2], Coords[3], Coords[4], Plate, vehicle[1]["Nitro"], vehicle[1]["Doors"], vehicle[1]["Body"])
 
 										if Exist then
@@ -638,7 +638,7 @@ function Hensa.Spawn(Name, Number)
 									else
 										if vRP.Request(source, "Garagem", "Retirar o veículo por <b>$" .. Dotted(VehiclePrice * 0.05) .. "</b> dólares?") then
 											if vRP.PaymentFull(Passport, VehiclePrice * 0.05) then
-												TriggerClientEvent("dynamic:closeSystem", source)
+												TriggerClientEvent("dynamic:Close", source)
 												local Exist, Network = Hensa.ServerVehicle(Name, Coords[1], Coords[2], Coords[3], Coords[4], Plate, vehicle[1]["Nitro"], vehicle[1] ["Doors"], vehicle[1]["Body"])
 
 												if Exist then
@@ -663,7 +663,7 @@ function Hensa.Spawn(Name, Number)
 								end
 							end
 						else
-							TriggerClientEvent("dynamic:closeSystem", source)
+							TriggerClientEvent("dynamic:Close", source)
 							local Exist, Network = Hensa.ServerVehicle(Name, Coords[1], Coords[2], Coords[3], Coords[4], Plate, vehicle[1]["Nitro"], vehicle[1]["Doors"], vehicle[1]["Body"])
 
 							if Exist then
@@ -956,7 +956,7 @@ AddEventHandler("garages:Propertys", function(Name)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		TriggerClientEvent("dynamic:closeSystem", source)
+		TriggerClientEvent("dynamic:Close", source)
 		TriggerClientEvent("Notify", source, "amarelo", "Selecione o local da garagem.", "Atenção", 5000)
 
 		local Hash = "prop_offroad_tyres02"

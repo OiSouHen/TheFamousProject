@@ -47,7 +47,7 @@ CreateThread(function()
 										exports["dynamic"]:AddButton("Credenciais","Máximo <blue>1</blue> proprietário e <blue>3</blue> moradores.","","",Line,false)
 										exports["dynamic"]:AddButton("Comprar com Dólares","Custo de <blue>$"..Dotted(v["Price"]).."</blue> dólares.","propertys:Buy",Name.."-"..Line.."-Dollars",Line,true)
 										exports["dynamic"]:AddButton("Comprar com Diamantes","Custo de <blue>"..Dotted(v["Gemstone"]).."</blue> diamantes.","propertys:Buy",Name.."-"..Line.."-Gemstone",Line,true)
-										exports["dynamic"]:SubMenu(Line,"Informações sobre o interior.",Line)
+										exports["dynamic"]:AddMenu(Line,"Informações sobre o interior.",Line)
 									end
 								else
 									if Consult ~= "Hotel" then
@@ -68,7 +68,7 @@ CreateThread(function()
 									end
 								end
 
-								exports["dynamic"]:openMenu()
+								exports["dynamic"]:Open()
 							end
 						end
 					end
@@ -141,8 +141,8 @@ end)
 function ClothesMenu()
 	exports["dynamic"]:AddButton("Guardar","Salvar suas vestimentas do corpo.","propertys:Clothes","save",false,true)
 	exports["dynamic"]:AddButton("Shopping","Abrir a loja de vestimentas.","skinshop:Open","",false,false)
-	exports["dynamic"]:SubMenu("Vestir","Abrir lista com todas as vestimentas.","apply")
-	exports["dynamic"]:SubMenu("Remover","Abrir lista com todas as vestimentas.","delete")
+	exports["dynamic"]:AddMenu("Vestir","Abrir lista com todas as vestimentas.","apply")
+	exports["dynamic"]:AddMenu("Remover","Abrir lista com todas as vestimentas.","delete")
 
 	local Clothes = vSERVER.Clothes()
 	if parseInt(#Clothes) > 0 then
@@ -152,7 +152,7 @@ function ClothesMenu()
 		end
 	end
 
-	exports["dynamic"]:openMenu()
+	exports["dynamic"]:Open()
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PROPERTYS:CLOTHESRESET
