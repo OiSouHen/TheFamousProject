@@ -415,7 +415,7 @@ AddEventHandler("player:Death",function(PedSource,OtherSource)
 			local Coords = vRP.GetEntityCoords(PedSource)
 			local OtherCoords = vRP.GetEntityCoords(OtherSource)
 
-			exports["vrp"]:Embed("Deaths","**Passaporte do Assassino:** "..OtherPassport.."\n**Localização do Assassino:** "..mathLength(OtherCoords["x"])..","..mathLength(OtherCoords["y"])..","..mathLength(OtherCoords["z"]).."\n\n**Passaporte da Vítima:** "..Passport.."\n**Localização da Vítima:** "..mathLength(Coords["x"])..","..mathLength(Coords["y"])..","..mathLength(Coords["z"]).."\n\n**Data & Hora:** "..os.date("%d/%m/%Y").." às "..os.date("%H:%M"),0xa3c846)
+			exports["vrp"]:Embed("Deaths","**Passaporte do Assassino:** "..OtherPassport.."\n**Localização do Assassino:** "..Optimize(OtherCoords["x"])..","..Optimize(OtherCoords["y"])..","..Optimize(OtherCoords["z"]).."\n\n**Passaporte da Vítima:** "..Passport.."\n**Localização da Vítima:** "..Optimize(Coords["x"])..","..Optimize(Coords["y"])..","..Optimize(Coords["z"]).."\n\n**Data & Hora:** "..os.date("%d/%m/%Y").." às "..os.date("%H:%M"),0xa3c846)
 		end
 	end
 end)
