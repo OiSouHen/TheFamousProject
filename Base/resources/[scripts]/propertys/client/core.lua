@@ -42,11 +42,11 @@ CreateThread(function()
 							if Consult then
 								if Consult == "Nothing" then
 									for Line,v in pairs(Informations) do
-										exports["dynamic"]:AddButton("Baú","Total de <blue>"..v["Vault"].."Kg</blue> no compartimento.","","",Line,false)
-										exports["dynamic"]:AddButton("Geladeira","Total de <blue>"..v["Fridge"].."Kg</blue> no compartimento.","","",Line,false)
-										exports["dynamic"]:AddButton("Credenciais","Máximo <blue>1</blue> proprietário e <blue>3</blue> moradores.","","",Line,false)
-										exports["dynamic"]:AddButton("Comprar com Dólares","Custo de <blue>$"..Dotted(v["Price"]).."</blue> dólares.","propertys:Buy",Name.."-"..Line.."-Dollars",Line,true)
-										exports["dynamic"]:AddButton("Comprar com Diamantes","Custo de <blue>"..Dotted(v["Gemstone"]).."</blue> diamantes.","propertys:Buy",Name.."-"..Line.."-Gemstone",Line,true)
+										exports["dynamic"]:AddButton("Baú","Total de <rare>"..v["Vault"].."Kg</rare> no compartimento.","","",Line,false)
+										exports["dynamic"]:AddButton("Geladeira","Total de <rare>"..v["Fridge"].."Kg</rare> no compartimento.","","",Line,false)
+										exports["dynamic"]:AddButton("Credenciais","Máximo <rare>1</rare> proprietário e <rare>3</rare> moradores.","","",Line,false)
+										exports["dynamic"]:AddButton("Comprar com Dólares","Custo de <rare>$"..Dotted(v["Price"]).."</rare> dólares.","propertys:Buy",Name.."-"..Line.."-Dollars",Line,true)
+										exports["dynamic"]:AddButton("Comprar com Diamantes","Custo de <rare>"..Dotted(v["Gemstone"]).."</rare> diamantes.","propertys:Buy",Name.."-"..Line.."-Gemstone",Line,true)
 										exports["dynamic"]:AddMenu(Line,"Informações sobre o interior.",Line)
 									end
 								else
