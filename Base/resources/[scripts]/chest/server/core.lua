@@ -208,7 +208,7 @@ function Hensa.Mount()
 		end
 
 		local Secondary = {}
-		local Result = vRP.GetSrvData(Open[Passport]["Name"],Open[Passport]["Save"])
+		local Result = vRP.GetServerData(Open[Passport]["Name"])
 		for Index,v in pairs(Result) do
 			v["name"] = ItemName(v["item"])
 			v["weight"] = ItemWeight(v["item"])
@@ -279,7 +279,7 @@ function Hensa.Store(Item,Slot,Amount,Target,Inactived)
 				return false
 			end
 
-			if vRP.StoreChest(Passport,Open[Passport]["Name"],Amount,Open[Passport]["Weight"],Slot,Target,Open[Passport]["Save"],ChestItens[Unique]) then
+			if vRP.StoreChest(Passport,Open[Passport]["Name"],Amount,Open[Passport]["Weight"],Slot,Target) then
 				TriggerClientEvent("inventory:Update",source)
 			elseif Open[Passport]["Logs"] then
 				exports["discord"]:Embed(Open[Passport]["NameLogs"],"**Passaporte:** "..Passport.."\n**Guardou:** "..Amount.."x "..ItemName(Item),0xa3c846)
@@ -296,8 +296,8 @@ function Hensa.Take(Item,Slot,Amount,Target)
 	local source = source
 	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
-	if Passport and Open[Passport] and not vRP.TakeChest(Passport,Open[Passport]["Name"],Amount,Slot,Target,Open[Passport]["Save"]) then
-		local Result = vRP.GetSrvData(Open[Passport]["Name"],Open[Passport]["Save"])
+	if Passport and Open[Passport] and not vRP.TakeChest(Passport,Open[Passport]["Name"],Amount,Slot,Target) then
+		local Result = vRP.GetServerData(Open[Passport]["Name"])
 		if (Open[Passport]["Mode"] or Open[Passport]["Item"]) and json.encode(Result) == "[]" then
 			if Open[Passport]["Item"] and vRP.TakeItem(Passport,Open[Passport]["Item"]) then
 				TriggerClientEvent("inventory:Open",source,{
@@ -324,7 +324,7 @@ function Hensa.Update(Slot,Target,Amount)
 	local source = source
 	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
-	if Passport and Open[Passport] and vRP.UpdateChest(Passport,Open[Passport]["Name"],Slot,Target,Amount,Open[Passport]["Save"]) then
+	if Passport and Open[Passport] and vRP.UpdateChest(Passport,Open[Passport]["Name"],Slot,Target,Amount) then
 		TriggerClientEvent("inventory:Update",source)
 	end
 end

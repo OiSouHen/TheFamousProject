@@ -1,276 +1,175 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
-local Proxy = module("vrp", "lib/Proxy")
-vRP = Proxy.getInterface("vRP")
+local Tunnel = module("vrp","lib/Tunnel")
+local Proxy = module("vrp","lib/Proxy")
 vRPC = Tunnel.getInterface("vRP")
+vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 Hensa = {}
-Tunnel.bindInterface("plants", Hensa)
+Tunnel.bindInterface("plants",Hensa)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
+local Active = {}
 local Plants = {}
-local PlantsAmount = math.random(2)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PLANTSTYPES
+-- THREADINITOBJECTS
 -----------------------------------------------------------------------------------------------------------------------------------------
-local PlantsTypes = {
-	["mushseed"] = { "mushseed", "Cogumelo", "mushroom" },
-	["weedclone"] = { "weedclone", "Maconha", "weedbud" },
-	["weedclone2"] = { "weedclone2", "Maconha", "weedbud" }
-}
+CreateThread(function()
+	local Consult = vRP.Query("entitydata/GetData",{ Name = "Plants" })
+	if Consult[1] then
+		Plants = json.decode(Consult[1]["Information"])
+
+		for Index,v in pairs(Plants) do
+			if Index and Plants[Index] and Plants[Index]["Timer"] and (os.time() - Plants[Index]["Timer"]) > 3600 then
+				Plants[Index] = nil
+			end
+		end
+	end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS
 -----------------------------------------------------------------------------------------------------------------------------------------
-exports("Plants", function(Model, Owner, Coords, Route, Points, Type)
-	local Number = 1
-	while Plants[tostring(Number)] do
-		Number = Number + 1
-	end
+exports("Plants",function(Hash,Coords,Route,Item,Amount)
+	repeat
+		Selected = GenerateString("DDLLDDLL")
+	until Selected and not Plants[Selected]
 
-	local plantData = {
-		["Model"] = Model,
-		["Type"] = Type,
-		["Owner"] = Owner,
-		["Coords"] = {Optimize(Coords.x), Optimize(Coords.y), Optimize(Coords.z)},
-		["Time"] = os.time() + 10800,
-		["Points"] = Points,
-		["Fertilizer"] = 0,
-		["Route"] = Route
+	Plants[Selected] = {
+		["Water"] = 0.0,
+		["Hash"] = Hash,
+		["Item"] = Item,
+		["Route"] = Route,
+		["Coords"] = Coords,
+		["Timer"] = os.time() + 7200,
+		["Amount"] = math.random(Amount["Min"],Amount["Max"])
 	}
 
-	Plants[tostring(Number)] = plantData
-
-	TriggerClientEvent("plants:New", -1, tostring(Number), plantData)
+	TriggerClientEvent("plants:New",-1,Selected,Plants[Selected])
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- REMOVEPLANT
+-- CHECKDEATH
 -----------------------------------------------------------------------------------------------------------------------------------------
-function RemovePlant(Number, source)
-	Plants[Number] = nil
-	TriggerClientEvent("plants:Remove", -1, Number)
-	TriggerClientEvent("dynamic:Close", source)
-	Player(source)["state"]["Buttons"] = false
-	Player(source)["state"]["Cancel"] = false
-	vRPC.Destroy(source)
+function CheckDeath(source,Number)
+	if Number and Plants[Number] and Plants[Number]["Timer"] and (os.time() - Plants[Number]["Timer"]) > 3600 then
+		Plants[Number] = nil
+		TriggerClientEvent("dynamic:Close",source)
+		TriggerClientEvent("plants:Remove",-1,Number)
+		TriggerClientEvent("Notify",source,"Horticultura","A plantação apodreceu.","vermelho",5000)
+
+		return true
+	end
+
+	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS:COLLECT
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("plants:Collect")
-AddEventHandler("plants:Collect", function(Number)
+AddEventHandler("plants:Collect",function(Number)
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport and Plants[Number] then
-		local currentTime = os.time()
-		local plantTime = Plants[Number]["Time"]
-		local timeDifference = currentTime - plantTime
+	if Passport and not Active[Passport] and Plants[Number] and Plants[Number]["Timer"] and not CheckDeath(source,Number) and os.time() >= Plants[Number]["Timer"] then
+		local Temporary = Plants[Number]
 
-		if timeDifference > 3600 then
-			RemovePlant(Number, source)
-			TriggerClientEvent("Notify", source, "amarelo", "A plantação apodreceu.", "Atenção", 5000)
-		elseif currentTime >= plantTime then
-			local temporary = Plants[Number]
-			local plantType = PlantsTypes[temporary["Type"]]
-			local ItemWeight = ItemWeight(plantType[3])
+		Plants[Number] = nil
+		Active[Passport] = true
+		Player(source)["state"]["Cancel"] = true
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("dynamic:Close",source)
+		TriggerClientEvent("Progress",source,"Coletando",10000)
+		vRPC.PlayAnim(source,false,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
 
-			if plantType[1] == "weedclone" then
-				plantsAmount = math.random(2)
-			elseif plantType[1] == "weedclone2" then
-				plantsAmount = math.random(3, 4)
-			elseif plantType[1] == "mushseed" then
-				plantsAmount = math.random(2)
+		SetTimeout(10000,function()
+			local Valuation = Temporary["Amount"]
+			if Temporary["Water"] and Valuation then
+				Valuation = Valuation + (Valuation * Temporary["Water"])
 			end
 
-			local totalWeight = vRP.InventoryWeight(Passport) + ItemWeight * plantsAmount
-			if totalWeight <= vRP.GetWeight(Passport) then
-				Player(source)["state"]["Cancel"] = true
-				Player(source)["state"]["Buttons"] = true
-				TriggerClientEvent("dynamic:Close", source)
-				TriggerClientEvent("Progress", source, "Coletando", 10000)
-				vRPC.PlayAnim(source, false, { "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer" }, true)
-
-				Wait(10000)
-
-				vRP.GenerateItem(Passport, plantType[3].."-"..temporary["Points"], plantsAmount, true)
-
-				if plantType[3] == "weedbud" then
-					vRP.GenerateItem(Passport, "bucket", 1, true)
-				end
-
-				RemovePlant(Number, source)
+			if vRP.CheckWeight(Passport,Temporary["Item"],Temporary["Amount"]) then
+				vRP.GenerateItem(Passport,Temporary["Item"],Temporary["Amount"],true)
 			else
-				TriggerClientEvent("Notify", source, "amarelo", "Sua recompensa caiu no chão.", "Mochila Sobrecarregada", 5000)
-				exports["inventory"]:Drops(Passport, source, plantType[3].."-"..temporary["Points"], plantsAmount)
+				TriggerClientEvent("Notify",source,"Mochila Sobrecarregada","Sua recompensa caiu no chão.","roxo",5000)
+				exports["inventory"]:Drops(Passport,source,Temporary["Item"],Temporary["Amount"])
 			end
-		end
+
+			TriggerClientEvent("plants:Remove",-1,Number)
+			Player(source)["state"]["Buttons"] = false
+			Player(source)["state"]["Cancel"] = false
+			Active[Passport] = nil
+			vRPC.Destroy(source)
+		end)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS:CLONING
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("plants:Cloning")
-AddEventHandler("plants:Cloning", function(Number)
+AddEventHandler("plants:Cloning",function(Number)
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport and Plants[Number] then
-		local currentTime = os.time()
-		local plantTime = Plants[Number]["Time"]
-		local timeDifference = currentTime - plantTime
-
-		if timeDifference > 3600 then
-			RemovePlant(Number, source)
-			TriggerClientEvent("Notify", source, "amarelo", "A plantação apodreceu.", "Atenção", 5000)
-		elseif plantTime - currentTime <= 5400 then
-			local temporary = Plants[Number]
-			local plantType = PlantsTypes[temporary["Type"]]
-			local ItemWeight = ItemWeight(plantType[1])
-			local plantsAmount
-
-			if plantType[1] == "weedclone" then
-				plantsAmount = math.random(2)
-			elseif plantType[1] == "weedclone2" then
-				plantsAmount = math.random(3, 4)
-			elseif plantType[1] == "mushseed" then
-				plantsAmount = math.random(2)
-			end
-
-			local totalWeight = vRP.InventoryWeight(Passport) + ItemWeight * plantsAmount
-			if totalWeight <= vRP.GetWeight(Passport) then
-				Player(source)["state"]["Cancel"] = true
-				Player(source)["state"]["Buttons"] = true
-				TriggerClientEvent("dynamic:Close", source)
-				TriggerClientEvent("Progress", source, "Clonando", 10000)
-				vRPC.PlayAnim(source, false, { "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer" }, true)
-
-				Wait(10000)
-
-				local points = parseInt(temporary["Points"]) + 1
-				if points > 100 then
-					points = 100
-				end
-
-				vRP.GenerateItem(Passport, plantType[1].."-"..points, plantsAmount, true)
-
-				if plantType[1] == "weedclone" or plantType[1] == "weedclone2" then
-					vRP.GenerateItem(Passport, "bucket", 1, true)
-				end
-
-				RemovePlant(Number, source)
-			else
-				TriggerClientEvent("Notify", source, "amarelo", "Sua recompensa caiu no chão.", "Mochila Sobrecarregada", 5000)
-				exports["inventory"]:Drops(Passport, source, plantType[1].."-"..points, plantsAmount)
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- PLANTS:FERTILIZER
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("plants:Fertilizer")
-AddEventHandler("plants:Fertilizer", function(Number)
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport and Plants[Number] then
-		local currentTime = os.time()
-		local plantTime = Plants[Number]["Time"]
-		local timeDifference = currentTime - plantTime
-
-		if timeDifference > 3600 then
-			RemovePlant(Number, source)
-			TriggerClientEvent("Notify", source, "amarelo", "A plantação apodreceu.", "Atenção", 5000)
-		else
-			local fertilizerLimit = 3
-			local fertilizerTimeLimit = 600
-			local fertilizerItem = "fertilizer"
-
-			if Plants[Number]["Fertilizer"] < fertilizerLimit and (plantTime - currentTime) >= fertilizerTimeLimit then
-				local ConsultFertilizer = vRP.InventoryItemAmount(Passport, fertilizerItem)
-				if ConsultFertilizer[1] <= 0 then
-					TriggerClientEvent("Notify", source, "amarelo", "Você precisa de <b>1x "..ItemName(fertilizerItem).."</b>.", "Atenção", 5000)
-				else
-					Player(source)["state"]["Cancel"] = true
-					Player(source)["state"]["Buttons"] = true
-					TriggerClientEvent("dynamic:Close", source)
-					TriggerClientEvent("Progress", source, "Fertilizando", 60000)
-					vRPC.PlayAnim(source, false,{ "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", "machinic_loop_mechandplayer" },true)
-
-					Wait(60000)
-
-					TriggerClientEvent("Notify", source, "verde", "Fertilização completa.", "Sucesso", 5000)
-					Plants[Number]["Points"] = Plants[Number]["Points"] + math.random(5, 10)
-					Plants[Number]["Fertilizer"] = Plants[Number]["Fertilizer"] + 1
-					Plants[Number]["Time"] = Plants[Number]["Time"] - fertilizerTimeLimit
-					vRP.RemoveItem(Passport, fertilizerItem, 1, true)
-					Player(source)["state"]["Buttons"] = false
-					Player(source)["state"]["Cancel"] = false
-					vRPC.Destroy(source)
-				end
-			else
-				TriggerClientEvent("Notify", source, "amarelo", "A plantação já foi fertilizada ao máximo.", "Atenção", 5000)
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- PLANTS:REMOVE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("plants:Remove")
-AddEventHandler("plants:Remove", function(Number)
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport and Plants[Number] then
-		local plantType = PlantsTypes[Plants[Number]["Type"]][1]
-
-		if plantType == "weedclone" or plantType == "weedclone2" then
-			vRP.GenerateItem(Passport, "bucket", 1, true)
-		end
+	if Passport and not Active[Passport] and Plants[Number] and Plants[Number]["Timer"] and not CheckDeath(source,Number) and (Plants[Number]["Timer"] - os.time()) <= 3600 then
+		local Temporary = Plants[Number]
 
 		Plants[Number] = nil
-		TriggerClientEvent("plants:Remove", -1, Number)
-		TriggerClientEvent("dynamic:Close", source)
-		TriggerClientEvent("Notify", source, "verde", "A plantação foi removida.", "Sucesso", 5000)
+		Active[Passport] = true
+		Player(source)["state"]["Cancel"] = true
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("dynamic:Close",source)
+		TriggerClientEvent("Progress",source,"Coletando",10000)
+		vRPC.PlayAnim(source,false,{"anim@amb@clubhouse@tutorial@bkr_tut_ig3@","machinic_loop_mechandplayer"},true)
+
+		SetTimeout(10000,function()
+			local Valuation = 2
+			if Temporary["Water"] and Valuation then
+				Valuation = Valuation + (Valuation * Temporary["Water"])
+			end
+
+			if vRP.CheckWeight(Passport,Temporary["Item"].."clone",Valuation) then
+				vRP.GenerateItem(Passport,Temporary["Item"].."clone",Valuation,true)
+			else
+				TriggerClientEvent("Notify",source,"Mochila Sobrecarregada","Sua recompensa caiu no chão.","roxo",5000)
+				exports["inventory"]:Drops(Passport,source,Temporary["Item"].."clone",Valuation)
+			end
+
+			TriggerClientEvent("plants:Remove",-1,Number)
+			Player(source)["state"]["Buttons"] = false
+			Player(source)["state"]["Cancel"] = false
+			Active[Passport] = nil
+			vRPC.Destroy(source)
+		end)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PLANTS:VERIFY
+-- PLANTS:WATER
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("plants:Verify")
-AddEventHandler("plants:Verify", function(Number)
+RegisterServerEvent("plants:Water")
+AddEventHandler("plants:Water",function(Number)
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport and Plants[Number] then
-		local Identity = vRP.Identity(Plants[Number]["Owner"])
-		if Identity then
-			local currentTime = os.time()
-			local plantTime = Plants[Number]["Time"]
-			local timeDifference = currentTime - plantTime
-			local Validity, Collect, Cloning
+	if Passport and not Active[Passport] and Plants[Number] and Plants[Number]["Timer"] and not CheckDeath(source,Number) and Plants[Number]["Timer"] >= os.time() then
+		local Consult = vRP.ConsultItem(Passport,"water")
+		if Plants[Number]["Water"] < 1.0 and Consult then
+			Active[Passport] = true
+			Player(source)["state"]["Cancel"] = true
+			Player(source)["state"]["Buttons"] = true
+			TriggerClientEvent("dynamic:Close",source)
+			TriggerClientEvent("Progress",source,"Coletando",10000)
+			vRPC.CreateObjects(source,"weapon@w_sp_jerrycan","fire","prop_wateringcan",1,28422,0.4,0.1,0.0,90.0,180.0,0.0)
 
-			if timeDifference > 3600 then
-				Validity = "Plantação Apodrecida"
-			else
-				Validity = "Plantação Ativa"
-			end
+			SetTimeout(10000,function()
+				if Plants[Number] and Plants[Number]["Water"] < 1.0 and vRP.TakeItem(Passport,Consult["Item"],true) then
+					Plants[Number]["Water"] = Plants[Number]["Water"] + 0.20
+				end
 
-			if currentTime < plantTime then
-				Collect = Calculate(plantTime - currentTime)
-			else
-				Collect = "A coleta está disponível"
-			end
-
-			local cloningTime = plantTime - currentTime - 5400
-			if cloningTime > 0 then
-				Cloning = Calculate(cloningTime)
-			else
-				Cloning = "A clonagem está disponível"
-			end
-
-			TriggerClientEvent("Notify", source, "azul", "<b>Planta:</b> "..Number.." <b>Por:</b> "..Identity["Name"].." "..Identity["Lastname"]..".<br><b>Status:</b> "..Validity..".<br><b>Pureza da folhagem:</b> "..parseInt(Plants[Number]["Points"]).."%.<br><b>Fertilização da plantação:</b> "..parseInt(Plants[Number]["Fertilizer"]).."%.<br><b>Dimensão da plantação:</b> "..parseInt(Plants[Number]["Route"])..".<br><b>Coleta:</b> "..Collect..".<br><b>Clonagem:</b> "..Cloning..".", false, 10000)
+				Player(source)["state"]["Buttons"] = false
+				Player(source)["state"]["Cancel"] = false
+				Active[Passport] = nil
+				vRPC.Destroy(source)
+			end)
 		end
 	end
 end)
@@ -278,124 +177,44 @@ end)
 -- INFORMATIONS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Informations(Number)
-	if Plants[Number] then
-		local currentTime = os.time()
-		local plantTime = Plants[Number]["Time"]
-		local timeDifference = currentTime - plantTime
+	local source = source
+	if Number and Plants[Number] and Plants[Number]["Timer"] and not CheckDeath(source,Number) then
+		local Collect = 100
+		if (os.time() < Plants[Number]["Timer"]) then
+			local Value = (Plants[Number]["Timer"] - os.time())
 
-		if timeDifference > 3600 then
-			Plants[Number] = nil
-			TriggerClientEvent("plants:Remove", -1, Number)
-			TriggerClientEvent("Notify", source, "amarelo", "A plantação apodreceu.", "Atenção", 5000)
-			return false
-		else
-			local Collect = "A coleta está disponível"
-			if currentTime < plantTime then
-				Collect = "Aguarde <rare>"..Calculate(plantTime - currentTime).."</rare>."
-			end
-
-			local cloningTime = plantTime - currentTime - 5400
-			local Cloning = "A clonagem está disponível"
-			if cloningTime > 0 then
-				Cloning = "Aguarde <rare>"..Calculate(cloningTime).."</rare>."
-			end
-
-			local Health = "Plantação com <rare>"..parseInt(Plants[Number]["Points"]).."%</rare> de pureza."
-			local Status = "A plantação foi fertilizada <rare>"..parseInt(Plants[Number]["Fertilizer"]).."x</rare>."
-
-			return { Collect, Cloning, Health, Status }
+			Collect = Whole(100 - (Value / 7200) * 100)
 		end
+
+		local Cloning = 100
+		if (Plants[Number]["Timer"] - os.time()) > 3600 then
+			local Value = (Plants[Number]["Timer"] - os.time() - 3600)
+
+			Cloning = Whole(100 - (Value / 3600) * 100)
+		end
+
+		return { Collect,Cloning,Plants[Number]["Item"],Plants[Number]["Water"] }
 	end
 
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- SAVESERVER
------------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("SaveServer", function(Silenced)
-	vRP.SetServerData("Plants", Plants)
-
-	if not Silenced then
-		print("O resource Plants salvou os dados.")
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- THREADSTART
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	Plants = vRP.GetServerData("Plants")
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECT
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("Connect", function(Passport, source)
-	TriggerClientEvent("plants:Table", source, Plants)
+AddEventHandler("Connect",function(Passport,source)
+	TriggerClientEvent("plants:Table",source,Plants)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CALCULATE
+-- DISCONNECT
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Calculate(Seconds)
-	local Days = math.floor(Seconds / 86400)
-	Seconds = Seconds % 86400
-
-	local Hours = math.floor(Seconds / 3600)
-	Seconds = Seconds % 3600
-
-	local Minutes = math.floor(Seconds / 60)
-	Seconds = Seconds % 60
-
-	local timeString = ""
-	local hasPrevious = false
-
-	if Days > 0 then
-		timeString = timeString .. Days .. " Dia"
-
-		if Days > 1 then
-			timeString = timeString .. "s"
-		end
-
-		hasPrevious = true
+AddEventHandler("Disconnect",function(Passport,source)
+	if Active[Passport] then
+		Active[Passport] = nil
 	end
-
-	if Hours > 0 then
-		if hasPrevious then
-			timeString = timeString .. ", "
-		end
-
-		timeString = timeString .. Hours .. " Hora"
-
-		if Hours > 1 then
-			timeString = timeString .. "s"
-		end
-
-		hasPrevious = true
-	end
-
-	if Minutes > 0 then
-		if hasPrevious then
-			timeString = timeString .. ", "
-		end
-
-		timeString = timeString .. Minutes .. " Minuto"
-
-		if Minutes > 1 then
-			timeString = timeString .. "s"
-		end
-
-		hasPrevious = true
-	end
-
-	if Seconds > 0 then
-		if hasPrevious then
-			timeString = timeString .. " e "
-		end
-
-		timeString = timeString .. Seconds .. " Segundo"
-
-		if Seconds > 1 then
-			timeString = timeString .. "s"
-		end
-	end
-
-	return timeString
-end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- SAVESERVER
+-----------------------------------------------------------------------------------------------------------------------------------------
+AddEventHandler("SaveServer",function()
+	vRP.Query("entitydata/SetData",{ Name = "Plants", Information = json.encode(Plants) })
+end)

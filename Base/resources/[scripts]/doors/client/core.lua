@@ -11,13 +11,9 @@ vSERVER = Tunnel.getInterface("doors")
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Display = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ONCLIENTRESOURCESTART
+-- THREADSERVERSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("onClientResourceStart",function(Resource)
-	if (GetCurrentResourceName() ~= Resource) then
-		return
-	end
-
+CreateThread(function()
 	for Number,v in pairs(GlobalState["Doors"]) do
 		if IsDoorRegisteredWithSystem(Number) then
 			RemoveDoorFromSystem(Number)
@@ -26,7 +22,7 @@ AddEventHandler("onClientResourceStart",function(Resource)
 		AddDoorToSystem(Number,v["Hash"],v["Coords"],false,false,true)
 
 		DoorSystemSetOpenRatio(Number,0.0,false,true)
-		DoorSystemSetAutomaticRate(Number,2.5,false,true)
+		DoorSystemSetAutomaticRate(Number,5.0,false,true)
 		DoorSystemSetDoorState(Number,v["Lock"] and 1 or 0,true)
 	end
 end)
@@ -36,17 +32,17 @@ end)
 AddStateBagChangeHandler("Doors",nil,function(Name,Key,Value)
 	for Number,v in pairs(Value) do
 		DoorSystemSetOpenRatio(Number,0.0,false,true)
-		DoorSystemSetAutomaticRate(Number,2.5,false,true)
+		DoorSystemSetAutomaticRate(Number,5.0,false,true)
 		DoorSystemSetDoorState(Number,v["Lock"] and 1 or 0,true)
 
 		if v["Other"] then
 			DoorSystemSetOpenRatio(v["Other"],0.0,false,true)
-			DoorSystemSetAutomaticRate(v["Other"],2.5,false,true)
+			DoorSystemSetAutomaticRate(v["Other"],5.0,false,true)
 			DoorSystemSetDoorState(v["Other"],v["Lock"] and 1 or 0,true)
 		end
 
 		if Display[Number] then
-			SendNUIMessage({ name = "Show", payload = { "E",v["Lock"] and "Trancado" or "Destrancado","Pressione o botão" } })
+			SendNUIMessage({ Action = "Show", Payload = { "E","Pressione",v["Lock"] and "para destrancar" or "para trancar" } })
 		end
 	end
 end)
@@ -65,7 +61,7 @@ CreateThread(function()
 					TimeDistance = 1
 
 					if not Display[Number] then
-						SendNUIMessage({ name = "Show", payload = { "E",v["Lock"] and "Trancado" or "Destrancado","Pressione o botão" } })
+						SendNUIMessage({ Action = "Show", Payload = { "E","Pressione",v["Lock"] and "para destrancar" or "para trancar" } })
 						Display[Number] = true
 					end
 
@@ -74,7 +70,7 @@ CreateThread(function()
 					end
 				else
 					if Display[Number] then
-						SendNUIMessage({ name = "Hide" })
+						SendNUIMessage({ Action = "Hide" })
 						Display[Number] = nil
 					end
 				end

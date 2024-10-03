@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
-local Proxy = module("vrp", "lib/Proxy")
+local Tunnel = module("vrp","lib/Tunnel")
+local Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
@@ -13,60 +13,74 @@ vSERVER = Tunnel.getInterface("party")
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Open = false
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PARTY
+-- PARTYS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("Groups", function()
-	if not Open then
+RegisterCommand("Partys",function()
+	local Ped = PlayerPedId()
+	if not Open and not IsPedInAnyVehicle(Ped) then
 		Open = true
-		SetNuiFocus(true, true)
-		SendNUIMessage({ name = "Open", payload = vSERVER.GetRooms() })
+		SetNuiFocus(true,true)
+		SendNUIMessage({ Action = "Open", Payload = { LocalPlayer["state"]["Passport"],vSERVER.GetRooms() } })
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DISPLAYS
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("Displays",function()
+	Display = not Display
+
+	if Display then
+		TriggerEvent("Notify","Grupos","Nome dos participantes ativado.","verde",5000)
+	else
+		TriggerEvent("Notify","Grupos","Nome dos participantes desativado.","vermelho",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- KEYMAPPING
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterKeyMapping("Groups", "Abrir os grupos", "keyboard", "M")
+RegisterKeyMapping("Partys","Abrir os grupos","keyboard","G")
+RegisterKeyMapping("Displays","Mostrar/Esconder membros do grupo","keyboard","I")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETROOMS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("GetRooms", function(Data, Callback)
+RegisterNUICallback("GetRooms",function(Data,Callback)
 	Callback(vSERVER.GetRooms())
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETMEMBERS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("GetMembers", function(Data, Callback)
-	Callback(vSERVER.GetMembers(Data["id"]))
+RegisterNUICallback("GetMembers",function(Data,Callback)
+	Callback(vSERVER.GetMembers(Data["Id"]))
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LEAVEROOM
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("LeaveRoom", function(Data, Callback)
+RegisterNUICallback("LeaveRoom",function(Data,Callback)
 	Callback(vSERVER.LeaveRoom())
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CREATEROOM
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("CreateRoom", function(Data, Callback)
-	Callback(vSERVER.CreateRoom(Data["name"], Data["password"]))
+RegisterNUICallback("CreateRoom",function(Data,Callback)
+	Callback(vSERVER.CreateRoom(Data["Name"],Data["Password"]))
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- KICKROOM
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("KickRoom", function(Data, Callback)
-	Callback(vSERVER.KickRoom(Data["room"], Data["id"]))
+RegisterNUICallback("KickRoom",function(Data,Callback)
+	Callback(vSERVER.KickRoom(Data["Room"],Data["Passport"]))
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ENTERROOM
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("EnterRoom", function(Data, Callback)
-	Callback(vSERVER.EnterRoom(Data["room"], Data["password"]))
+RegisterNUICallback("EnterRoom",function(Data,Callback)
+	Callback(vSERVER.EnterRoom(Data["Room"],Data["Password"]))
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Close", function(Data, Callback)
-	SetNuiFocus(false, false)
+RegisterNUICallback("Close",function(Data,Callback)
+	SetNuiFocus(false,false)
 	Open = false
 
 	Callback("Ok")
@@ -75,8 +89,10 @@ end)
 -- PARTY:RESETNUI
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("party:ResetNui")
-AddEventHandler("party:ResetNui", function()
+AddEventHandler("party:ResetNui",function()
 	if Open then
-		SendNUIMessage({ name = "Reset" })
+		Open = false
+		SetNuiFocus(false,false)
+		SendNUIMessage({ Action = "Close" })
 	end
 end)

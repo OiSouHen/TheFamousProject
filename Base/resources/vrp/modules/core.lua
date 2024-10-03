@@ -1528,6 +1528,19 @@ function vRP.InventoryWeight(Passport)
 	return Weight
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- CHECKWEIGHT
+-----------------------------------------------------------------------------------------------------------------------------------------
+function vRP.CheckWeight(Passport, Item, Amount)
+	local source = vRP.Source(Passport)
+	if source then
+		if (vRP.InventoryWeight(Passport) + ItemWeight(Item) * Amount) <= vRP.GetWeight(Passport) then
+			return true
+		end
+	end
+
+	return false
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- CHECKDAMAGED
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.CheckDamaged(Item)
@@ -1909,39 +1922,41 @@ function vRP.StoreChest(Passport, Data, Amount, Weight, Slot, Target)
 	local Source = vRP.Source(Passport)
 	local Slot = tostring(Slot)
 	local Target = tostring(Target)
-	local AmountInt = parseInt(Amount)
+	local AmountInt = parseInt(Amount, true)
 
-	if Source and AmountInt > 0 and Inventory[Slot] and Weight >= vRP.ChestWeight(Datatable) + ItemWeight(Inventory[Slot].item) * AmountInt then
-		if Datatable[Target] then
-			if Inventory[Slot] and Inventory[Slot].item == Datatable[Target].item then
-				if AmountInt <= Inventory[Slot].amount then
-					Datatable[Target].amount = Datatable[Target].amount + AmountInt
-					Inventory[Slot].amount = Inventory[Slot].amount - AmountInt
+	if Source and AmountInt > 0 and Inventory[Slot] then
+		if Weight >= (vRP.ChestWeight(Datatable) + ItemWeight(Inventory[Slot].item)) * AmountInt then
+			if Datatable[Target] then
+				if Inventory[Slot] and Inventory[Slot].item == Datatable[Target].item then
+					if AmountInt <= Inventory[Slot].amount then
+						Datatable[Target].amount = Datatable[Target].amount + AmountInt
+						Inventory[Slot].amount = Inventory[Slot].amount - AmountInt
 
-					if Inventory[Slot].amount <= 0 then
-						if ItemType(Inventory[Slot].item) == "Armamento" or ItemType(Inventory[Slot].item) ~= "Throwing" then
-							TriggerClientEvent("inventory:VerifyWeapon", Source, Inventory[Slot].item)
+						if Inventory[Slot].amount <= 0 then
+							if ItemType(Inventory[Slot].item) == "Armamento" or ItemType(Inventory[Slot].item) ~= "Throwing" then
+								TriggerClientEvent("inventory:VerifyWeapon", Source, Inventory[Slot].item)
+							end
+
+							Inventory[Slot] = nil
 						end
 
-						Inventory[Slot] = nil
+						return true
+					end
+				end
+			elseif Inventory[Slot] and AmountInt <= Inventory[Slot].amount then
+				Datatable[Target] = { item = Inventory[Slot].item, amount = AmountInt }
+				Inventory[Slot].amount = Inventory[Slot].amount - AmountInt
+
+				if Inventory[Slot].amount <= 0 then
+					if ItemType(Inventory[Slot].item) == "Armamento" or ItemType(Inventory[Slot].item) ~= "Throwing" then
+						TriggerClientEvent("inventory:VerifyWeapon", Source, Inventory[Slot].item)
 					end
 
-					return true
-				end
-			end
-		elseif Inventory[Slot] and AmountInt <= Inventory[Slot].amount then
-			Datatable[Target] = { item = Inventory[Slot].item, amount = AmountInt }
-			Inventory[Slot].amount = Inventory[Slot].amount - AmountInt
-
-			if Inventory[Slot].amount <= 0 then
-				if ItemType(Inventory[Slot].item) == "Armamento" or ItemType(Inventory[Slot].item) ~= "Throwing" then
-					TriggerClientEvent("inventory:VerifyWeapon", Source, Inventory[Slot].item)
+					Inventory[Slot] = nil
 				end
 
-				Inventory[Slot] = nil
+				return true
 			end
-
-			return true
 		end
 	end
 
@@ -1954,7 +1969,7 @@ function vRP.UpdateChest(Passport, Data, Slot, Target, Amount)
 	local Datatable = vRP.GetServerData(Data)
 	local Slot = tostring(Slot)
 	local Target = tostring(Target)
-	local Amount = parseInt(Amount)
+	local Amount = parseInt(Amount, true)
 
 	if vRP.Source(Passport) and Amount > 0 and Datatable[Slot] then
 		local sourceItem = Datatable[Slot]
@@ -2417,40 +2432,16 @@ end
 -- PAYMENTFULL
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.PaymentFull(Passport, Amount)
-	local Amount = tonumber(Amount)
+	local Amount = parseInt(Amount, true)
 	local Source = vRP.Source(Passport)
 
 	if Amount and Amount > 0 then
 		if vRP.TakeItem(Passport, DefaultDollars1, Amount, true) then
 			return true
-		elseif vRP.TakeItem(Passport, DefaultDollars3, Amount, true) then
-			TriggerEvent("Wanted", Source, Passport, 60)
-
-			local Coords = vRP.GetEntityCoords(Source)
-			local Service = vRP.NumPermission("Policia")
-
-			for _, PolicePassport in pairs(Service) do
-				async(function()
-					local PoliceSource = vRP.Source(PolicePassport)
-					TriggerClientEvent("NotifyPush", PoliceSource, { code = 20, title = "Tentativa de Golpe", x = Coords["x"], y = Coords["y"], z = Coords["z"], criminal = "Ligação Anônima", color = 16 })
-				end)
-			end
-
-			return true
 		elseif Characters[Source] and Amount <= (Characters[Source]["Bank"] or 0) then
-			if vRP.ConsultItem(Passport, "bankcard", 1) then
-				if not GlobalState["Blackout"] then
-					vRP.RemoveBank(Passport, Amount)
-					TriggerClientEvent("NotifyItem", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
-					return true
-				else
-					TriggerClientEvent("Notify", Source, "vermelho", "No momento não estamos aceitando <b>" .. ItemName("bankcard") .. "</b> pois estamos sem eletricidade.", "Aviso", 5000)
-				end
-			else
-				TriggerClientEvent("Notify", Source, "vermelho", "Você precisa de <b>1x " .. ItemName("bankcard") .. "</b>.", "Aviso", 5000)
-			end
-		else
-			TriggerClientEvent("Notify", Source, "vermelho", "<b>Saldo</b> insuficiente.", "Aviso", 5000)
+			vRP.RemoveBank(Passport, Amount)
+			TriggerClientEvent("NotifyItem", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
+			return true
 		end
 	end
 

@@ -1,12 +1,10 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
+local Tunnel = module("vrp","lib/Tunnel")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
-Hensa = {}
-Tunnel.bindInterface("plants", Hensa)
 vSERVER = Tunnel.getInterface("plants")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
@@ -17,132 +15,117 @@ local Objects = {}
 -- THREADOBJECTS
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
-	-- Vermelho
-	LoadModel("prop_stoneshroom1")
-
-	-- Verde
-	LoadModel("prop_stoneshroom2")
-
-	-- Broto
-	LoadModel("bkr_prop_weed_01_small_01c")
-
-	-- Pequena
-	LoadModel("bkr_prop_weed_01_small_01a")
-
-	-- Média
-	LoadModel("bkr_prop_weed_med_01a")
-
-	-- Grande
-	LoadModel("bkr_prop_weed_lrg_01a")
-
 	while true do
-		local Ped = PlayerPedId()
-		local Coords = GetEntityCoords(Ped)
+		local TimeDistance = 999
+		if LocalPlayer["state"]["Active"] then
+			local Ped = PlayerPedId()
+			local Coords = GetEntityCoords(Ped)
 
-		for Index, v in pairs(Plants) do
-			local OtherCoords = vec3(v["Coords"][1], v["Coords"][2], v["Coords"][3])
-			if #(Coords - OtherCoords) <= 100 then
-				if not Objects[Index] and v["Route"] == LocalPlayer["state"]["Route"] then
-					exports["target"]:AddBoxZone("Plants:"..Index, OtherCoords, 0.6, 0.6, {
-						name = "Plants:"..Index,
-						heading = 0.0
-					}, {
-						shop = Index,
-						Distance = 1.5,
-						options = {
-							{
-								event = "plants:Informations",
-								label = "Verificar",
-								tunnel = "shop"
-							}, {
-								event = "plants:Fertilizer",
-								label = "Fertilizar",
-								tunnel = "shop"
-							}
-						}
-					})
+			for Index,v in pairs(Plants) do
+				if v["Route"] == LocalPlayer["state"]["Route"] then
+					local OtherCoords = vec3(v["Coords"][1],v["Coords"][2],v["Coords"][3])
+					if #(Coords - OtherCoords) <= 50 then
+						if not Objects[Index] then
+							exports["target"]:AddBoxZone("Plants:"..Index,vec3(OtherCoords["x"],OtherCoords["y"],OtherCoords["z"] + 0.25),0.4,0.4,{
+								name = "Plants:"..Index,
+								heading = v["Coords"][4],
+								minZ = OtherCoords["z"] + 0.50,
+								maxZ = OtherCoords["z"] + 1.50
+							},{
+								shop = Index,
+								Distance = 1.5,
+								options = {
+									{
+										event = "plants:Informations",
+										label = "Verificar",
+										tunnel = "client"
+									}
+								}
+							})
 
-					Objects[Index] = CreateObjectNoOffset(v["Model"], OtherCoords, false, false, false)
-
-					FreezeEntityPosition(Objects[Index], true)
-					SetEntityLodDist(Objects[Index], 0xFFFF)
-					SetModelAsNoLongerNeeded(v["Model"])
-
-					if v["Model"] == "prop_stoneshroom1" or v["Model"] == "prop_stoneshroom2" then
-						SetEntityCollision(Objects[Index], false, false)
-					else
-						SetEntityCollision(Objects[Index], true, true)
+							CreateModels(Index,v["Hash"],v["Coords"])
+							TimeDistance = 100
+						end
+					elseif Objects[Index] then
+						ClearObjects(Index)
 					end
-				end
-			else
-				if Objects[Index] then
-					if DoesEntityExist(Objects[Index]) then
-						exports["target"]:RemCircleZone("Plants:"..Index)
-						DeleteEntity(Objects[Index])
-					end
-
-					Objects[Index] = nil
+				elseif Objects[Index] then
+					ClearObjects(Index)
 				end
 			end
 		end
 
-		Wait(1000)
+		Wait(TimeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS:INFORMATIONS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("plants:Informations")
-AddEventHandler("plants:Informations", function(Number)
+AddEventHandler("plants:Informations",function(Number)
 	local Informations = vSERVER.Informations(Number)
 	if Informations then
-		exports["dynamic"]:AddButton("Vida", Informations[3], false, false, false, false)
-		exports["dynamic"]:AddButton("Saúde", Informations[4], false, false, false, false)
-		exports["dynamic"]:AddButton("Coletar", Informations[1], "plants:Collect", Number, false, true)
-		exports["dynamic"]:AddButton("Clonagem", Informations[2], "plants:Cloning", Number, false, true)
+		exports["dynamic"]:AddButton("Germinação","Tipo de Frutos: <b>"..ItemName(Informations[3]).."</b>","","",false,false)
+		exports["dynamic"]:AddButton("Fototropismo","Processo de Crescimento: <b>"..Informations[1].."%</b>","plants:Collect",Number,false,true)
+		exports["dynamic"]:AddButton("Fertilização","Processo de Clonagem: <b>"..Informations[2].."%</b>","plants:Cloning",Number,false,true)
+		exports["dynamic"]:AddButton("Hidratação","Fortificação do Adubo: <b>"..math.floor(Informations[4] * 100).."%</b>","plants:Water",Number,false,true)
 
-		if LocalPlayer["state"]["Admin"] then
-			exports["dynamic"]:AddButton("Remover", "Clique para remover esta plantação.", "plants:Remove", Number, false, true)
-			exports["dynamic"]:AddButton("Administração", "Verificar informações da plantação.", "plants:Verify", Number, false, true)
-		end
-
-		exports["dynamic"]:Open()
+		exports["dynamic"]:openMenu()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PLANTS:FERTILIZER
+-- CREATEMODELS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("plants:Fertilizer")
-AddEventHandler("plants:Fertilizer", function(Number)
-	TriggerServerEvent("plants:Fertilizer", Number)
-end)
+function CreateModels(Number,Hash,Coords)
+	if LoadModel(Hash) then
+		Objects[Number] = CreateObjectNoOffset(Hash,Coords[1],Coords[2],Coords[3],false,false,false)
+
+		local Ped = PlayerPedId()
+		if IsPedInAnyVehicle(Ped) then
+			SetEntityNoCollisionEntity(Objects[Number],GetVehiclePedIsUsing(Ped),false)
+		end
+
+		SetEntityHeading(Objects[Number],Coords[4])
+		SetEntityNoCollisionEntity(Objects[Number],Ped,false)
+		PlaceObjectOnGroundProperly(Objects[Number])
+		FreezeEntityPosition(Objects[Number],true)
+		SetModelAsNoLongerNeeded(Hash)
+	end
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS:TABLE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("plants:Table")
-AddEventHandler("plants:Table", function(Table)
+AddEventHandler("plants:Table",function(Table)
 	Plants = Table
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS:NEW
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("plants:New")
-AddEventHandler("plants:New", function(Number, Table)
+AddEventHandler("plants:New",function(Number,Table)
 	Plants[Number] = Table
 end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CLEAROBJECTS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function ClearObjects(Index)
+	if Objects[Index] then
+		if DoesEntityExist(Objects[Index]) then
+			DeleteEntity(Objects[Index])
+		end
+
+		exports["target"]:RemCircleZone("Plants:"..Index)
+		Objects[Index] = nil
+	end
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLANTS:REMOVE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("plants:Remove")
-AddEventHandler("plants:Remove", function(Number)
-	Plants[Number] = nil
-
-	if Objects[Number] then
-		if DoesEntityExist(Objects[Number]) then
-			exports["target"]:RemCircleZone("Plants:"..Number)
-			DeleteEntity(Objects[Number])
-		end
-
-		Objects[Number] = nil
+AddEventHandler("plants:Remove",function(Number)
+	if Plants[Number] then
+		Plants[Number] = nil
 	end
+
+	ClearObjects(Number)
 end)

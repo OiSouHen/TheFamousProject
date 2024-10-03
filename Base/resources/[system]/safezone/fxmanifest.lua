@@ -7,7 +7,3 @@ client_scripts {
 	"@vrp/lib/Utils.lua",
 	"client/*"
 }
-
-shared_scripts {
-	"shared/*"
-}
