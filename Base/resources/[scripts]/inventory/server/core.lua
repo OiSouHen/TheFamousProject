@@ -767,7 +767,7 @@ function Hensa.Use(Slot,Amount)
 		end
 
 		if ItemTypeCheck(Full,"Armamento") and (parseInt(Slot) >= 101 and parseInt(Slot) <= 103) then
-			if vRP.InsideVehicle(source) and not ItemVehicle(Full) then
+			if vRPC.InsideVehicle(source) and not ItemVehicle(Full) then
 				return
 			end
 
