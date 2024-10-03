@@ -68,7 +68,7 @@ Use = {
 	end,
 
 	["odb2"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if vRP.InsideVehicle(source) then
+		if vRPC.InsideVehicle(source) then
 			TriggerClientEvent("notebook:Open",source)
 			TriggerClientEvent("inventory:Close",source)
 		end
@@ -538,7 +538,7 @@ Use = {
 	end,
 
 	["nitro"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) then
+		if not vRPC.InsideVehicle(source) then
 			local Vehicle,Network,Plate = vRPC.VehicleList(source)
 			if Vehicle then
 				vRPC.AnimActive(source)
@@ -631,7 +631,7 @@ Use = {
 	end,
 
 	["advtoolbox"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) then
+		if not vRPC.InsideVehicle(source) then
 			local Vehicle,Network,Plate = vRPC.VehicleList(source)
 			if Vehicle then
 				vRPC.AnimActive(source)
@@ -688,7 +688,7 @@ Use = {
 	end,
 
 	["toolbox"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) then
+		if not vRPC.InsideVehicle(source) then
 			local Vehicle,Network,Plate = vRPC.VehicleList(source)
 			if Vehicle then
 				vRPC.AnimActive(source)
@@ -742,7 +742,7 @@ Use = {
 	["circuit"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		if not Player(source)["state"]["Handcuff"] then
 			local Vehicle,Network,Plate = vRPC.VehicleList(source)
-			if Vehicle and Plate and (Boosting[Plate] and vRP.InsideVehicle(source) and Boosting[Plate]["Amount"] < 10) then
+			if Vehicle and Plate and (Boosting[Plate] and vRPC.InsideVehicle(source) and Boosting[Plate]["Amount"] < 10) then
 				if (not Travel[Passport] or #(vRP.GetEntityCoords(source) - Travel[Passport]) >= 100) then
 					TriggerClientEvent("inventory:Close",source)
 
@@ -793,7 +793,7 @@ Use = {
 
 				local Networked = NetworkGetEntityFromNetworkId(Network)
 
-				if vRP.InsideVehicle(source) then
+				if vRPC.InsideVehicle(source) then
 					vGARAGE.StartHotwired(source)
 
 					if vRP.Task(source,10,10000) then
@@ -901,7 +901,7 @@ Use = {
 	["blocksignal"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		if not Player(source)["state"]["Handcuff"] then
 			local Vehicle,Network,Plate = vRPC.VehicleList(source)
-			if Vehicle and vRP.InsideVehicle(source) then
+			if Vehicle and vRPC.InsideVehicle(source) then
 				if not exports["garages"]:Signal(Plate) then
 					vRPC.AnimActive(source)
 					vGARAGE.StartHotwired(source)
@@ -1745,7 +1745,7 @@ Use = {
 	end,
 
 	["ration"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) and not vCLIENT.CheckRation(source) then
+		if not vRPC.InsideVehicle(source) and not vCLIENT.CheckRation(source) then
 			Active[Passport] = os.time() + 10
 			Player(source)["state"]["Buttons"] = true
 			TriggerClientEvent("inventory:Close",source)
@@ -2494,7 +2494,7 @@ Use = {
 	end,
 
 	["tyres"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) then
+		if not vRPC.InsideVehicle(source) then
 			if not vCLIENT.CheckWeapon(source,"WEAPON_WRENCH") then
 				TriggerClientEvent("Notify",source,"Atenção","<b>Chave Inglesa</b> não encontrada.","amarelo",5000)
 				return
@@ -2540,7 +2540,7 @@ Use = {
 	end,
 
 	["seatbelt"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if vRP.InsideVehicle(source) then
+		if vRPC.InsideVehicle(source) then
 			TriggerClientEvent("inventory:Close",source)
 
 			local Model,Vehicle = vRPC.VehicleName(source)
@@ -2555,7 +2555,7 @@ Use = {
 	end,
 
 	["premiumplate"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if vRP.InsideVehicle(source) then
+		if vRPC.InsideVehicle(source) then
 			TriggerClientEvent("inventory:Close",source)
 
 			local Model = vRPC.VehicleName(source)
@@ -2597,7 +2597,7 @@ Use = {
 	end,
 
 	["handcuff"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) then
+		if not vRPC.InsideVehicle(source) then
 			local ClosestPed = vRPC.ClosestPed(source)
 			if ClosestPed and not vRP.IsEntityVisible(ClosestPed) then
 				Player(source)["state"]["Cancel"] = true
@@ -2651,7 +2651,7 @@ Use = {
 	end,
 
 	["rope"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		if not vRP.InsideVehicle(source) then
+		if not vRPC.InsideVehicle(source) then
 			if not Carry[Passport] then
 				local OtherSource = vRPC.ClosestPed(source)
 				local OtherPassport = vRP.Passport(OtherSource)
