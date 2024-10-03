@@ -107,9 +107,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Store",function(Data,Callback)
 	if MumbleIsConnected() and not TakeWeapon and not StoreWeapon then
-	print("store: antes")
 		vSERVER.Drops(Data["item"],Data["slot"],Data["amount"])
-	print("store: depois")
 	end
 
 	Callback("Ok")
@@ -248,9 +246,9 @@ CreateThread(function()
 			local Coords = GetEntityCoords(Ped)
 
 			for _,v in pairs(Drops[Route]) do
-				if #(Coords - v["coords"]) <= 25 then
-					SetDrawOrigin(v["coords"]["x"],v["coords"]["y"],v["coords"]["z"] - 0.75)
-					DrawSprite("Textures","Drop",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+				if #(Coords - v["coords"]) <= 10 then
+					SetDrawOrigin(v["coords"]["x"],v["coords"]["y"],v["coords"]["z"] + 0.1)
+					DrawSprite("Targets","Drop",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
 					ClearDrawOrigin()
 
 					TimeDistance = 1
