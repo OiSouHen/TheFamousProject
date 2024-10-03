@@ -2090,7 +2090,7 @@ function tvRP.UpdateInventory(Slot,Target,Amount)
 				SelfReturn[Passport] = false
 			end
 		else
-			TriggerClientEvent("inventory:Update",source,"Backpack")
+			TriggerClientEvent("inventory:Update", source, "Backpack")
 		end
 	end
 end
