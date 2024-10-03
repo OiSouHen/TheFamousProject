@@ -91,8 +91,12 @@ function Creative.Propertys(Name)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		if Name == "Hotel" then
-			if vRP.Scalar("propertys/Count",{ Passport = Passport }) <= 0 then
-				return "Hotel"
+			local Consult = vRP.Query("propertys/Count",{ Passport = Passport })
+			if Consult[1] then
+				local Count = Consult[1]["COUNT(Passport)"]
+				if Count <= 0 then
+					return "Hotel"
+				end
 			end
 		else
 			local Consult = vRP.Query("propertys/Exist",{ Name = Name })
@@ -595,13 +599,17 @@ CreateThread(function()
 	GlobalState:set("Markers",Markers,true)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHARACTERCHOSEN
+-- CHOSENCHARACTER
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("CharacterChosen",function(Passport,source)
+AddEventHandler("ChosenCharacter",function(Passport,source)
 	local Increments = {}
 
-	if vRP.Scalar("propertys/Count",{ Passport = Passport }) <= 0 then
-		Increments[#Increments + 1] = "Hotel"
+	local Consult = vRP.Query("propertys/Count", { Passport = Passport })
+	if Consult[1] then
+		local Count = Consult[1]["COUNT(Passport)"]
+		if Count <= 0 then
+			Increments[#Increments + 1] = "Hotel"
+		else
 	else
 		local All = vRP.Query("propertys/AllUser",{ Passport = Passport })
 		if All[1] then
