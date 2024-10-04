@@ -1568,14 +1568,20 @@ end
 -- INVENTORYITEMAMOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.InventoryItemAmount(Passport, Item)
-	if vRP.Source(Passport) then
+	local Source = vRP.Source(Passport)
+	if Source then
 		local Inventory = vRP.Inventory(Passport)
-		for k,v in pairs(Inventory) do
-			local splitName01 = splitString(Item, "-")
-			local splitName02 = splitString(v["item"], "-")
-			if splitName01[1] == splitName02[1] then
-				return { parseInt(v["amount"]), v["item"] }
+		local totalAmount = 0
+		local baseItem = splitString(Item, "-")[1]
+
+		for _, v in pairs(Inventory) do
+			if splitString(v["item"], "-")[1] == baseItem then
+				totalAmount = totalAmount + parseInt(v["amount"])
 			end
+		end
+
+		if totalAmount > 0 then
+			return { totalAmount, Item }
 		end
 	end
 
@@ -1602,11 +1608,16 @@ end
 function vRP.ItemAmount(Passport, Item)
 	if vRP.Source(Passport) then
 		local Inventory = vRP.Inventory(Passport)
-		for k,v in pairs(Inventory) do
-			if splitString(v["item"], "-")[1] == splitString(Item, "-")[1] then
-				return v["amount"]
+		local totalAmount = 0
+		local baseItem = splitString(Item, "-")[1]
+
+		for _, v in pairs(Inventory) do
+			if splitString(v["item"], "-")[1] == baseItem then
+				totalAmount = totalAmount + v["amount"]
 			end
 		end
+
+		return totalAmount
 	end
 
 	return 0
@@ -1616,37 +1627,41 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.GiveItem(Passport, Item, Amount, Notify, Slot)
 	local Source = vRP.Source(Passport)
-	if Source and parseInt(Amount) > 0 then
+	local amountParsed = parseInt(Amount)
+
+	if Source and amountParsed > 0 then
 		local Inventory = vRP.Inventory(Passport)
-		if not Slot then
-			local NewSlot = 0
+		if Inventory then
+			if not Slot then
+				local NewSlot = 0
 
-			repeat
-				NewSlot = NewSlot + 1
-			until not Inventory[tostring(NewSlot)] or (Inventory[tostring(NewSlot)] and Inventory[tostring(NewSlot)]["item"] == Item)
+				repeat
+					NewSlot = NewSlot + 1
+				until not Inventory[tostring(NewSlot)] or (Inventory[tostring(NewSlot)] and Inventory[tostring(NewSlot)]["item"] == Item)
 
-			if not Inventory[tostring(NewSlot)] then
-				Inventory[tostring(NewSlot)] = { amount = parseInt(Amount), item = Item }
-			elseif Inventory[tostring(NewSlot)] and Inventory[tostring(NewSlot)]["item"] == Item then
-				Inventory[tostring(NewSlot)]["amount"] = Inventory[tostring(NewSlot)]["amount"] + parseInt(Amount)
-			end
+				if not Inventory[tostring(NewSlot)] then
+					Inventory[tostring(NewSlot)] = { amount = amountParsed, item = Item }
+				elseif Inventory[tostring(NewSlot)] and Inventory[tostring(NewSlot)]["item"] == Item then
+					Inventory[tostring(NewSlot)]["amount"] = Inventory[tostring(NewSlot)]["amount"] + amountParsed
+				end
 
-			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
-			end
-		else
-			Slot = tostring(Slot)
-
-			if Inventory[Slot] then
-				if Inventory[Slot]["item"] == Item then
-					Inventory[Slot]["amount"] = Inventory[Slot]["amount"] + parseInt(Amount)
+				if Notify and ItemIndex(Item) then
+					TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), amountParsed, ItemName(Item) })
 				end
 			else
-				Inventory[Slot] = { amount = parseInt(Amount), item = Item }
-			end
+				Slot = tostring(Slot)
 
-			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				if Inventory[Slot] then
+					if Inventory[Slot]["item"] == Item then
+						Inventory[Slot]["amount"] = Inventory[Slot]["amount"] + amountParsed
+					end
+				else
+					Inventory[Slot] = { amount = amountParsed, item = Item }
+				end
+
+				if Notify and ItemIndex(Item) then
+					TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), amountParsed, ItemName(Item) })
+				end
 			end
 		end
 	end
@@ -1656,13 +1671,14 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
 	local Source = vRP.Source(Passport)
-	if Source and parseInt(Amount) > 0 then
+	local amountParsed = parseInt(Amount)
+
+	if Source and amountParsed > 0 then
 		local Inventory = vRP.Inventory(Passport)
+
 		if ItemDurability(Item) then
 			if ItemType(Item) == "Armamento" then
 				Item = Item.."-"..os.time().."-"..Passport
-			-- elseif ItemMode(Item) == "Chest" then
-			-- 	Item = Item.."-"..os.time().."-"..(math.random(1000,5000) + Passport)
 			else
 				Item = Item.."-"..os.time()
 			end
@@ -1675,30 +1691,30 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
 
 			repeat
 				NewSlot = NewSlot + 1
-			until not Inventory[tostring(NewSlot)] or (Inventory[tostring(NewSlot)] and Inventory[tostring(NewSlot)]["item"] == Item)
+			until not Inventory[tostring(NewSlot)]
 
 			if not Inventory[tostring(NewSlot)] then
-				Inventory[tostring(NewSlot)] = { amount = parseInt(Amount), item = Item }
+				Inventory[tostring(NewSlot)] = { amount = amountParsed, item = Item }
 			elseif Inventory[tostring(NewSlot)] and Inventory[tostring(NewSlot)]["item"] == Item then
-				Inventory[tostring(NewSlot)]["amount"] = Inventory[tostring(NewSlot)]["amount"] + parseInt(Amount)
+				Inventory[tostring(NewSlot)]["amount"] = Inventory[tostring(NewSlot)]["amount"] + amountParsed
 			end
 
 			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), amountParsed, ItemName(Item) })
 			end
 		else
 			Slot = tostring(Slot)
 
 			if Inventory[Slot] then
 				if Inventory[Slot]["item"] == Item then
-					Inventory[Slot]["amount"] = Inventory[Slot]["amount"] + parseInt(Amount)
+					Inventory[Slot]["amount"] = Inventory[Slot]["amount"] + amountParsed
 				end
 			else
-				Inventory[Slot] = { amount = parseInt(Amount), item = Item }
+				Inventory[Slot] = { amount = amountParsed, item = Item }
 			end
 
 			if Notify and ItemIndex(Item) then
-				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "+", ItemIndex(Item), amountParsed, ItemName(Item) })
 			end
 		end
 	end
@@ -1707,13 +1723,14 @@ end
 -- MAXITENS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.MaxItens(Passport, Item, Amount)
-	if ItemIndex(Item) and vRP.Source(Passport) and ItemMaxAmount(Item) then
+	local amountParsed = parseInt(Amount)
+	if ItemIndex(Item) and vRP.Source(Passport) and ItemMaxAmount(Item) and amountParsed then
 		if vRP.HasGroup(Passport, "Restaurantes") then
-			if vRP.ItemAmount(Passport, Item) + parseInt(Amount) > ItemMaxAmount(Item) * 5 then
+			if vRP.ItemAmount(Passport, Item) + amountParsed > ItemMaxAmount(Item) * 5 then
 				return true
 			end
 		else
-			if vRP.ItemAmount(Passport, Item) + parseInt(Amount) > ItemMaxAmount(Item) then
+			if vRP.ItemAmount(Passport, Item) + amountParsed > ItemMaxAmount(Item) then
 				return true
 			end
 		end
@@ -1728,52 +1745,51 @@ function vRP.TakeItem(Passport, Item, Amount, Notify, Slot)
 	SelfReturn[Passport] = false
 
 	local Source = vRP.Source(Passport)
-	if Source and parseInt(Amount) > 0 then
+	local amountParsed = parseInt(Amount)
+	if Source and amountParsed > 0 then
+		local splitName = splitString(Item, "-")
 		local Inventory = vRP.Inventory(Passport)
+
 		if not Slot then
-			for k,v in pairs(Inventory) do
-				if v["item"] == Item and parseInt(Amount) <= v["amount"] then
-					v["amount"] = v["amount"] - parseInt(Amount)
+			for k, v in pairs(Inventory) do
+				if v["item"] == Item and amountParsed <= v["amount"] then
+					v["amount"] = v["amount"] - amountParsed
 
 					if v["amount"] <= 0 then
-						if "Armamento" == ItemType(Item) or "Throwing" ~= ItemType(Item) then
+						if ItemType(Item) == "Armamento" or ItemType(Item) == "Throwing" then
 							TriggerClientEvent("inventory:VerifyWeapon", Source, Item)
 						end
-
 						Inventory[k] = nil
 					end
 
 					if Notify and ItemExist(Item) then
-						TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+						TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), amountParsed, ItemName(Item) })
 					end
 
 					SelfReturn[Passport] = true
-
 					break
 				end
 			end
-		elseif Inventory[Slot] and Inventory[Slot]["item"] == Item and parseInt(Amount) <= Inventory[Slot]["amount"] then
-			Inventory[Slot]["amount"] = Inventory[Slot]["amount"] - parseInt(Amount)
+		elseif Inventory[Slot] and Inventory[Slot]["item"] == Item and amountParsed <= Inventory[Slot]["amount"] then
+			Inventory[Slot]["amount"] = Inventory[Slot]["amount"] - amountParsed
 
-			if 0 >= Inventory[Slot]["amount"] then
-				if "Armamento" == ItemType(Item) or "Throwing" ~= ItemType(Item) then
+			if Inventory[Slot]["amount"] <= 0 then
+				if ItemType(Item) == "Armamento" or ItemType(Item) == "Throwing" then
 					TriggerClientEvent("inventory:VerifyWeapon", Source, Item)
 				end
-
 				Inventory[Slot] = nil
 			end
 
 			if Notify and ItemExist(Item) then
-				TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+				TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), amountParsed, ItemName(Item) })
 			end
 
 			SelfReturn[Passport] = true
 		end
-	end
 
-	local splitName = splitString(Item, "-")
-	if ItemType(splitName[1]) == "Animal" then
-		TriggerClientEvent("dynamic:animalFunctions", Source, "destroy")
+		if ItemType(splitName[1]) == "Animal" then
+			TriggerClientEvent("dynamic:animalFunctions", Source, "destroy")
+		end
 	end
 
 	return SelfReturn[Passport]
@@ -1783,25 +1799,29 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.RemoveItem(Passport, Item, Amount, Notify)
 	local Source = vRP.Source(Passport)
-	if Source and parseInt(Amount) > 0 then
-		local Inventory = vRP.Inventory(Passport)
-		for k,v in pairs(Inventory) do
-			if v["item"] == Item and parseInt(Amount) <= v["amount"] then
-				v["amount"] = v["amount"] - parseInt(Amount)
+	local amountParsed = parseInt(Amount)
 
-				if v["amount"] <= 0 then
-					if "Armamento" == ItemType(Item) or "Throwing" ~= ItemType(Item) then
-						TriggerClientEvent("inventory:VerifyWeapon", Source, Item)
+	if Source and amountParsed > 0 then
+		local Inventory = vRP.Inventory(Passport)
+		if Inventory then
+			for k, v in pairs(Inventory) do
+				if v["item"] == Item and amountParsed <= v["amount"] then
+					v["amount"] = v["amount"] - amountParsed
+
+					if v["amount"] <= 0 then
+						if "Armamento" == ItemType(Item) or "Throwing" ~= ItemType(Item) then
+							TriggerClientEvent("inventory:VerifyWeapon", Source, Item)
+						end
+
+						Inventory[k] = nil
 					end
 
-					Inventory[k] = nil
-				end
+					if Notify and ItemIndex(Item) then
+						TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), amountParsed, ItemName(Item) })
+					end
 
-				if Notify and ItemIndex(Item) then
-					TriggerClientEvent("NotifyItem", Source, { "-", ItemIndex(Item), parseInt(Amount), ItemName(Item) })
+					break
 				end
-
-				break
 			end
 		end
 	end
@@ -1810,16 +1830,17 @@ end
 -- GETSERVERDATA
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.GetServerData(Key)
-	if SrvData[Key] == nil then
+	if not SrvData[Key] then
 		local Rows = vRP.Query("entitydata/GetData", { Name = Key })
-		if parseInt(#Rows) > 0 then
-			SrvData[Key] = { data = json.decode(Rows[1]["Information"]), timer = 180 }
+		if #Rows > 0 then
+			local decodedData = json.decode(Rows[1]["Information"]) or {}
+			SrvData[Key] = { data = decodedData, timer = 180 }
 		else
 			SrvData[Key] = { data = {}, timer = 180 }
 		end
 	end
 
-	return SrvData[Key]["data"]
+	return SrvData[Key].data
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SETSERVERDATA
