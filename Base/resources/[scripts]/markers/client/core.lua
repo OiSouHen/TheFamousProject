@@ -27,7 +27,7 @@ local Colors = {
 -- FORSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
 for Index,_ in pairs(Colors) do
-	AddStateBagChangeHandler(Index,("player:%s"):format(LocalPlayer["state"]["Source"]),function(Name,Key,Value)
+	AddStateBagChangeHandler(Index,("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
 		Active = Key
 
 		if not Value then
@@ -116,8 +116,7 @@ end)
 -- GETPLAYERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function GetPlayers()
-	local Selected = {}
-	local GamePool = GetGamePool("CPed")
+	local Selected = {}local GamePool = GetGamePool("CPed")
 
 	for _,Entity in pairs(GamePool) do
 		local Index = NetworkGetPlayerIndexFromPed(Entity)

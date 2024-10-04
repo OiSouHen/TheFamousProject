@@ -1,75 +1,112 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ROBBERY
+-- LOCKERITENS
 -----------------------------------------------------------------------------------------------------------------------------------------
-Robbery = {
-	["Emerald"] = {
-		["Furniture"] = {
-			["1"] = vec3(18.62,-32.78,-24.15),
-			["2"] = vec3(17.83,-30.2,-24.15),
-			["3"] = vec3(24.06,-27.55,-24.35),
-			["4"] = vec3(25.4,-20.25,-24.50),
-			["5"] = vec3(30.29,-25.82,-24.25),
-			["6"] = vec3(27.1,-29.88,-24.45)
-		}
-	},
-	["Ruby"] = {
-		["Furniture"] = {
-			["1"] = vec3(94.73,-98.72,-24.40),
-			["2"] = vec3(95.95,-95.17,-24.30),
-			["3"] = vec3(98.03,-93.04,-24.60),
-			["4"] = vec3(102.29,-99.95,-24.75),
-			["5"] = vec3(92.62,-104.02,-24.45),
-			["6"] = vec3(97.54,-106.04,-24.65),
-			["7"] = vec3(99.45,-105.18,-24.55)
-		}
-	},
-	["Sapphire"] = {
-		["Furniture"] = {
-			["1"] = vec3(90.62,70.25,-24.50),
-			["2"] = vec3(86.63,76.97,-24.50),
-			["3"] = vec3(91.13,75.67,-24.50),
-			["4"] = vec3(82.84,81.13,-24.20),
-			["5"] = vec3(66.63,80.42,-24.40),
-			["6"] = vec3(58.68,79.26,-25.25),
-			["7"] = vec3(58.69,75.94,-25.25),
-			["8"] = vec3(55.37,73.37,-25.10)
-		}
-	},
-	["Amethyst"] = {
-		["Furniture"] = {
-			["1"] = vec3(164.53,-146.77,-18.25),
-			["2"] = vec3(166.04,-151.15,-18.25),
-			["3"] = vec3(161.1,-153.53,-18.25),
-			["4"] = vec3(157.73,-153.44,-19.40),
-			["5"] = vec3(159.84,-155.48,-19.40),
-			["6"] = vec3(149.23,-165.71,-19.45),
-			["7"] = vec3(143.94,-151.29,-24.65),
-			["8"] = vec3(145.82,-154.02,-24.65),
-			["9"] = vec3(155.95,-151.02,-24.45)
-		}
-	},
-	["Amber"] = {
-		["Furniture"] = {
-			["1"] = vec3(125.67,-109.31,-23.80),
-			["2"] = vec3(125.84,-112.58,-23.80),
-			["3"] = vec3(119.95,-118.95,-24.15),
-			["4"] = vec3(120.28,-123.1,-24.25),
-			["5"] = vec3(120.37,-123.18,-27.75),
-			["6"] = vec3(126.69,-110.46,-27.90),
-			["7"] = vec3(122.64,-111.4,-31.75),
-			["8"] = vec3(121.88,-116.0,-31.75),
-			["9"] = vec3(116.39,-115.55,-31.75)
-		}
-	}
+LockerItens = {
+	{ ["Item"] = "dollar", ["Chance"] = 225, ["Min"] = 3225, ["Max"] = 3775 },
+	{ ["Item"] = "dirtydollar", ["Chance"] = 225, ["Min"] = 3225, ["Max"] = 3775 },
+	{ ["Item"] = "promissory1000", ["Chance"] = 100, ["Min"] = 2, ["Max"] = 4 },
+	{ ["Item"] = "promissory2000", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "promissory3000", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "promissory4000", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "promissory5000", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "goldnecklace", ["Chance"] = 50, ["Min"] = 4, ["Max"] = 6 },
+	{ ["Item"] = "silverchain", ["Chance"] = 75, ["Min"] = 6, ["Max"] = 8 },
+	{ ["Item"] = "safependrive", ["Chance"] = 10, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "goldenjug", ["Chance"] = 3, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "goldenleopard", ["Chance"] = 2, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "platinum", ["Chance"] = 1, ["Min"] = 225, ["Max"] = 375 },
+	{ ["Item"] = "goldenlion", ["Chance"] = 1, ["Min"] = 1, ["Max"] = 1 }
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ROBBERYITEM
+-- OTHERITENS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RobberyItem = {
-	{ ["Item"] = "dollars2", ["Chance"] = 100, ["Min"] = 275, ["Max"] = 375 },
+OtherItens = {
+	{ ["Item"] = "weedclone", ["Chance"] = 5, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "cokeclone", ["Chance"] = 5, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "adrenaline", ["Chance"] = 7, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "pistolbody", ["Chance"] = 15, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "smgbody", ["Chance"] = 10, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "riflebody", ["Chance"] = 5, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "dismantle", ["Chance"] = 35, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "ration", ["Chance"] = 80, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "gunpowder", ["Chance"] = 100, ["Min"] = 3, ["Max"] = 5 },
+	{ ["Item"] = "platinum", ["Chance"] = 35, ["Min"] = 50, ["Max"] = 75 },
+	{ ["Item"] = "treasurebox", ["Chance"] = 3, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "boilies", ["Chance"] = 100, ["Min"] = 4, ["Max"] = 6 },
+	{ ["Item"] = "binoculars", ["Chance"] = 75, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "camera", ["Chance"] = 75, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "repairkit01", ["Chance"] = 25, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "races", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "postit", ["Chance"] = 100, ["Min"] = 2, ["Max"] = 5 },
+	{ ["Item"] = "techtrash", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "tarp", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "sheetmetal", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "roadsigns", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "explosives", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "sulfuric", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "saline", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "alcohol", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "radio", ["Chance"] = 45, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "bandage", ["Chance"] = 80, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "medkit", ["Chance"] = 25, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "pouch", ["Chance"] = 75, ["Min"] = 2, ["Max"] = 4 },
+	{ ["Item"] = "woodlog", ["Chance"] = 75, ["Min"] = 2, ["Max"] = 4 },
+	{ ["Item"] = "fishingrod", ["Chance"] = 35, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "pickaxe", ["Chance"] = 25, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "joint", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "cocaine", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "meth", ["Chance"] = 100, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "crack", ["Chance"] = 60, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "heroin", ["Chance"] = 60, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "metadone", ["Chance"] = 60, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "codeine", ["Chance"] = 60, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "amphetamine", ["Chance"] = 60, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "acetone", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 3 },
+	{ ["Item"] = "plate", ["Chance"] = 75, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "circuit", ["Chance"] = 15, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "lockpick", ["Chance"] = 45, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "toolbox", ["Chance"] = 35, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "tyres", ["Chance"] = 55, ["Min"] = 1, ["Max"] = 2 },
+	{ ["Item"] = "cellphone", ["Chance"] = 65, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "handcuff", ["Chance"] = 15, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "rope", ["Chance"] = 45, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "hood", ["Chance"] = 15, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "plastic", ["Chance"] = 100, ["Min"] = 6, ["Max"] = 10 },
+	{ ["Item"] = "glass", ["Chance"] = 100, ["Min"] = 6, ["Max"] = 10 },
+	{ ["Item"] = "rubber", ["Chance"] = 100, ["Min"] = 6, ["Max"] = 10 },
+	{ ["Item"] = "aluminum", ["Chance"] = 75, ["Min"] = 3, ["Max"] = 5 },
+	{ ["Item"] = "copper", ["Chance"] = 75, ["Min"] = 3, ["Max"] = 5 },
+	{ ["Item"] = "ritmoneury", ["Chance"] = 75, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "sinkalmy", ["Chance"] = 45, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "cigarette", ["Chance"] = 100, ["Min"] = 2, ["Max"] = 5 },
+	{ ["Item"] = "lighter", ["Chance"] = 60, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "vape", ["Chance"] = 20, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "dirtydollar", ["Chance"] = 100, ["Min"] = 275, ["Max"] = 375 },
 	{ ["Item"] = "pager", ["Chance"] = 10, ["Min"] = 1, ["Max"] = 1 },
-	{ ["Item"] = "pistolbody", ["Chance"] = 10, ["Min"] = 1, ["Max"] = 1 },
-	{ ["Item"] = "smgbody", ["Chance"] = 8, ["Min"] = 1, ["Max"] = 1 },
-	{ ["Item"] = "riflebody", ["Chance"] = 6, ["Min"] = 1, ["Max"] = 1 },
-	{ ["Item"] = "circuit", ["Chance"] = 3, ["Min"] = 1, ["Max"] = 1 }
+	{ ["Item"] = "analgesic", ["Chance"] = 100, ["Min"] = 2, ["Max"] = 3 },
+	{ ["Item"] = "soap", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "alliance", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "WEAPON_PISTOL_AMMO", ["Chance"] = 10, ["Min"] = 25, ["Max"] = 50 },
+	{ ["Item"] = "blueprint_WEAPON_SNSPISTOL", ["Chance"] = 2, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "scotchtape", ["Chance"] = 25, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "insulatingtape", ["Chance"] = 25, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "rammemory", ["Chance"] = 12, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "powersupply", ["Chance"] = 35, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "processorfan", ["Chance"] = 10, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "processor", ["Chance"] = 5, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "screws", ["Chance"] = 30, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "screwnuts", ["Chance"] = 30, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "videocard", ["Chance"] = 2, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "ssddrive", ["Chance"] = 15, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "safependrive", ["Chance"] = 5, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "powercable", ["Chance"] = 35, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "weaponparts", ["Chance"] = 10, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "electroniccomponents", ["Chance"] = 30, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "batteryaa", ["Chance"] = 50, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "batteryaaplus", ["Chance"] = 40, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "goldnecklace", ["Chance"] = 15, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "silverchain", ["Chance"] = 25, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "horsefigurine", ["Chance"] = 2, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "toothpaste", ["Chance"] = 35, ["Min"] = 1, ["Max"] = 1 },
+	{ ["Item"] = "television", ["Chance"] = 2, ["Min"] = 1, ["Max"] = 1 }
 }

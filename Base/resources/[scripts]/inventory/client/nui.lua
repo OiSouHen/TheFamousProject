@@ -202,12 +202,15 @@ RegisterNUICallback("Mount",function(Data,Callback)
 	if Primary then
 		local Secondary = {}
 		local Ped = PlayerPedId()
-		local Coords = GetEntityCoords(Ped)
 		local Route = LocalPlayer["state"]["Route"]
 
 		if not IsPedInAnyVehicle(Ped) and Drops[Route] then
-			for _,v in pairs(Drops[Route]) do
-				if #(Coords - v["coords"]) <= 1.0 then
+			local Coords = GetEntityCoords(Ped)
+			local _,GroundZ = GetGroundZFor_3dCoord(Coords["x"],Coords["y"],Coords["z"])
+
+			for Index,v in pairs(Drops[Route]) do
+				local OtherCoords = vec3(Coords["x"],Coords["y"],GroundZ)
+				if #(OtherCoords - v["coords"]) <= 1.0 then
 					Secondary[#Secondary + 1] = v
 				end
 			end
@@ -220,6 +223,7 @@ end)
 -- BLUEPRINT
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Blueprint",function(Data,Callback)
+print("blueprint 1")
 	local Primary,PrimaryMaxWeight,Secondary = vSERVER.Blueprint()
 	if Primary then
 		TriggerEvent("inventory:Open",{
@@ -246,8 +250,8 @@ CreateThread(function()
 			local Coords = GetEntityCoords(Ped)
 
 			for _,v in pairs(Drops[Route]) do
-				if #(Coords - v["coords"]) <= 10 then
-					SetDrawOrigin(v["coords"]["x"],v["coords"]["y"],v["coords"]["z"] + 0.1)
+				if #(Coords - v["coords"]) <= 25 then
+					SetDrawOrigin(v["coords"]["x"],v["coords"]["y"],v["coords"]["z"])
 					DrawSprite("Targets","Drop",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
 					ClearDrawOrigin()
 

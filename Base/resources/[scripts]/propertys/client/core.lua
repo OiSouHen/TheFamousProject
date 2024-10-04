@@ -3,37 +3,34 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Tunnel = module("vrp","lib/Tunnel")
 local Proxy = module("vrp","lib/Proxy")
-vRPS = Tunnel.getInterface("vRP")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
-Hensa = {}
-Tunnel.bindInterface("propertys",Hensa)
 vSERVER = Tunnel.getInterface("propertys")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Init = ""
 local Blips = {}
-local Chest = ""
-local Amounts = 1
-local Theft = nil
-local Hoverfy = {}
 local Interior = ""
+local Inside = false
+local Opened = false
+local Policed = false
+local Stealing = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADSYSTEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
 	while true do
+		local Pid = PlayerId()
 		local TimeDistance = 999
 		local Ped = PlayerPedId()
 		if not IsPedInAnyVehicle(Ped) then
 			local Coords = GetEntityCoords(Ped)
 
-			if Init == "" then
+			if not Inside then
 				for Name,v in pairs(Propertys) do
-					if #(Coords - v) <= 0.75 then
+					if #(Coords - v["Coords"]) <= 0.75 then
 						TimeDistance = 1
 
 						if IsControlJustPressed(1,38) then
@@ -41,94 +38,104 @@ CreateThread(function()
 
 							if Consult then
 								if Consult == "Nothing" then
-									for Line,v in pairs(Informations) do
-										exports["dynamic"]:AddButton("Baú","Total de <rare>"..v["Vault"].."Kg</rare> no compartimento.","","",Line,false)
-										exports["dynamic"]:AddButton("Geladeira","Total de <rare>"..v["Fridge"].."Kg</rare> no compartimento.","","",Line,false)
-										exports["dynamic"]:AddButton("Credenciais","Máximo <rare>1</rare> proprietário e <rare>3</rare> moradores.","","",Line,false)
-										exports["dynamic"]:AddButton("Comprar com Dólares","Custo de <rare>$"..Dotted(v["Price"]).."</rare> dólares.","propertys:Buy",Name.."-"..Line.."-Dollars",Line,true)
-										exports["dynamic"]:AddButton("Comprar com Diamantes","Custo de <rare>"..Dotted(v["Gemstone"]).."</rare> diamantes.","propertys:Buy",Name.."-"..Line.."-Gemstone",Line,true)
-										exports["dynamic"]:AddMenu(Line,"Informações sobre o interior.",Line)
+									if not Propertys[Name]["Galpão"] then
+										exports["dynamic"]:AddButton("Invadir","Forçar a fechadura.","propertys:Robbery",Name,false,true)
 									end
+
+									for Line,v in pairs(Informations) do
+										if (Propertys[Name]["Galpão"] and Line == "Galpão") or (not Propertys[Name]["Galpão"] and Line ~= "Galpão") then
+											exports["dynamic"]:AddMenu(Line,"Informações sobre o interior.",Line)
+
+											if v["Vault"] then
+												exports["dynamic"]:AddButton("Baú","Total de <yellow>"..v["Vault"].."Kg</yellow> no compartimento.","","",Line,false)
+											end
+
+											if v["Fridge"] then
+												exports["dynamic"]:AddButton("Geladeira","Total de <yellow>"..v["Fridge"].."Kg</yellow> no compartimento.","","",Line,false)
+											end
+
+											exports["dynamic"]:AddButton("Credenciais","Máximo <yellow>1</yellow> proprietário e <yellow>3</yellow> adicionais.","","",Line,false)
+
+											if not Propertys[Name]["Vip"] then
+												exports["dynamic"]:AddButton("Comprar com Dinheiro","Custo de <yellow>"..Currency..Dotted(v["Price"]).."</yellow>.","propertys:Buy",Name.."-"..Line.."-Dollar",Line,true)
+											end
+
+											exports["dynamic"]:AddButton("Comprar com Diamantes","Custo de <yellow>"..Dotted(v["Gemstone"]).."</yellow>.","propertys:Buy",Name.."-"..Line.."-Gemstone",Line,true)
+										end
+									end
+
+									exports["dynamic"]:Open()
 								else
 									if Consult ~= "Hotel" then
 										exports["dynamic"]:AddButton("Entrar","Adentrar a propriedade.","propertys:Enter",Name,false,false)
 										exports["dynamic"]:AddButton("Credenciais","Reconfigurar os cartões de acesso.","propertys:Credentials",Name,false,true)
 										exports["dynamic"]:AddButton("Cartões","Comprar um novo cartão de acesso.","propertys:Item",Name,false,true)
 										exports["dynamic"]:AddButton("Fechadura","Trancar/Destrancar a propriedade.","propertys:Lock",Name,false,true)
-										exports["dynamic"]:AddButton("Garagem","Adicionar/Reajustar a garagem.","garages:Propertys",Name,false,true)
+
+										if not Propertys[Name]["Galpão"] then
+											exports["dynamic"]:AddButton("Garagem","Adicionar/Reajustar a garagem.","garages:Propertys",Name,false,true)
+										end
+
 										exports["dynamic"]:AddButton("Vender","Se desfazer da propriedade.","propertys:Sell",Name,false,true)
 										exports["dynamic"]:AddButton("Transferência","Mudar proprietário.","propertys:Transfer",Name,false,true)
 										exports["dynamic"]:AddButton("Hipoteca",Consult["Tax"],"","",false,false)
 
 										Interior = Consult["Interior"]
+										exports["dynamic"]:Open()
 									else
 										Interior = "Hotel"
 
 										TriggerEvent("propertys:Enter",Name,false)
 									end
 								end
-
+							elseif not Propertys[Name]["Galpão"] and Name ~= "Hotel" then
+								exports["dynamic"]:AddButton("Invadir","Forçar a fechadura.","propertys:Robbery",Name,false,true)
 								exports["dynamic"]:Open()
 							end
 						end
 					end
 				end
-			else
-				if Interiors[Interior] then
-					SetPlayerBlipPositionThisFrame(Propertys[Init]["x"],Propertys[Init]["y"])
+			elseif Propertys[Inside] and Internal[Interior] then
+				SetPlayerBlipPositionThisFrame(Propertys[Inside]["Coords"]["x"],Propertys[Inside]["Coords"]["y"])
 
-					if Coords["z"] < (Interiors[Interior]["Exit"]["z"] - 25.0) then
-						SetEntityCoords(Ped,Interiors[Interior]["Exit"],false,false,false,false)
-					end
+				if Coords["z"] < (Internal[Interior]["Exit"]["z"] - 25.0) then
+					SetEntityCoords(Ped,Internal[Interior]["Exit"],false,false,false,false)
+				end
 
-					if Theft and Robbery[Interior]["Furniture"] then
-						for Index,v in pairs(Robbery[Interior]["Furniture"]) do
-							if #(Coords - v) <= 1.0 then
-								TimeDistance = 1
+				if Internal[Interior]["Furniture"] and Policed and Policed <= GetGameTimer() and (GetPedMovementClipset(Ped) ~= -1155413492 or IsPedSprinting(Ped) or MumbleIsPlayerTalking(Pid)) then
+					vSERVER.Police(Propertys[Inside]["Coords"],Coords)
+					Policed = GetGameTimer() + 15000
+				end
 
-								DrawText3D(v,"~g~E~w~  ROUBAR")
-
-								if #(Coords - v) <= 0.75 and IsControlJustPressed(1,38) and vSERVER.Robbery(Init,Index) then
-									vRP.PlayAnim(false,{"amb@prop_human_bum_bin@base","base"},true)
-
-									if exports["taskbar"]:Task(5, 5500) then
-										vSERVER.PaymentRobbery(Init,Index)
-									end
-
-									vRP.Destroy()
+				for Line,v in pairs(Internal[Interior]) do
+					if Line ~= "Furniture" and #(Coords - v) <= 1.0 then
+						if Line == "Exit" and IsControlJustPressed(1,38) then
+							if Stealing and Internal[Interior]["Furniture"] then
+								for Index in pairs(Internal[Interior]["Furniture"]) do
+									exports["target"]:RemCircleZone("Robberys:"..Index)
 								end
 							end
-						end
 
-						if Theft < GetGameTimer() and GetEntitySpeed(Ped) > 2 then
-							Theft = GetGameTimer() + 60000
-							vSERVER.Police(Propertys[Init])
-						end
-					end
+							SetEntityCoords(Ped,Propertys[Inside]["Coords"],false,false,false,false)
+							vSERVER.Toggle(Inside,"Exit")
+							Stealing = false
+							Policed = false
+							Inside = false
+						elseif not Stealing and (Line == "Vault" or Line == "Fridge") and IsControlJustPressed(1,38) and vSERVER.Permission(Inside) then
+							vRP.PlayAnim(false,{"amb@prop_human_bum_bin@base","base"},true)
+							Opened = Line
 
-					for Line,v in pairs(Interiors[Interior]) do
-						if #(Coords - v) <= 0.75 then
-							TimeDistance = 1
-
-							if Line == "Exit" and IsControlJustPressed(1,38) then
-								SetEntityCoords(Ped,Propertys[Init],false,false,false,false)
-								LocalPlayer["state"]:set("Propertys",false,false)
-								vSERVER.Toggle(Init,"Exit")
-								Interior = ""
-								Theft = nil
-								Chest = ""
-								Init = ""
-							elseif not Theft and (Line == "Vault" or Line == "Fridge") and IsControlJustPressed(1,38) and vSERVER.Permission(Init) then
-								vRP.PlayAnim(false,{"amb@prop_human_bum_bin@base","base"},true)
-								SendNUIMessage({ Action = "Open" })
-								SetNuiFocus(true,true)
-								Chest = Line
-							elseif not Theft and Line == "Clothes" and IsControlJustPressed(1,38) then
-								ClothesMenu()
-							end
+							TriggerEvent("inventory:Open",{
+								Type = "Chest",
+								Resource = "propertys"
+							})
+						elseif not Stealing and Line == "Clothes" and IsControlJustPressed(1,38) then
+							ClothesMenu()
 						end
 					end
 				end
+
+				TimeDistance = 1
 			end
 		end
 
@@ -139,95 +146,95 @@ end)
 -- CLOTHESMENU
 -----------------------------------------------------------------------------------------------------------------------------------------
 function ClothesMenu()
-	exports["dynamic"]:AddButton("Guardar","Salvar suas vestimentas do corpo.","propertys:Clothes","save",false,true)
-	exports["dynamic"]:AddButton("Shopping","Abrir a loja de vestimentas.","skinshop:Open","",false,false)
-	exports["dynamic"]:AddMenu("Vestir","Abrir lista com todas as vestimentas.","apply")
-	exports["dynamic"]:AddMenu("Remover","Abrir lista com todas as vestimentas.","delete")
+	if Inside and vSERVER.CheckMode(Inside) then
+		exports["dynamic"]:AddButton("Shopping","Abrir a loja de vestimentas.","skinshop:Open","",false,false)
+	end
+
+	exports["dynamic"]:AddMenu("Armário","Abrir lista com todas as vestimentas.","wardrobe")
+	exports["dynamic"]:AddButton("Guardar","Salvar vestimentas do corpo.","propertys:Clothes","Save","wardrobe",true)
 
 	local Clothes = vSERVER.Clothes()
 	if parseInt(#Clothes) > 0 then
-		for _,v in pairs(Clothes) do
-			exports["dynamic"]:AddButton(v,"Vestir-se com as vestimentas.","propertys:Clothes","apply-"..v,"apply",true)
-			exports["dynamic"]:AddButton(v,"Remover a vestimenta salva.","propertys:Clothes","delete-"..v,"delete",true)
+		for Index,v in pairs(Clothes) do
+			exports["dynamic"]:AddMenu(v,"Informações da vestimenta.",Index,"wardrobe")
+			exports["dynamic"]:AddButton("Aplicar","Vestir-se com as vestimentas.","propertys:Clothes","Apply-"..v,Index,true)
+			exports["dynamic"]:AddButton("Remover","Deletar a vestimenta do armário.","propertys:Clothes","Delete-"..v,Index,true,true)
 		end
 	end
 
 	exports["dynamic"]:Open()
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PROPERTYS:CLOTHESRESET
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("propertys:ClothesReset")
-AddEventHandler("propertys:ClothesReset",function()
-	TriggerEvent("dynamic:Close")
-	ClothesMenu()
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- PROPERTYS:ENTER
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("propertys:Enter")
-AddEventHandler("propertys:Enter",function(Name,Thefting)
-	if Thefting then
-		Theft = GetGameTimer() + 10000
-		Interior = Thefting
-	else
-		LocalPlayer["state"]:set("Propertys",true,false)
+AddEventHandler("propertys:Enter",function(Name,Theft)
+	if Theft then
+		Stealing = true
+		Interior = Theft
+		Policed = GetGameTimer() + 15000
+		TriggerEvent("player:Residual","Resquício de Línter")
 
-		if not Hoverfy[Name] then
-			local Tables = {}
-			Hoverfy[Name] = true
-
-			for _,Intern in pairs(Interiors) do
-				for Index,v in pairs(Intern) do
-					local Message = "Saída"
-
-					if Index == "Vault" then
-						Message = "Baú"
-					elseif Index == "Fridge" then
-						Message = "Geladeira"
-					elseif Index == "Clothes" then
-						Message = "Armário"
-					end
-
-					Tables[#Tables + 1] = { v,0.75,"E",Message,"Pressione para acessar" }
-				end
+		if Internal[Interior] and Internal[Interior]["Furniture"] then
+			for Number,v in pairs(Internal[Interior]["Furniture"]) do
+				exports["target"]:AddCircleZone("Robberys:"..Number,v,0.1,{
+					name = "Robberys:"..Number,
+					heading = 0.0,
+					useZ = true
+				},{
+					shop = Number,
+					Distance = 1.25,
+					options = {
+						{
+							event = "propertys:RobberyItem",
+							label = "Roubar",
+							tunnel = "server",
+							service = Name
+						}
+					}
+				})
 			end
-
-			TriggerEvent("hoverfy:Insert",Tables)
 		end
 	end
 
-	Init = Name
+	Inside = Name
 	local Ped = PlayerPedId()
-	vSERVER.Toggle(Init,"Enter")
 	TriggerEvent("dynamic:Close")
-	SetEntityCoords(Ped,Interiors[Interior]["Exit"],false,false,false,false)
+	vSERVER.Toggle(Inside,"Enter")
+	SetEntityCoords(Ped,Internal[Interior]["Exit"],false,false,false,false)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- REQUEST
+-- MOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Request",function(Data,Callback)
-	local Inventory,Chest,InvPeso,InvMax,ChestPeso,ChestMax = vSERVER.Request(Init,Chest)
-	if Inventory then
-		Callback({ Inventory = Inventory, Chest = Chest, InvPeso = InvPeso, InvMax = InvMax, ChestPeso = ChestPeso, ChestMax = ChestMax })
+RegisterNUICallback("Mount",function(Data,Callback)
+	local Primary,Secondary,PrimaryWeight,SecondaryWeight = vSERVER.Mount(Inside,Opened)
+	if Primary then
+		Callback({ Primary = Primary, Secondary = Secondary, PrimaryMaxWeight = PrimaryWeight, SecondaryMaxWeight = SecondaryWeight })
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CLOSE
+-- INVENTORY:CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Close",function(Data,Callback)
-	SendNUIMessage({ Action = "Close" })
-	SetNuiFocus(false,false)
-	vRP.Destroy()
-
-	Callback("Ok")
+RegisterNetEvent("inventory:Close")
+AddEventHandler("inventory:Close",function()
+	if Opened then
+		Opened = false
+		vRP.Destroy()
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PROPERTYS:REMCIRCLEZONE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("propertys:RemCircleZone")
+AddEventHandler("propertys:RemCircleZone",function(Index)
+	exports["target"]:RemCircleZone("Robberys:"..Index)
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TAKE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Take",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Take(Data["slot"],Data["amount"],Data["target"],Init,Chest)
+		vSERVER.Take(Data["slot"],Data["amount"],Data["target"],Inside,Opened)
 	end
 
 	Callback("Ok")
@@ -237,7 +244,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Store",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"],Init,Chest)
+		vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"],Inside,Opened)
 	end
 
 	Callback("Ok")
@@ -247,36 +254,18 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Update",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Update(Data["slot"],Data["target"],Data["amount"],Init,Chest)
+		vSERVER.Update(Data["slot"],Data["target"],Data["amount"],Inside,Opened)
 	end
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PROPERTYS:UPDATE
+-- THREADSERVERSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("propertys:Update")
-AddEventHandler("propertys:Update",function()
-	SendNUIMessage({ Action = "Request" })
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- PROPERTYS:WEIGHT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("propertys:Weight")
-AddEventHandler("propertys:Weight",function(InvPeso,InvMax,ChestPeso,ChestMax)
-	SendNUIMessage({ Action = "Weight", InvPeso = InvPeso, InvMax = InvMax, ChestPeso = ChestPeso, ChestMax = ChestMax })
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- ONCLIENTRESOURCESTART
------------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("onClientResourceStart",function(Resource)
-	if (GetCurrentResourceName() ~= Resource) then
-		return
-	end
-
+CreateThread(function()
 	local Tables = {}
 	for Name,v in pairs(Propertys) do
-		Tables[#Tables + 1] = { v,0.75,"E","Propriedade","Pressione para acessar" }
+		Tables[#Tables + 1] = { v["Coords"],0.75,"E","Pressione","para acessar" }
 	end
 
 	TriggerEvent("hoverfy:Insert",Tables)
@@ -295,121 +284,24 @@ AddEventHandler("propertys:Blips",function()
 
 		Blips = {}
 
-		TriggerEvent("Notify","amarelo","Marcações desativadas.","propriedades",5000)
+		TriggerEvent("Notify","Propriedades","Marcações desativadas.","default",10000)
 	else
 		for Name,v in pairs(Propertys) do
 			if Name ~= "Hotel" then
-				Blips[Name] = AddBlipForCoord(v["x"],v["y"],v["z"])
-				SetBlipSprite(Blips[Name],374)
+				Blips[Name] = AddBlipForCoord(v["Coords"]["x"],v["Coords"]["y"],v["Coords"]["z"])
+
+				if v["Galpão"] then
+					SetBlipSprite(Blips[Name],473)
+				else
+					SetBlipSprite(Blips[Name],374)
+				end
+
+				SetBlipScale(Blips[Name],0.5)
 				SetBlipAsShortRange(Blips[Name],true)
 				SetBlipColour(Blips[Name],GlobalState["Markers"][Name] and 35 or 43)
-				SetBlipScale(Blips[Name],0.4)
 			end
 		end
 
-		TriggerEvent("Notify","verde","Marcações ativadas.","propriedades",5000)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- DRAWTEXT3D
------------------------------------------------------------------------------------------------------------------------------------------
-function DrawText3D(Coords,Text)
-	local onScreen,x,y = World3dToScreen2d(Coords["x"],Coords["y"],Coords["z"])
-
-	if onScreen then
-		SetTextFont(4)
-		SetTextCentre(true)
-		SetTextProportional(1)
-		SetTextScale(0.35,0.35)
-		SetTextColour(255,255,255,150)
-
-		SetTextEntry("STRING")
-		AddTextComponentString(Text)
-		EndTextCommandDisplayText(x,y)
-
-		local Width = string.len(Text) / 160 * 0.45
-		DrawRect(x,y + 0.0125,Width,0.03,15,15,15,175)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- PEDS
------------------------------------------------------------------------------------------------------------------------------------------
-local Peds = { "ig_abigail", "a_m_m_afriamer_01", "ig_mp_agent14", "csb_agent", "ig_amandatownley", "s_m_y_ammucity_01", "u_m_y_antonb", "g_m_m_armboss_01", "g_m_m_armgoon_01", "g_m_m_armlieut_01", "ig_ashley", "s_m_m_autoshop_01", "ig_money", "g_m_y_ballaeast_01", "g_f_y_ballas_01", "g_m_y_ballasout_01", "s_m_y_barman_01", "u_m_y_baygor", "a_m_o_beach_01", "ig_bestmen", "a_f_y_bevhills_01", "a_m_m_bevhills_02", "u_m_m_bikehire_01", "u_f_y_bikerchic", "mp_f_boatstaff_01", "s_m_m_bouncer_01", "ig_brad", "ig_bride", "u_m_y_burgerdrug_01", "a_m_m_business_01", "a_m_y_business_02", "s_m_o_busker_01", "ig_car3guy2", "cs_carbuyer", "g_m_m_chiboss_01", "g_m_m_chigoon_01", "g_m_m_chigoon_02", "u_f_y_comjane", "ig_dale", "ig_davenorton", "s_m_y_dealer_01", "ig_denise", "ig_devin", "a_m_y_dhill_01", "ig_dom", "a_m_y_downtown_01", "ig_dreyfuss" }
------------------------------------------------------------------------------------------------------------------------------------------
--- PROPERTYS:PROPERPATCH
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("propertys:Properpatch")
-AddEventHandler("propertys:Properpatch", function()
-	local Ped = PlayerPedId()
-	local Coords = GetEntityCoords(Ped)
-	local Heading = GetEntityHeading(Ped)
-
-	for Number = 1, Amounts do
-		local Cooldown = 0
-		local OtherPeds = math.random(#Peds)
-		local SpawnX = Coords["x"] + math.random(-20, 20)
-		local SpawnY = Coords["y"] + math.random(-20, 20)
-		local HitZ, GroundZ = GetGroundZFor_3dCoord(SpawnX, SpawnY, Coords["z"], true)
-		local HitSafe, SafeCoords = GetSafeCoordForPed(SpawnX, SpawnY, GroundZ, false, 16)
-
-		repeat
-			Cooldown = Cooldown + 1
-			SpawnX = Coords["x"] + math.random(-20, 20)
-			SpawnY = Coords["y"] + math.random(-20, 20)
-			HitZ, GroundZ = GetGroundZFor_3dCoord(SpawnX, SpawnY, Coords["z"], true)
-			HitSafe, SafeCoords = GetSafeCoordForPed(SpawnX, SpawnY, GroundZ, false, 16)
-		until (HitZ and HitSafe) or Cooldown >= 100
-
-		if HitZ and HitSafe then
-			local Application, Network = vRPS.CreatePed(Peds[OtherPeds], SafeCoords["x"], SafeCoords["y"], SafeCoords["z"], Heading, 28)
-			if Application then
-				SetTimeout(1000, function()
-					local Entity = LoadNetwork(Network)
-					if Entity then
-						SetPedArmour(Entity, 100)
-						SetPedAccuracy(Entity, 75)
-						SetPedAlertness(Entity, 3)
-						SetPedAsEnemy(Entity, true)
-						SetPedMaxHealth(Entity, 500)
-						SetEntityHealth(Entity, 500)
-						SetPedKeepTask(Entity, true)
-						SetPedCombatRange(Entity, 2)
-						StopPedSpeaking(Entity, true)
-						SetPedCombatMovement(Entity, 2)
-						DisablePedPainAudio(Entity, true)
-						SetPedPathAvoidFire(Entity, true)
-						SetPedConfigFlag(Entity, 208, true)
-						SetPedSeeingRange(Entity, 10000.0)
-						SetPedCanEvasiveDive(Entity, false)
-						SetPedHearingRange(Entity, 10000.0)
-						SetPedDiesWhenInjured(Entity, false)
-						SetPedPathCanUseLadders(Entity, true)
-						SetPedFleeAttributes(Entity, 0, false)
-						SetPedCombatAttributes(Entity, 46, true)
-						SetPedFiringPattern(Entity, 0xC6EE6B4C)
-						SetCanAttackFriendly(Entity, true, false)
-						SetPedSuffersCriticalHits(Entity, false)
-						SetPedPathCanUseClimbovers(Entity, true)
-						SetPedDropsWeaponsWhenDead(Entity, false)
-						SetPedEnableWeaponBlocking(Entity, false)
-						SetPedPathCanDropFromHeight(Entity, false)
-						RegisterHatedTargetsAroundPed(Entity, 100.0)
-						GiveWeaponToPed(Entity, "WEAPON_PISTOL_MK2", -1, false, true)
-						SetCurrentPedWeapon(Entity, "WEAPON_PISTOL_MK2", true)
-						SetPedInfiniteAmmo(Entity, true, "WEAPON_PISTOL_MK2")
-						SetPedRelationshipGroupHash(Entity, GetHashKey("HATES_PLAYER"))
-						SetEntityCanBeDamagedByRelationshipGroup(Entity, false, "HATES_PLAYER")
-						SetRelationshipBetweenGroups(5, GetHashKey("HATES_PLAYER"), GetHashKey("PLAYER"))
-						SetRelationshipBetweenGroups(5, GetHashKey("PLAYER"), GetHashKey("HATES_PLAYER"))
-						TaskCombatPed(Entity, Ped, 0, 16)
-
-						SetTimeout(1000, function()
-							TaskWanderInArea(Entity, SafeCoords["x"], SafeCoords["y"], SafeCoords["z"], 25.0, 0.0, 0.0)
-							SetModelAsNoLongerNeeded(Peds[OtherPeds])
-						end)
-					end
-				end)
-			end
-		end
+		TriggerEvent("Notify","Propriedades","Marcações ativadas.","default",10000)
 	end
 end)

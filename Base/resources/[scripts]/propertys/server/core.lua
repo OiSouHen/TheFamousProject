@@ -19,7 +19,7 @@ local Inside = {}
 local Actived = {}
 local Robbery = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
--- GLOBALSTATES
+-- GLOBALVARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 GlobalState["Markers"] = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ function Hensa.Robbery(Name,Number)
 	end
 
 	if Robbery[Name] and os.time() < Robbery[Name][Number] then
-		TriggerClientEvent("Notify",source,"azul","Aguarde <b>"..CompleteTimers(Robbery[Name][Number] - os.time()).."</b>.",false,5000)
+		TriggerClientEvent("Notify",source,"Atenção","Aguarde "..CompleteTimers(Robbery[Name][Number] - os.time())..".","amarelo",5000)
 
 		return false
 	end
@@ -51,44 +51,39 @@ function Hensa.Police(Coords)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		TriggerEvent("Wanted",source,Passport,300)
-
-		local Service = vRP.NumPermission("Policia")
-		for Passports,Sources in pairs(Service) do
-			async(function()
-				TriggerClientEvent("sounds:Private",Sources,"crime",0.5)
-				TriggerClientEvent("NotifyPush",Sources,{ code = 31, title = "Roubo a Propriedade", x = Coords["x"], y = Coords["y"], z = Coords["z"], color = 44 })
-			end)
-		end
+		exports["vrp"]:CallPolice({
+			["Source"] = source,
+			["Passport"] = Passport,
+			["Coords"] = Coords,
+			["Permission"] = "Policia",
+			["Name"] = "Roubo a Propriedade",
+			["Wanted"] = 300,
+			["Code"] = 31,
+			["Color"] = 44
+		})
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PAYMENTROBBERY
+-- PAYBERRY
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.PaymentRobbery(Name, Number)
+function Hensa.Paybbery(Name,Number)
 	local source = source
-	local playerPassport = vRP.Passport(source)
-	if playerPassport and Robbery[Name] and os.time() >= Robbery[Name][Number] then
-		local randomIndex = math.random(#RobberyItem)
-		local robberyItem = RobberyItem[randomIndex]
-		local valuation = math.random(robberyItem["Min"], robberyItem["Max"])
-
-		local totalWeight = vRP.InventoryWeight(playerPassport) + ItemWeight(robberyItem["Item"]) * valuation
-		local maxWeight = vRP.GetWeight(playerPassport)
-
-		if totalWeight <= maxWeight then
-			local buffs = exports["inventory"]:Buffs("Luck", playerPassport)
-
-			if buffs and buffs > os.time() and math.random(100) >= 90 then
-				valuation = valuation * 2
-			end
-
-			vRP.GenerateItem(playerPassport, robberyItem["Item"], valuation, true)
-			vRP.UpgradeStress(playerPassport, math.random(3, 6))
-			Robbery[Name][Number] = os.time() + 3600
-		else
-			TriggerClientEvent("Notify", source, "vermelho", "Mochila cheia.", "Aviso", 5000)
+	local Passport = vRP.Passport(source)
+	if Passport and Robbery[Name] and os.time() >= Robbery[Name][Number] then
+		local Result = RandPercentage(IlegalItens)
+		if exports["inventory"]:Buffs("Luck",Passport) then
+			Result["Valuation"] = Result["Valuation"] + (Result["Valuation"] * 0.5)
 		end
+
+		if not vRP.MaxItens(Passport,Result["Item"],Result["Valuation"]) and vRP.CheckWeight(Passport,Result["Item"],Result["Valuation"]) then
+			vRP.GenerateItem(Passport,Result["Item"],Result["Valuation"],true)
+		else
+			TriggerClientEvent("Notify",source,"Mochila Sobrecarregada","Sua recompensa caiu no chão.","roxo",5000)
+			exports["inventory"]:Drops(Passport,source,Result["Item"],Result["Valuation"])
+		end
+
+		TriggerClientEvent("player:Residuals",source,"Resquício de Línter")
+		Robbery[Name][Number] = os.time() + 3600
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -98,16 +93,11 @@ function Hensa.Propertys(Name)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if exports["bank"]:CheckFines(Passport) or exports["bank"]:CheckTaxs(Passport) then
-			TriggerClientEvent("Notify",source,"amarelo","Você está temporariamente proibido de utilizar esse sistema por pendências com o <b>Banco</b>.","Atenção",5000)
-			return false
-		end
-
 		if Name == "Hotel" then
 			local Consult = vRP.Query("propertys/Count",{ Passport = Passport })
 			if Consult[1] then
 				local Count = Consult[1]["COUNT(Passport)"]
-				if Count == 0 then
+				if Count <= 0 then
 					return "Hotel"
 				end
 			end
@@ -122,7 +112,7 @@ function Hensa.Propertys(Name)
 						local Price = Informations[Consult[1]["Interior"]]["Price"] * 0.15
 
 						if vRP.Request(source,"Propriedades","Hipoteca atrasada, deseja pagar por <b>$"..Dotted(Price).."</b>?") and vRP.PaymentFull(Passport,Price) then
-							TriggerClientEvent("Notify",source,"verde","Pagamento concluído.","Sucesso",5000)
+							TriggerClientEvent("Notify",source,"Propriedades","Pagamento concluído.","verde",5000)
 							vRP.Query("propertys/Tax",{ Name = Name })
 							Tax = CompleteTimers(2592000)
 						else
@@ -172,7 +162,7 @@ AddEventHandler("propertys:Buy",function(Name)
 	local source = source
 	local Split = splitString(Name)
 	local Passport = vRP.Passport(source)
-	if Passport then
+	if Passport and not exports["bank"]:CheckFines(Passport) then
 		local Name,Interior,Mode = Split[1],Split[2],Split[3]
 
 		local Consult = vRP.Query("propertys/Exist",{ Name = Name })
@@ -182,16 +172,18 @@ AddEventHandler("propertys:Buy",function(Name)
 			if vRP.Request(source,"Propriedades","Deseja comprar a propriedade?") then
 				local Serial = PropertysSerials()
 
-				if Mode == "Dollars" then
+				if Mode == "Dollar" then
 					if vRP.PaymentFull(Passport,Informations[Interior]["Price"]) then
 						local Markers = GlobalState["Markers"]
 						Markers[Name] = true
 						GlobalState:set("Markers",Markers,true)
 
 						vRP.GiveItem(Passport,"propertys-"..Serial,3,true)
-						TriggerClientEvent("Notify",source,"verde","Compra concluída.","Sucesso",5000)
+						TriggerClientEvent("Notify",source,"Propriedades","Compra concluída.","verde",5000)
 						exports["bank"]:AddTaxs(Passport,source,"Propriedades",Informations[Interior]["Price"],"Compra de propriedade.")
 						vRP.Query("propertys/Buy",{ Name = Name, Interior = Interior, Passport = Passport, Serial = Serial, Vault = Informations[Interior]["Vault"], Fridge = Informations[Interior]["Fridge"], Tax = os.time() + 2592000 })
+					else
+						TriggerClientEvent("Notify",source,"Propriedades","<b>Dólares</b> insuficientes.","amarelo",5000)
 					end
 				elseif Mode == "Gemstone" then
 					if vRP.PaymentGems(Passport,Informations[Interior]["Gemstone"]) then
@@ -200,10 +192,10 @@ AddEventHandler("propertys:Buy",function(Name)
 						GlobalState:set("Markers",Markers,true)
 
 						vRP.GiveItem(Passport,"propertys-"..Serial,3,true)
-						TriggerClientEvent("Notify",source,"verde","Compra concluída.","Sucesso",5000)
+						TriggerClientEvent("Notify",source,"Propriedades","Compra concluída.","verde",5000)
 						vRP.Query("propertys/Buy",{ Name = Name, Interior = Interior, Passport = Passport, Serial = Serial, Vault = Informations[Interior]["Vault"], Fridge = Informations[Interior]["Fridge"], Tax = os.time() + 31104000 })
 					else
-						TriggerClientEvent("Notify",source,"vermelho","<b>Diamantes</b> insuficientes.","Aviso",5000)
+						TriggerClientEvent("Notify",source,"Propriedades","<b>Diamantes</b> insuficientes.","amarelo",5000)
 					end
 				end
 			end
@@ -221,10 +213,10 @@ AddEventHandler("propertys:Lock",function(Name)
 	if Passport and Consult[1] and (vRP.InventoryFull(Passport,"propertys-"..Consult[1]["Serial"]) or Consult[1]["Passport"] == Passport) then
 		if Lock[Name] then
 			Lock[Name] = nil
-			TriggerClientEvent("Notify",source,"verde","Propriedade trancada.","Sucesso",5000)
+			TriggerClientEvent("Notify",source,"Aviso","Propriedade trancada.","default",5000)
 		else
 			Lock[Name] = true
-			TriggerClientEvent("Notify",source,"vermelho","Propriedade destrancada.","Aviso",5000)
+			TriggerClientEvent("Notify",source,"Aviso","Propriedade destrancada.","default",5000)
 		end
 	end
 end)
@@ -251,11 +243,11 @@ AddEventHandler("propertys:Sell",function(Name)
 				end
 
 				vRP.GiveBank(Passport,Price)
-				vRP.RemoveServerData("Vault:"..Name,true)
-				vRP.RemoveServerData("Fridge:"..Name,true)
+				vRP.RemoveServerData("Vault:"..Name)
+				vRP.RemoveServerData("Fridge:"..Name)
 				vRP.Query("propertys/Sell",{ Name = Name })
 				TriggerClientEvent("garages:Clean",-1,Name)
-				TriggerClientEvent("Notify",source,"verde","Venda concluída.","Sucesso",5000)
+				TriggerClientEvent("Notify",source,"Propriedades","Venda concluída.","verde",5000)
 			end
 		end
 
@@ -269,7 +261,7 @@ RegisterServerEvent("propertys:Transfer")
 AddEventHandler("propertys:Transfer",function(Name)
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport and not Actived[Passport] then
+	if Passport and not Actived[Passport] and not exports["bank"]:CheckFines(Passport) then
 		Actived[Passport] = true
 
 		local Consult = vRP.Query("propertys/Exist",{ Name = Name })
@@ -279,7 +271,7 @@ AddEventHandler("propertys:Transfer",function(Name)
 			local Keyboard = vKEYBOARD.Primary(source,"Passaporte")
 			if Keyboard and vRP.Identity(Keyboard[1]) and vRP.Request(source,"Propriedades","Deseja trasnferir a propriedade para passaporte <b>"..Keyboard[1].."</b>?") then
 				vRP.Query("propertys/Transfer",{ Name = Name, Passport = Keyboard[1] })
-				TriggerClientEvent("Notify",source,"verde","Transferência concluída.","Sucesso",5000)
+				TriggerClientEvent("Notify",source,"Propriedades","Transferência concluída.","verde",5000)
 			end
 		end
 
@@ -319,6 +311,8 @@ AddEventHandler("propertys:Item",function(Name)
 			if vRP.PaymentFull(Passport,150000) then
 				vRP.Query("propertys/Item",{ Name = Name })
 				vRP.GiveItem(Passport,"propertys-"..Consult[1]["Serial"],1,true)
+			else
+				TriggerClientEvent("Notify",source,"Aviso","<b>Dólares</b> insuficientes.","amarelo",5000)
 			end
 		end
 	end
@@ -331,7 +325,7 @@ function Hensa.Clothes()
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		local Consult = vRP.GetServerData("Wardrobe:"..Passport,true)
+		local Consult = vRP.GetServerData("Wardrobe:"..Passport)
 
 		for Table,_ in pairs(Consult) do
 			Clothes[#Clothes + 1] = Table
@@ -348,7 +342,7 @@ AddEventHandler("propertys:Clothes",function(Mode)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		local Consult = vRP.GetServerData("Wardrobe:"..Passport,true)
+		local Consult = vRP.GetServerData("Wardrobe:"..Passport)
 		local Split = splitString(Mode)
 		local Name = Split[2]
 
@@ -359,28 +353,28 @@ AddEventHandler("propertys:Clothes",function(Mode)
 
 				if not Consult[Check] then
 					Consult[Check] = vSKINSHOP.Customization(source)
-					vRP.SetServerData("Wardrobe:"..Passport,Consult)
+					vRP.SetServerData("Wardrobe:"..Passport,Consult,true)
 					TriggerClientEvent("propertys:ClothesReset",source)
-					TriggerClientEvent("Notify",source,"verde","<b>"..Check.."</b> adicionado.","Sucesso",5000)
+					TriggerClientEvent("Notify",source,"Propriedades","<b>"..Check.."</b> adicionado.","verde",5000)
 				else
-					TriggerClientEvent("Notify",source,"amarelo","Nome escolhido já existe em seu armário.","Atenção",5000)
+					TriggerClientEvent("Notify",source,"Propriedades","Nome escolhido já existe em seu armário.","amarelo",5000)
 				end
 			end
 		elseif Split[1] == "delete" then
 			if Consult[Name] then
 				Consult[Name] = nil
-				vRP.SetServerData("Wardrobe:"..Passport,Consult)
+				vRP.SetServerData("Wardrobe:"..Passport,Consult,true)
 				TriggerClientEvent("propertys:ClothesReset",source)
-				TriggerClientEvent("Notify",source,"verde","<b>"..Name.."</b> removido.","Sucesso",5000)
+				TriggerClientEvent("Notify",source,"Propriedades","<b>"..Name.."</b> removido.","verde",5000)
 			else
-				TriggerClientEvent("Notify",source,"vermelho","A vestimenta salva não se encontra mais em seu armário.","Aviso",5000)
+				TriggerClientEvent("Notify",source,"Propriedades","A vestimenta salva não se encontra mais em seu armário.","amarelo",5000)
 			end
 		elseif Split[1] == "apply" then
 			if Consult[Name] then
 				TriggerClientEvent("skinshop:Apply",source,Consult[Name])
-				TriggerClientEvent("Notify",source,"verde","<b>"..Name.."</b> aplicado.","Sucesso",5000)
+				TriggerClientEvent("Notify",source,"Propriedades","<b>"..Name.."</b> aplicado.","verde",5000)
 			else
-				TriggerClientEvent("Notify",source,"vermelho","A vestimenta salva não se encontra mais em seu armário.","Aviso",5000)
+				TriggerClientEvent("Notify",source,"Propriedades","A vestimenta salva não se encontra mais em seu armário.","amarelo",5000)
 			end
 		end
 	end
@@ -389,11 +383,10 @@ end)
 -- PROPERTYSSERIALS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function PropertysSerials()
-	local Serial = vRP.GenerateString("LDLDLDLDLD")
-	local Consult = vRP.Query("propertys/Serial",{ Serial = Serial })
-	if Consult[1] then
-		PropertysSerials()
-	end
+	repeat
+		Serial = GenerateString("LDLDLDLDLD")
+		Consult = vRP.Query("propertys/Serial",{ Serial = Serial })
+	until Serial and not Consult[1]
 
 	return Serial
 end
@@ -411,307 +404,97 @@ function Hensa.Permission(Name)
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- REQUEST
+-- MOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Request(Name,Mode)
+function Hensa.Mount(Name,Mode)
 	local Weight = 25
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport then
+	if Passport and Name and Mode then
 		if Name == "Hotel" then
 			Name = "Hotel:"..Passport
 		else
 			Weight = vRP.Query("propertys/Exist",{ Name = Name })[1][Mode]
 		end
 
-		local Chest = {}
-		local Inventory = {}
+		local Primary = {}
 		local Inv = vRP.Inventory(Passport)
 		local Consult = vRP.GetServerData(Mode..":"..Name)
 
 		for Index,v in pairs(Inv) do
-			if (parseInt(v["amount"]) <= 0 or not ItemExist(v["item"])) then
-				vRP.RemoveItem(Passport,v["item"],parseInt(v["amount"]),false)
-			else
-				v["amount"] = parseInt(v["amount"])
-				v["peso"] = ItemWeight(v["item"])
-				v["index"] = ItemIndex(v["item"])
-				v["name"] = ItemName(v["item"])
-				v["key"] = v["item"]
-				v["slot"] = Index
+			v["name"] = ItemName(v["item"])
+			v["weight"] = ItemWeight(v["item"])
+			v["index"] = ItemIndex(v["item"])
+			v["amount"] = parseInt(v["amount"])
+			v["rarity"] = ItemRarity(v["item"])
+			v["economy"] = ItemEconomy(v["item"])
+			v["desc"] = ItemDescription(v["item"])
+			v["key"] = v["item"]
+			v["slot"] = Index
 
-				v["desc"] = "<item>"..v["name"].."</item>"
+			local Split = splitString(v["item"])
 
-				local Split = splitString(v["item"])
-				local Description = ItemDescription(v["item"])
-
-				if Description then
-					v["desc"] = v["desc"].."<br><description>"..Description.."</description>"
-				else
-					if Split[1] == "identity" or Split[1] == "fidentity" then
-						local Number = parseInt(Split[2])
-						local Identity = vRP.Identity(Number)
-
-						if Split[1] == "fidentity" then
-							Identity = vRP.FalseIdentity(Number)
-						end
-
-						if Identity then
-							v["Port"] = "Não"
-							v["Passport"] = Number
-							v["Medic"] = "Inativo"
-							v["Premium"] = "Inativo"
-							v["Rolepass"] = "Inativo"
-							v["Name"] = vRP.FullName(Number)
-							v["Work"] = ClassWork(Identity["Work"])
-							v["Blood"] = Sanguine(Identity["Blood"])
-
-							if Identity["Gun"] == 1 then
-								v["Port"] = "Sim"
-							end
-
-							if Number == Passport and Split[1] == "identity" then
-								if Identity["Premium"] > os.time() then
-									v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
-								end
-
-								if Identity["Medic"] > os.time() then
-									v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
-								end
-
-								if Identity["Rolepass"] > 0 then
-									v["Rolepass"] = "Ativo"
-								end
-							end
-
-							if Split[1] == "fidentity" then
-								v["desc"] = v["desc"].."<br><description>Número: <green>"..v["Passport"].."</green>.<br>Nome: <green>"..v["Name"].."</green>.<br>Tipo Sangüineo: <green>"..v["Blood"].."</green>.<br>Porte de Armas: <green>"..v["Port"].."</green>.</description>"
-							else
-								v["desc"] = v["desc"].."<br><description>Número: <green>"..v["Passport"].."</green>.<br>Nome: <green>"..v["Name"].."</green>.<br>Emprego: <green>"..v["Work"].."</green><br>Tipo Sangüineo: <green>"..v["Blood"].."</green>.<br>Porte de Armas: <green>"..v["Port"].."</green>.<br>Passe Mensal: <green>"..v["Rolepass"].."</green>.<br>Premium: <green>"..v["Premium"].."</green>.<br>Plano Médico: <green>"..v["Medic"].."</green>.</description>"
-							end
-						end
-					end
-
-					if Split[1] == "cnh" then
-						local Number = parseInt(Split[2])
-						local Identity = vRP.Identity(Number)
-						if Identity then
-							v["Passport"] = Number
-							v["Driverlicense"] = "Inativa"
-							v["Name"] = Identity["Name"].." "..Identity["Lastname"]
-
-							if Number == Passport then
-								if Identity["Driver"] == 1 then
-									v["Driverlicense"] = "Ativa"
-								elseif Identity["Driver"] == 2 then
-									v["Driverlicense"] = "Apreendida"
-								end
-							end
-
-							v["desc"] = v["desc"].."<br><description>Número: <green>"..v["Passport"].."</green>.<br>Nome: <green>"..v["Name"].."</green>.<br>Habilitação: <green>"..v["Driverlicense"].."</green>.</description>"
-						end
-					end
-
-					if Split[1] == "vehkey" then
-						v["desc"] = v["desc"].."<br><description>Placa do Veículo: <green>"..Split[2].."</green>.</description>"
-					end
-
-					if Split[1] == "bankcard" then
-						v["desc"] = v["desc"].."<br><description>Saldo bancário disponível: <green>$"..Dotted(vRP.GetBank(source)).."</green>.</description>"
-					end
-
-					if Split[1] == "notepad" and Split[2] then
-						v["desc"] = v["desc"].."<br><description>"..vRP.GetServerData(v["item"])..".</description>"
-					end
-
-					if Split[1] == "paper" and Split[2] then
-						v["desc"] = v["desc"].."<br><description>"..vRP.GetServerData(v["item"])..".</description>"
-					end
-
-					if ItemType(Split[1]) == "Armamento" and Split[3] then
-						v["desc"] = v["desc"].."<br><description>Nome de registro: <green>"..vRP.FullName(Split[3]).."</green>.</description>"
-					end
-
-					if Split[1] == "evidence01" or Split[1] == "evidence02" or Split[1] == "evidence03" or Split[1] == "evidence04" and Split[2] then
-						v["desc"] = v["desc"].."<br><description>Tipo sanguíneo encontrado: <green>"..Sanguine(vRP.Identity(Split[2])["Blood"]).."</green>.</description>"
-					end
-
-					if Split[1] == "weedclone" or Split[1] == "weedclone2" or Split[1] == "weedbud" or Split[1] == "joint" then
-						local Item = "da clonagem"
-						if Split[1] == "weedbud" then
-							Item = "da folha"
-						elseif Split[1] == "joint" then
-							Item = "do baseado"
-						end
-
-						v["desc"] = v["desc"].."<br><description>A pureza "..Item.." se encontra em <green>"..(Split[2] or 0).."%</green>.</description>"
-					end
+			if not v["desc"] then
+				if Split[1] == "vehkey" and Split[2] then
+					v["desc"] = "Placa do Veículo: <common>"..Split[2].."</common>"
+				elseif ItemNamed(Split[1]) and Split[2] then
+					v["desc"] = "Propriedade: <common>"..vRP.FullName(Split[2]).."</common>"
 				end
-
-				local Max = ItemMaxAmount(v["item"])
-				if not Max then
-					Max = "Ilimitado"
-				end
-
-				v["desc"] = v["desc"].."<br><legenda>Economia: <r>"..ItemEconomy(v["item"]).."</r> <s>|</s> Máximo: <r>"..Max.."</r></legenda>"
-
-				if Split[2] then
-					if ItemLoads(v["item"]) then
-						v["charges"] = parseInt(Split[2] * 33)
-					end
-
-					if ItemDurability(v["item"]) then
-						v["durability"] = parseInt(os.time() - Split[2])
-						v["days"] = ItemDurability(v["item"])
-					end
-				end
-
-				Inventory[Index] = v
 			end
+
+			if Split[2] then
+				local Loaded = ItemLoads(v["item"])
+				if Loaded then
+					v["charges"] = parseInt(Split[2] * (100 / Loaded))
+				end
+
+				if ItemDurability(v["item"]) then
+					v["durability"] = parseInt(os.time() - Split[2])
+					v["days"] = ItemDurability(v["item"])
+				end
+			end
+
+			Primary[Index] = v
 		end
 
+		local Secondary = {}
 		for Index,v in pairs(Consult) do
-			if (parseInt(v["amount"]) <= 0 or not ItemExist(v["item"])) then
-				TriggerClientEvent("Notify", source, "vermelho", "Problema encontrado.", "Aviso", 5000)
-			else
-				v["amount"] = parseInt(v["amount"])
-				v["peso"] = ItemWeight(v["item"])
-				v["index"] = ItemIndex(v["item"])
-				v["name"] = ItemName(v["item"])
-				v["key"] = v["item"]
-				v["slot"] = Index
+			v["name"] = ItemName(v["item"])
+			v["weight"] = ItemWeight(v["item"])
+			v["index"] = ItemIndex(v["item"])
+			v["amount"] = parseInt(v["amount"])
+			v["rarity"] = ItemRarity(v["item"])
+			v["economy"] = ItemEconomy(v["item"])
+			v["desc"] = ItemDescription(v["item"])
+			v["key"] = v["item"]
+			v["slot"] = Index
 
-				v["desc"] = "<item>"..v["name"].."</item>"
+			local Split = splitString(v["item"])
 
-				local Split = splitString(v["item"])
-				local Description = ItemDescription(v["item"])
-
-				if Description then
-					v["desc"] = v["desc"].."<br><description>"..Description.."</description>"
-				else
-					if Split[1] == "identity" or Split[1] == "fidentity" then
-						local Number = parseInt(Split[2])
-						local Identity = vRP.Identity(Number)
-
-						if Split[1] == "fidentity" then
-							Identity = vRP.FalseIdentity(Number)
-						end
-
-						if Identity then
-							v["Port"] = "Não"
-							v["Medic"] = "Inativo"
-							v["Passport"] = Number
-							v["Premium"] = "Inativo"
-							v["Rolepass"] = "Inativo"
-							v["Name"] = vRP.FullName(Number)
-							v["Work"] = ClassWork(Identity["Work"])
-							v["Blood"] = Sanguine(Identity["Blood"])
-
-							if Identity["Gun"] == 1 then
-								v["Port"] = "Sim"
-							end
-
-							if Number == Passport and Split[1] == "identity" then
-								if Identity["Premium"] > os.time() then
-									v["Premium"] = CompleteTimers(Identity["Premium"] - os.time())
-								end
-
-								if Identity["Medic"] > os.time() then
-									v["Medic"] = CompleteTimers(Identity["Medic"] - os.time())
-								end
-
-								if Identity["Rolepass"] > 0 then
-									v["Rolepass"] = "Ativo"
-								end
-							end
-
-							if Split[1] == "fidentity" then
-								v["desc"] = v["desc"].."<br><description>Número: <green>"..v["Passport"].."</green>.<br>Nome: <green>"..v["Name"].."</green>.<br>Tipo Sangüineo: <green>"..v["Blood"].."</green>.<br>Porte de Armas: <green>"..v["Port"].."</green>.</description>"
-							else
-								v["desc"] = v["desc"].."<br><description>Número: <green>"..v["Passport"].."</green>.<br>Nome: <green>"..v["Name"].."</green>.<br>Emprego: <green>"..v["Work"].."</green><br>Tipo Sangüineo: <green>"..v["Blood"].."</green>.<br>Porte de Armas: <green>"..v["Port"].."</green>.<br>Passe Mensal: <green>"..v["Rolepass"].."</green>.<br>Premium: <green>"..v["Premium"].."</green>.<br>Plano Médico: <green>"..v["Medic"].."</green>.</description>"
-							end
-						end
-					end
-
-					if Split[1] == "cnh" then
-						local Number = parseInt(Split[2])
-						local Identity = vRP.Identity(Number)
-						if Identity then
-							v["Passport"] = Number
-							v["Driverlicense"] = "Inativa"
-							v["Name"] = Identity["Name"].." "..Identity["Lastname"]
-
-							if Number == Passport then
-								if Identity["Driver"] == 1 then
-									v["Driverlicense"] = "Ativa"
-								elseif Identity["Driver"] == 2 then
-									v["Driverlicense"] = "Apreendida"
-								end
-							end
-
-							v["desc"] = v["desc"].."<br><description>Número: <green>"..v["Passport"].."</green>.<br>Nome: <green>"..v["Name"].."</green>.<br>Habilitação: <green>"..v["Driverlicense"].."</green>.</description>"
-						end
-					end
-
-					if Split[1] == "vehkey" then
-						v["desc"] = v["desc"].."<br><description>Placa do Veículo: <green>"..Split[2].."</green>.</description>"
-					end
-
-					if Split[1] == "bankcard" then
-						v["desc"] = v["desc"].."<br><description>Saldo bancário disponível: <green>$"..Dotted(vRP.GetBank(source)).."</green>.</description>"
-					end
-
-					if Split[1] == "notepad" and Split[2] then
-						v["desc"] = v["desc"].."<br><description>"..vRP.GetServerData(v["item"])..".</description>"
-					end
-
-					if Split[1] == "paper" and Split[2] then
-						v["desc"] = v["desc"].."<br><description>"..vRP.GetServerData(v["item"])..".</description>"
-					end
-
-					if ItemType(Split[1]) == "Armamento" and Split[3] then
-						v["desc"] = v["desc"].."<br><description>Nome de registro: <green>"..vRP.FullName(Split[3]).."</green>.</description>"
-					end
-
-					if Split[1] == "evidence01" or Split[1] == "evidence02" or Split[1] == "evidence03" or Split[1] == "evidence04" and Split[2] then
-						v["desc"] = v["desc"].."<br><description>Tipo sanguíneo encontrado: <green>"..Sanguine(vRP.Identity(Split[2])["Blood"]).."</green>.</description>"
-					end
-
-					if Split[1] == "weedclone" or Split[1] == "weedclone2" or Split[1] == "weedbud" or Split[1] == "joint" then
-						local Item = "da clonagem"
-						if Split[1] == "weedbud" then
-							Item = "da folha"
-						elseif Split[1] == "joint" then
-							Item = "do baseado"
-						end
-
-						v["desc"] = v["desc"].."<br><description>A pureza "..Item.." se encontra em <green>"..(Split[2] or 0).."%</green>.</description>"
-					end
+			if not v["desc"] then
+				if Split[1] == "vehkey" and Split[2] then
+					v["desc"] = "Placa do Veículo: <common>"..Split[2].."</common>"
+				elseif ItemNamed(Split[1]) and Split[2] then
+					v["desc"] = "Propriedade: <common>"..vRP.FullName(Split[2]).."</common>"
 				end
-
-				local Max = ItemMaxAmount(v["item"])
-				if not Max then
-					Max = "Ilimitado"
-				end
-
-				v["desc"] = v["desc"].."<br><legenda>Economia: <r>"..ItemEconomy(v["item"]).."</r> <s>|</s> Máximo: <r>"..Max.."</r></legenda>"
-
-				if Split[2] then
-					if ItemLoads(v["item"]) then
-						v["charges"] = parseInt(Split[2] * 33)
-					end
-
-					if ItemDurability(v["item"]) then
-						v["durability"] = parseInt(os.time() - Split[2])
-						v["days"] = ItemDurability(v["item"])
-					end
-				end
-
-				Chest[Index] = v
 			end
+
+			if Split[2] then
+				local Loaded = ItemLoads(v["item"])
+				if Loaded then
+					v["charges"] = parseInt(Split[2] * (100 / Loaded))
+				end
+
+				if ItemDurability(v["item"]) then
+					v["durability"] = parseInt(os.time() - Split[2])
+					v["days"] = ItemDurability(v["item"])
+				end
+			end
+
+			Secondary[Index] = v
 		end
 
-		return Inventory,Chest,vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Consult),Weight
+		return Primary,Secondary,vRP.GetWeight(Passport),Weight
 	end
 
 	return false
@@ -721,15 +504,18 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Store(Item,Slot,Amount,Target,Name,Mode)
 	local source = source
-	local Amount = parseInt(Amount)
+	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
 	if Passport then
+		if (Mode == "Vault" and ItemFridge(Item)) or (Mode == "Fridge" and not ItemFridge(Item)) then
+			TriggerClientEvent("inventory:Update",source)
+
+			return false
+		end
+
 		if Name == "Hotel" then
 			if vRP.StoreChest(Passport,Mode..":Hotel:"..Passport,Amount,25,Slot,Target,true) then
-				TriggerClientEvent("propertys:Update",source)
-			else
-				local Result = vRP.GetServerData(Mode..":Hotel:"..Passport,true)
-				TriggerClientEvent("propertys:Weight",source,vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),25)
+				TriggerClientEvent("inventory:Update",source)
 			end
 		else
 			local Consult = vRP.Query("propertys/Exist",{ Name = Name })
@@ -737,14 +523,11 @@ function Hensa.Store(Item,Slot,Amount,Target,Name,Mode)
 				if Item == "diagram" then
 					if vRP.TakeItem(Passport,Item,Amount,false,Slot) then
 						vRP.Query("propertys/"..Mode,{ Name = Name, Weight = 10 * Amount })
-						TriggerClientEvent("propertys:Update",source)
+						TriggerClientEvent("inventory:Update",source)
 					end
 				else
 					if vRP.StoreChest(Passport,Mode..":"..Name,Amount,Consult[1][Mode],Slot,Target,true) then
-						TriggerClientEvent("propertys:Update",source)
-					else
-						local Result = vRP.GetServerData(Mode..":"..Name,true)
-						TriggerClientEvent("propertys:Weight",source,vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Consult[1][Mode])
+						TriggerClientEvent("inventory:Update",source)
 					end
 				end
 			end
@@ -756,25 +539,16 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Take(Slot,Amount,Target,Name,Mode)
 	local source = source
-	local Amount = parseInt(Amount)
+	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		if Name == "Hotel" then
 			if vRP.TakeChest(Passport,Mode..":Hotel:"..Passport,Amount,Slot,Target,true) then
-				TriggerClientEvent("propertys:Update",source)
-			else
-				local Result = vRP.GetServerData(Mode..":Hotel:"..Passport,true)
-				TriggerClientEvent("propertys:Weight",source,vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),25)
+				TriggerClientEvent("inventory:Update",source)
 			end
 		else
 			if vRP.TakeChest(Passport,Mode..":"..Name,Amount,Slot,Target,true) then
-				TriggerClientEvent("propertys:Update",source)
-			else
-				local Consult = vRP.Query("propertys/Exist",{ Name = Name })
-				if Consult[1] then
-					local Result = vRP.GetServerData(Mode..":"..Name,true)
-					TriggerClientEvent("propertys:Weight",source,vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Consult[1][Mode])
-				end
+				TriggerClientEvent("inventory:Update",source)
 			end
 		end
 	end
@@ -784,7 +558,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Update(Slot,Target,Amount,Name,Mode)
 	local source = source
-	local Amount = parseInt(Amount)
+	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		if Name == "Hotel" then
@@ -792,7 +566,7 @@ function Hensa.Update(Slot,Target,Amount,Name,Mode)
 		end
 
 		if vRP.UpdateChest(Passport,Mode..":"..Name,Slot,Target,Amount,true) then
-			TriggerClientEvent("propertys:Update",source)
+			TriggerClientEvent("inventory:Update",source)
 		end
 	end
 end
@@ -814,14 +588,10 @@ AddEventHandler("Disconnect",function(Passport)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ONCLIENTRESOURCESTART
+-- THREADSERVERSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("onClientResourceStart",function(Resource)
-	if (GetCurrentResourceName() ~= Resource) then
-		return
-	end
-
-	local Markers = {}
+CreateThread(function()
+	local Markers = GlobalState["Markers"]
 	for _,v in pairs(vRP.Query("propertys/All")) do
 		local Name = v["Name"]
 		if Propertys[Name] then

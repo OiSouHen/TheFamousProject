@@ -707,6 +707,7 @@ RegisterCommand("fix",function(source)
 				local Players = vRPC.Players(source)
 				for _,v in pairs(Players) do
 					async(function()
+						TriggerClientEvent("target:RollVehicle",v,Network)
 						TriggerClientEvent("inventory:RepairAdmin",v,Network,Plate)
 					end)
 				end

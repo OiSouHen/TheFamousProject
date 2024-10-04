@@ -479,6 +479,7 @@ function Hensa.Blueprint()
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport and Users["Blueprints"][Passport] then
+	print("bluepr")
 		local Primary = {}
 		local Inv = vRP.Inventory(Passport)
 		for Index,v in pairs(Inv) do

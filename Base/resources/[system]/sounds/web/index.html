@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Hensa Sounds</title>
+		<title>Hensa.store</title>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
 		<script>
@@ -9,7 +9,7 @@
 			window.addEventListener('message',function(event){
 				if (event.data.transactionType == "playSound"){
 					if (audioPlayer != null){ audioPlayer.pause(); }
-					audioPlayer = new Audio("./sounds/"+ event.data.transactionFile +".ogg");
+					audioPlayer = new Audio("./sounds/"+ event.data.transactionFile +".mp3");
 					audioPlayer.volume = event.data.transactionVolume;
 					audioPlayer.play();
 				}

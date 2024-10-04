@@ -396,46 +396,36 @@ end)
 -- THREADOPEN
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
-    while true do
-        local TimeDistance = 999
-        local Ped = PlayerPedId()
+	while true do
+		local TimeDistance = 999
+		local Ped = PlayerPedId()
+		if not IsPedInAnyVehicle(Ped) then
+			local Coords = GetEntityCoords(Ped)
 
-        if not IsPedInAnyVehicle(Ped) then
-            local Coords = GetEntityCoords(Ped)
-            local isNearGarage = false
+			for Number,v in pairs(GaragesCoords) do
+				local Distance = #(Coords - vec3(v["x"],v["y"],v["z"]))
+				if Distance <= 25 then
+					TimeDistance = 1
 
-            for Number, v in pairs(GaragesCoords) do
-                local Distance = #(Coords - vec3(v["x"], v["y"], v["z"]))
-                
-                if Distance <= 5.0 then
-                    isNearGarage = true
-                    TimeDistance = 1
-					DrawMarker(23, v["x"], v["y"], v["z"] - 0.95, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.75, 1.75, 0.0, 88, 101, 242, 175, 0, 0, 0, 0)
+					SetDrawOrigin(v["x"],v["y"],v["z"])
+					DrawSprite("Targets","E",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+					ClearDrawOrigin()
 
-                    if Distance <= 1.25 and IsControlJustPressed(1, 38) then
-                        if not exports["hud"]:Wanted() and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Target"] then
-                            if vSERVER.Verify(Number) then
-                                local Vehicles = vSERVER.Vehicles(Number)
-                                
-                                if Vehicles then
-                                    Opened = Number
-                                    SetNuiFocus(true, true)
-                                    TriggerEvent("target:Debug")
-									SendNUIMessage({ Action = "Open", Payload = Vehicles })
-                                end
-                            end
-                        end
-                    end
-                end
-            end
+					if Distance <= 1.25 and IsControlJustPressed(1,38) and not exports["hud"]:Wanted() then
+						local Vehicles = vSERVER.Vehicles(Number)
+						if Vehicles then
+							Opened = Number
+							SetNuiFocus(true,true)
+							TriggerEvent("target:Debug")
+							SendNUIMessage({ Action = "Open", Payload = Vehicles })
+						end
+					end
+				end
+			end
+		end
 
-            if not isNearGarage then
-                TimeDistance = 999
-            end
-        end
-
-        Wait(TimeDistance)
-    end
+		Wait(TimeDistance)
+	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GARAGES:CLOSE

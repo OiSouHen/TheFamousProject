@@ -6,22 +6,27 @@ ui_page "web/index.html"
 
 client_scripts {
 	"@vrp/config/Native.lua",
-	"@vrp/config/Global.lua",
+	"@PolyZone/client.lua",
 	"@vrp/lib/Utils.lua",
 	"client/*"
 }
 
 server_scripts {
-	"@vrp/config/License.lua",
 	"@vrp/lib/Utils.lua",
 	"server/*"
 }
 
 files {
 	"web/*",
-	"web/**/*"
+	"web/**/*",
+	"web/**/**/*",
+	"web/**/**/**/*",
+	"web/**/**/**/**/*"
 }
 
 shared_scripts {
-	"shared/*"
+	"@vrp/config/Item.lua",
+	"@vrp/config/Vehicle.lua",
+	"@vrp/config/Global.lua",
+	"@vrp/config/Drops.lua"
 }
