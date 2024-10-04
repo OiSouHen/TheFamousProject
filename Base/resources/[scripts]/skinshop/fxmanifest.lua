@@ -17,11 +17,7 @@ server_scripts {
 }
 
 files {
-	"web/*",
-	"web/**/*",
-	"web/**/**/*",
-	"web/**/**/**/*",
-	"web/**/**/**/**/*"
+	"web/*"
 }
 
 shared_scripts {

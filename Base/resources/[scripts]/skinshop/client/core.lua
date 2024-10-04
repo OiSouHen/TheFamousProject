@@ -20,6 +20,10 @@ local Default = nil
 local Skinshop = {}
 local Animation = false
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- EXCLUDE
+-----------------------------------------------------------------------------------------------------------------------------------------
+local Exclude = {}
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- MAXVALUER
 -----------------------------------------------------------------------------------------------------------------------------------------
 local MaxValuer = {
@@ -58,12 +62,7 @@ local Locations = {
 	vec3(-1108.61,2709.59,19.11),
 	vec3(429.67,-800.14,29.49),
 	vec3(480.78,-1009.08,30.68),
-	vec3(474.41,-992.92,30.68),
-	vec3(-1278.09,368.6,65.39),
-	vec3(-778.68,-1210.07,10.38),
-	vec3(-1136.5,-2071.29,21.28),
-	vec3(-1097.68,-832.33,14.27),
-	vec3(142.57,-981.95,30.19)
+	vec3(474.41,-992.92,30.68)
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DATASET
@@ -175,18 +174,12 @@ end
 -- OPENSKINSHOP
 -----------------------------------------------------------------------------------------------------------------------------------------
 function OpenSkinshop()
-	local Model = "male"
-	local Ped = PlayerPedId()
-	if GetEntityModel(Ped) == GetHashKey("mp_f_freemode_01") then
-		Model = "female"
-	end
-
 	Lasted = Skinshop
 	SetNuiFocus(true,true)
 	TriggerEvent("hud:Active",false)
 	LocalPlayer["state"]:set("Hoverfy",false,false)
 	vRP.PlayAnim(true,{"mp_sleep","bind_pose_180"},true)
-	SendNUIMessage({ Action = "Open", Payload = { Skinshop,MaxValues(),Model } })
+	SendNUIMessage({ Action = "Open", Payload = { Skinshop,MaxValues(),Exclude } })
 
 	CameraActive()
 end
@@ -567,4 +560,30 @@ AddEventHandler("skinshop:setAccessory",function()
 	else
 		SetPedComponentVariation(Ped,7,Skinshop["accessory"]["item"],Skinshop["accessory"]["texture"],GetPedPaletteVariation(Ped,7))
 	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- SKINSHOP:BACKPACK
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("skinshop:Backpack")
+AddEventHandler("skinshop:Backpack",function(Table)
+	local Ped = PlayerPedId()
+	if Table["mp_f_freemode_01"] and GetEntityModel(Ped) == GetHashKey("mp_f_freemode_01") then
+		Skinshop["backpack"]["item"] = Table["mp_f_freemode_01"]["Model"]
+		Skinshop["backpack"]["texture"] = Table["mp_f_freemode_01"]["Texture"]
+	elseif Table["mp_m_freemode_01"] and GetEntityModel(Ped) == GetHashKey("mp_m_freemode_01") then
+		Skinshop["backpack"]["item"] = Table["mp_m_freemode_01"]["Model"]
+		Skinshop["backpack"]["texture"] = Table["mp_m_freemode_01"]["Texture"]
+	end
+
+	SetPedComponentVariation(Ped,5,Skinshop["backpack"]["item"],Skinshop["backpack"]["texture"],GetPedPaletteVariation(Ped,5))
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- SKINSHOP:BACKPACKREMOVE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("skinshop:BackpackRemove")
+AddEventHandler("skinshop:BackpackRemove",function()
+	local Ped = PlayerPedId()
+	Skinshop["backpack"]["item"] = -1
+	Skinshop["backpack"]["texture"] = 0
+	SetPedComponentVariation(Ped,5,Skinshop["backpack"]["item"],Skinshop["backpack"]["texture"],GetPedPaletteVariation(Ped,5))
 end)
