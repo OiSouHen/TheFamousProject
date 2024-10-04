@@ -476,28 +476,6 @@ RegisterCommand("timeset",function(source)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- WEATHERSET
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("weatherset",function(source)
-	local Passport = vRP.Passport(source)
-	if Passport and GlobalState["Commands"] then
-		if vRP.HasGroup(Passport,"Admin",1) then
-			local Keyboard = vKEYBOARD.Secondary(source,"Região:","Clima:")
-			if Keyboard then
-				if Keyboard[1] == "Sul" then
-					GlobalState["WeatherS"] = Keyboard[2]
-					TriggerClientEvent("Notify",source,"amarelo","Você mudou o clima do <b>Sul</b>.","Atenção",5000)
-				elseif Keyboard[1] == "Norte" then
-					GlobalState["WeatherN"] = Keyboard[2]
-					TriggerClientEvent("Notify",source,"amarelo","Você mudou o clima do <b>Norte</b>.","Atenção",5000)
-				end
-			end
-		else
-			TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- TEMPERATURESET
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("temperatureset",function(source)

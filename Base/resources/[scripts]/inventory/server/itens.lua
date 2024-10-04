@@ -539,7 +539,7 @@ Use = {
 
 	["nitro"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		if not vRPC.InsideVehicle(source) then
-			local Vehicle,Network,Plate = vRPC.VehicleList(source)
+			local Vehicle,Network,Plate = vRPC.VehicleList(source, 2)
 			if Vehicle then
 				vRPC.AnimActive(source)
 				Active[Passport] = os.time() + 10
@@ -564,7 +564,9 @@ Use = {
 						if vRP.TakeItem(Passport,Full,1,true,Slot) then
 							local Networked = NetworkGetEntityFromNetworkId(Network)
 							if DoesEntityExist(Networked) then
-								Entity(Networked)["state"]:set("Nitro",2000,true)
+								local Nitro = GlobalState["Nitro"]
+								Nitro[Plate] = 2000
+								GlobalState:set("Nitro", Nitro, true)
 							end
 						end
 					end

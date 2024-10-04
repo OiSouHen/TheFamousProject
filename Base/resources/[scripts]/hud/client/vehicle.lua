@@ -15,8 +15,19 @@ local ActualVehicle = nil
 -- NITRO
 -----------------------------------------------------------------------------------------------------------------------------------------
 local NitroFuel = 0
-local NitroActive = false
+local NitroFlame = false
 local NitroButton = GetGameTimer()
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- LIGHTTRAILS
+-----------------------------------------------------------------------------------------------------------------------------------------
+local LightTrails = {}
+local LightParticles = {}
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PURGESPRAYS
+-----------------------------------------------------------------------------------------------------------------------------------------
+local PurgeSprays = {}
+local PurgeParticles = {}
+local PurgeActive = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SEATBELT
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -78,8 +89,9 @@ CreateThread(function()
 				local VRpm = GetVehicleCurrentRpm(Vehicle)
 				local EntitySpeed = GetEntitySpeed(Vehicle)
 				local VLocked = GetVehicleDoorLockStatus(Vehicle)
-				local VFuel = Entity(Vehicle)["state"]["Fuel"] or 0
+				local VFuel = GetVehicleFuelLevel(Vehicle)
 				local VEngineHealth = GetVehicleEngineHealth(Vehicle)
+				local VPlate = GetVehicleNumberPlateText(Vehicle)
 				local VSpeed = math.ceil(EntitySpeed * 3.6)
 
 				if GetPedInVehicleSeat(Vehicle,-1) == Ped then
@@ -155,9 +167,9 @@ CreateThread(function()
 					SendNUIMessage({ name = "Nitro", payload = NitroFuel })
 					Nitro = NitroFuel
 				else
-					if (Entity(Vehicle)["state"]["Nitro"] or 0) ~= Nitro then
-						SendNUIMessage({ name = "Nitro", payload = Entity(Vehicle)["state"]["Nitro"] or 0 })
-						Nitro = Entity(Vehicle)["state"]["Nitro"] or 0
+					if (GlobalState["Nitro"][VPlate] or 0) ~= Nitro then
+						SendNUIMessage({ name = "Nitro", payload = GlobalState["Nitro"][VPlate] or 0 })
+						Nitro = GlobalState["Nitro"][VPlate] or 0
 					end
 				end
 
@@ -244,38 +256,53 @@ function NitroEnable()
 			NitroButton = GetGameTimer() + 1000
 
 			local Vehicle = GetVehiclePedIsUsing(Ped)
-			if GetPedInVehicleSeat(Vehicle,-1) == Ped and GetVehicleTopSpeedModifier(Vehicle) < 50.0 then
-				NitroFuel = Entity(Vehicle)["state"]["Nitro"] or 0
+			if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+				if GetVehicleTopSpeedModifier(Vehicle) < 50.0 then
+					local Plate = GetVehicleNumberPlateText(Vehicle)
+					NitroFuel = GlobalState["Nitro"][Plate] or 0
 
-				if NitroFuel >= 1 and Speed > 10 then
-					NitroActive = true
+					if NitroFuel >= 1 then
+						if GetIsVehicleEngineRunning(Vehicle) then
+							local Speed = GetEntitySpeed(Vehicle) * 2.236936
+							if Speed > 10 then
+								LocalPlayer["state"]["Nitro"] = true
 
-					while NitroActive do
-						if NitroFuel >= 1 then
-							NitroFuel = NitroFuel - 1
+								while LocalPlayer["state"]["Nitro"] do
+									if NitroFuel >= 1 then
+										NitroFuel = NitroFuel - 1
 
-							if not LocalPlayer["state"]["Nitro"] then
-								LocalPlayer["state"]:set("Nitro",true,false)
-								Entity(Vehicle)["state"]:set("NitroFlame",true,true)
+										if not NitroFlame then
+											SetVehicleRocketBoostActive(Vehicle,true)
+											SetVehicleNitroEnabled(Vehicle,true)
+											SetVehicleBoostActive(Vehicle,true)
+											ModifyVehicleTopSpeed(Vehicle,50.0)
+											SetLightTrail(Vehicle,true)
+											NitroFlame = Plate
+										end
+									else
+										if NitroFlame then
+											SetVehicleRocketBoostActive(Vehicle,false)
+											vSERVER.UpdateNitro(NitroFlame,NitroFuel)
+											SetVehicleNitroEnabled(Vehicle,false)
+											SetVehicleBoostActive(Vehicle,false)
+											ModifyVehicleTopSpeed(Vehicle,0.0)
+											SetLightTrail(Vehicle,false)
+											NitroFlame = false
 
-								SetVehicleRocketBoostActive(Vehicle,true)
-								SetVehicleBoostActive(Vehicle,true)
-								ModifyVehicleTopSpeed(Vehicle,50.0)
+											LocalPlayer["state"]["Nitro"] = false
+										end
+									end
+
+									Wait(1)
+								end
+							else
+								SetPurgeSprays(Vehicle,true)
+								PurgeActive = true
 							end
 						else
-							if LocalPlayer["state"]["Nitro"] then
-								LocalPlayer["state"]:set("Nitro",false,false)
-								Entity(Vehicle)["state"]:set("NitroFlame",false,true)
-								Entity(Vehicle)["state"]:set("Nitro",NitroFuel,true)
-							end
-
-							SetVehicleRocketBoostActive(Vehicle,false)
-							SetVehicleBoostActive(Vehicle,false)
-							ModifyVehicleTopSpeed(Vehicle,0.0)
-							NitroActive = false
+							SetPurgeSprays(Vehicle,true)
+							PurgeActive = true
 						end
-
-						Wait(1)
 					end
 				end
 			end
@@ -286,40 +313,127 @@ end
 -- NITRODISABLE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function NitroDisable()
-	if LocalPlayer["state"]["Nitro"] then
-		LocalPlayer["state"]:set("Nitro",false,false)
+	local Vehicle = GetLastDrivenVehicle()
 
-		local Vehicle = GetLastDrivenVehicle()
-		if DoesEntityExist(Vehicle) then
-			Entity(Vehicle)["state"]:set("Nitro",NitroFuel,true)
-			Entity(Vehicle)["state"]:set("NitroFlame",false,true)
+	if NitroFlame then
+		SetVehicleRocketBoostActive(Vehicle,false)
+		vSERVER.UpdateNitro(NitroFlame,NitroFuel)
+		SetVehicleNitroEnabled(Vehicle,false)
+		SetVehicleBoostActive(Vehicle,false)
+		ModifyVehicleTopSpeed(Vehicle,0.0)
+		SetLightTrail(Vehicle,false)
+		NitroFlame = false
 
-			SetVehicleRocketBoostActive(Vehicle,false)
-			SetVehicleBoostActive(Vehicle,false)
-			ModifyVehicleTopSpeed(Vehicle,0.0)
-		end
+		LocalPlayer["state"]["Nitro"] = false
 	end
 
-	NitroActive = false
+	if PurgeActive then
+		SetPurgeSprays(Vehicle,false)
+		PurgeActive = false
+	end
 end
------------------------------------------------------------------------------------------------------------------------------------------
--- ADDSTATEBAGCHANGEHANDLER
------------------------------------------------------------------------------------------------------------------------------------------
-AddStateBagChangeHandler("NitroFlame",nil,function(Name,Key,Value)
-	local Network = parseInt(Name:gsub("entity:",""))
-	if NetworkDoesNetworkIdExist(Network) then
-		local Vehicle = NetToVeh(Network)
-		if DoesEntityExist(Vehicle) then
-			SetVehicleNitroEnabled(Vehicle,Value)
-		end
-	end
-end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ACTIVENITRO
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("+activeNitro",NitroEnable)
 RegisterCommand("-activeNitro",NitroDisable)
 RegisterKeyMapping("+activeNitro","Ativação do nitro.","keyboard","LMENU")
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- SETLIGHTTRAIL
+-----------------------------------------------------------------------------------------------------------------------------------------
+function SetLightTrail(Vehicle,Enable)
+	if LightTrails[Vehicle] == Enable then
+		return
+	end
+
+	if Enable then
+		local Particles = {}
+		local LeftTrail = CreateLightTrail(Vehicle,GetEntityBoneIndexByName(Vehicle,"taillight_l"))
+		local RightTrail = CreateLightTrail(Vehicle,GetEntityBoneIndexByName(Vehicle,"taillight_r"))
+
+		Particles[#Particles + 1] = LeftTrail
+		Particles[#Particles + 1] = RightTrail
+
+		LightTrails[Vehicle] = true
+		LightParticles[Vehicle] = Particles
+	else
+		if LightParticles[Vehicle] and #LightParticles[Vehicle] > 0 then
+			for _,v in ipairs(LightParticles[Vehicle]) do
+				StopLightTrail(v)
+			end
+		end
+
+		LightTrails[Vehicle] = nil
+		LightParticles[Vehicle] = nil
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CREATELIGHTTRAIL
+-----------------------------------------------------------------------------------------------------------------------------------------
+function CreateLightTrail(Vehicle,Bone)
+	UseParticleFxAssetNextCall("core")
+	local Particle = StartParticleFxLoopedOnEntityBone("veh_light_red_trail",Vehicle,0.0,0.0,0.0,0.0,0.0,0.0,Bone,1.0,false,false,false)
+	SetParticleFxLoopedEvolution(Particle,"speed",1.0,false)
+
+	return Particle
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- STOPLIGHTTRAIL
+-----------------------------------------------------------------------------------------------------------------------------------------
+function StopLightTrail(Particle)
+	CreateThread(function()
+		local endTime = GetGameTimer() + 500
+		while GetGameTimer() < endTime do 
+			Wait(0)
+			local now = GetGameTimer()
+			local Scale = (endTime - now) / 500
+			SetParticleFxLoopedScale(Particle,Scale)
+			SetParticleFxLoopedAlpha(Particle,Scale)
+		end
+
+		StopParticleFxLooped(Particle)
+	end)
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- SETPURGESPRAYS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function SetPurgeSprays(Vehicle,Enable)
+	if PurgeSprays[Vehicle] == Enable then
+		return
+	end
+
+	if Enable then
+		local Particles = {}
+		local Bone = GetEntityBoneIndexByName(Vehicle,"bonnet")
+		local Position = GetWorldPositionOfEntityBone(Vehicle,Bone)
+		local Offset = GetOffsetFromEntityGivenWorldCoords(Vehicle,Position["x"],Position["y"],Position["z"])
+
+		for i = 0,3 do
+			local LeftPurge = CreatePurgeSprays(Vehicle,Offset["x"] - 0.5,Offset["y"] + 0.05,Offset["z"],40.0,-20.0,0.0,0.5)
+			local RightPurge = CreatePurgeSprays(Vehicle,Offset["x"] + 0.5,Offset["y"] + 0.05,Offset["z"],40.0,20.0,0.0,0.5)
+
+			Particles[#Particles + 1] = LeftPurge
+			Particles[#Particles + 1] = RightPurge
+		end
+
+		PurgeSprays[Vehicle] = true
+		PurgeParticles[Vehicle] = Particles
+	else
+		if PurgeParticles[Vehicle] then
+			RemoveParticleFxFromEntity(Vehicle)
+		end
+
+		PurgeSprays[Vehicle] = nil
+		PurgeParticles[Vehicle] = nil
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CREATEPURGESPRAYS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function CreatePurgeSprays(Vehicle,xOffset,yOffset,zOffset,xRot,yRot)
+	UseParticleFxAssetNextCall("core")
+	return StartNetworkedParticleFxNonLoopedOnEntity("ent_sht_steam",Vehicle,xOffset,yOffset,zOffset,xRot,yRot,0.0,0.5,false,false,false)
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADBELT
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -329,22 +443,27 @@ CreateThread(function()
 		if LocalPlayer["state"]["Active"] then
 			local Ped = PlayerPedId()
 			if IsPedInAnyVehicle(Ped) then
-				if not IsPedOnAnyBike(Ped) and not IsPedInAnyHeli(Ped) and not IsPedInAnyBoat(Ped) and not IsPedInAnyPlane(Ped) then
+				if not IsPedOnAnyBike(Ped) and not IsPedInAnyHeli(Ped) and not IsPedInAnyPlane(Ped) then
 					TimeDistance = 1
 
-					if Speed ~= SeatbeltSpeed then
-						local Vehicle = GetVehiclePedIsUsing(Ped)
-						if not Entity(Vehicle)["state"]["Seatbelt"] and not SeatbeltLock and (SeatbeltSpeed - Speed) >= 100 then
-							ApplyDamageToPed(Ped,25,false)
+					local Vehicle = GetVehiclePedIsUsing(Ped)
+					local Speed = GetEntitySpeed(Vehicle) * 3.6
+					if GetVehicleDoorLockStatus(Vehicle) >= 2 or SeatbeltLock then
+						DisableControlAction(0,75,true)
+						DisableControlAction(27,75,true)
+					end
 
+					if Speed ~= SeatbeltSpeed then
+						if (SeatbeltSpeed - Speed) >= 60 and not SeatbeltLock then
+							SmashVehicleWindow(Vehicle,6)
 							SetEntityNoCollisionEntity(Ped,Vehicle,false)
 							SetEntityNoCollisionEntity(Vehicle,Ped,false)
 							TriggerServerEvent("hud:VehicleEject",SeatbeltVelocity)
 
-							SetTimeout(500,function()
-								SetEntityNoCollisionEntity(Ped,Vehicle,true)
-								SetEntityNoCollisionEntity(Vehicle,Ped,true)
-							end)
+							Wait(500)
+
+							SetEntityNoCollisionEntity(Ped,Vehicle,true)
+							SetEntityNoCollisionEntity(Vehicle,Ped,true)
 						end
 
 						SeatbeltVelocity = GetEntityVelocity(Vehicle)
@@ -361,13 +480,13 @@ CreateThread(function()
 					SeatbeltLock = false
 				end
 
-				if LocalPlayer["state"]["Nitro"] then
+				if NitroFlame then
 					NitroDisable()
 				end
 			end
 		end
 
-		Wait(TimeDistance)
+		Wait(timeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
