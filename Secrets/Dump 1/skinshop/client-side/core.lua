@@ -7,8 +7,8 @@ vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
-Creative = {}
-Tunnel.bindInterface("skinshop",Creative)
+Hensa = {}
+Tunnel.bindInterface("skinshop",Hensa)
 vSERVER = Tunnel.getInterface("skinshop")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
@@ -185,7 +185,7 @@ function OpenSkinshop()
 	SetNuiFocus(true,true)
 	TriggerEvent("hud:Active",false)
 	LocalPlayer["state"]:set("Hoverfy",false,false)
-	vRP.playAnim(true,{"mp_sleep","bind_pose_180"},true)
+	vRP.PlayAnim(true,{"mp_sleep","bind_pose_180"},true)
 	SendNUIMessage({ Action = "Open", Payload = { Skinshop,MaxValues(),Model } })
 
 	CameraActive()
@@ -395,7 +395,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CHECKSHOES
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Creative.checkShoes()
+function Hensa.checkShoes()
 	local Number = 34
 	local Ped = PlayerPedId()
 	if GetEntityModel(Ped) == GetHashKey("mp_f_freemode_01") then
@@ -415,7 +415,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CUSTOMIZATION
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Creative.Customization()
+function Hensa.Customization()
 	return Skinshop
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -427,7 +427,7 @@ RegisterNUICallback("HandsUp",function(Data,Callback)
 		StopAnimTask(Ped,"random@mugging3","handsup_standing_base",8.0)
 		vRP.AnimActive()
 	else
-		vRP.playAnim(true,{"random@mugging3","handsup_standing_base"},true)
+		vRP.PlayAnim(true,{"random@mugging3","handsup_standing_base"},true)
 	end
 
 	Callback("Ok")
