@@ -2939,34 +2939,8 @@ CreateThread(function()
 		for k,v in pairs(Sources) do
 			local Source = vRP.Source(k)
 			if Source then
-				if TemperatureEffect then
-					if Player(Source)["state"]["Location"] == "South" then
-						if GlobalState["TemperatureS"] >= TemperatureHot then
-							vRP.DowngradeHunger(k, ConsumeHunger)
-							vRP.DowngradeThirst(k, ConsumeThirst * 2)
-						elseif GlobalState["TemperatureS"] <= TemperatureCold then
-							vRP.DowngradeHunger(k, ConsumeHunger * 2)
-							vRP.DowngradeThirst(k, ConsumeThirst)
-						else
-							vRP.DowngradeHunger(k, ConsumeHunger)
-							vRP.DowngradeThirst(k, ConsumeThirst)
-						end
-					elseif Player(Source)["state"]["Location"] == "North" then
-						if GlobalState["TemperatureN"] >= TemperatureHot then
-							vRP.DowngradeHunger(k, ConsumeHunger)
-							vRP.DowngradeThirst(k, ConsumeThirst * 2)
-						elseif GlobalState["TemperatureN"] <= TemperatureCold then
-							vRP.DowngradeHunger(k, ConsumeHunger * 2)
-							vRP.DowngradeThirst(k, ConsumeThirst)
-						else
-							vRP.DowngradeHunger(k, ConsumeHunger)
-							vRP.DowngradeThirst(k, ConsumeThirst)
-						end
-					end
-				else
-					vRP.DowngradeHunger(k, ConsumeHunger)
-					vRP.DowngradeThirst(k, ConsumeThirst)
-				end
+				vRP.DowngradeHunger(k, ConsumeHunger)
+				vRP.DowngradeThirst(k, ConsumeThirst)
 			end
 		end
 
@@ -2989,34 +2963,8 @@ function tvRP.Foods()
 			HensaTable["Hunger"] = 100
 		end
 
-		if TemperatureEffect then
-			if Player(source)["state"]["Location"] == "South" then
-				if GlobalState["TemperatureS"] >= TemperatureHot then
-					HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger
-					HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst * 2
-				elseif GlobalState["TemperatureS"] <= TemperatureCold then
-					HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger * 2
-					HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst
-				else
-					HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger
-					HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst
-				end
-			elseif Player(source)["state"]["Location"] == "North" then
-				if GlobalState["TemperatureN"] >= TemperatureHot then
-					HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger
-					HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst * 2
-				elseif GlobalState["TemperatureN"] <= TemperatureCold then
-					HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger * 2
-					HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst
-				else
-					HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger
-					HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst
-				end
-			end
-		else
-			HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger
-			HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst
-		end
+		HensaTable["Hunger"] = HensaTable["Hunger"] - ConsumeHunger
+		HensaTable["Thirst"] = HensaTable["Thirst"] - ConsumeThirst
 
 		if HensaTable["Thirst"] < 0 then
 			HensaTable["Thirst"] = 0
