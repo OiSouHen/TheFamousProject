@@ -18,11 +18,6 @@ local NitroFuel = 0
 local NitroFlame = false
 local NitroButton = GetGameTimer()
 -----------------------------------------------------------------------------------------------------------------------------------------
--- LIGHTTRAILS
------------------------------------------------------------------------------------------------------------------------------------------
-local LightTrails = {}
-local LightParticles = {}
------------------------------------------------------------------------------------------------------------------------------------------
 -- PURGESPRAYS
 -----------------------------------------------------------------------------------------------------------------------------------------
 local PurgeSprays = {}
@@ -276,7 +271,6 @@ function NitroEnable()
 											SetVehicleNitroEnabled(Vehicle,true)
 											SetVehicleBoostActive(Vehicle,true)
 											ModifyVehicleTopSpeed(Vehicle,50.0)
-											SetLightTrail(Vehicle,true)
 											NitroFlame = Plate
 										end
 									else
@@ -286,7 +280,6 @@ function NitroEnable()
 											SetVehicleNitroEnabled(Vehicle,false)
 											SetVehicleBoostActive(Vehicle,false)
 											ModifyVehicleTopSpeed(Vehicle,0.0)
-											SetLightTrail(Vehicle,false)
 											NitroFlame = false
 
 											LocalPlayer["state"]["Nitro"] = false
@@ -321,7 +314,6 @@ function NitroDisable()
 		SetVehicleNitroEnabled(Vehicle,false)
 		SetVehicleBoostActive(Vehicle,false)
 		ModifyVehicleTopSpeed(Vehicle,0.0)
-		SetLightTrail(Vehicle,false)
 		NitroFlame = false
 
 		LocalPlayer["state"]["Nitro"] = false
@@ -338,62 +330,6 @@ end
 RegisterCommand("+activeNitro",NitroEnable)
 RegisterCommand("-activeNitro",NitroDisable)
 RegisterKeyMapping("+activeNitro","Ativação do nitro.","keyboard","LMENU")
------------------------------------------------------------------------------------------------------------------------------------------
--- SETLIGHTTRAIL
------------------------------------------------------------------------------------------------------------------------------------------
-function SetLightTrail(Vehicle,Enable)
-	if LightTrails[Vehicle] == Enable then
-		return
-	end
-
-	if Enable then
-		local Particles = {}
-		local LeftTrail = CreateLightTrail(Vehicle,GetEntityBoneIndexByName(Vehicle,"taillight_l"))
-		local RightTrail = CreateLightTrail(Vehicle,GetEntityBoneIndexByName(Vehicle,"taillight_r"))
-
-		Particles[#Particles + 1] = LeftTrail
-		Particles[#Particles + 1] = RightTrail
-
-		LightTrails[Vehicle] = true
-		LightParticles[Vehicle] = Particles
-	else
-		if LightParticles[Vehicle] and #LightParticles[Vehicle] > 0 then
-			for _,v in ipairs(LightParticles[Vehicle]) do
-				StopLightTrail(v)
-			end
-		end
-
-		LightTrails[Vehicle] = nil
-		LightParticles[Vehicle] = nil
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- CREATELIGHTTRAIL
------------------------------------------------------------------------------------------------------------------------------------------
-function CreateLightTrail(Vehicle,Bone)
-	UseParticleFxAssetNextCall("core")
-	local Particle = StartParticleFxLoopedOnEntityBone("veh_light_red_trail",Vehicle,0.0,0.0,0.0,0.0,0.0,0.0,Bone,1.0,false,false,false)
-	SetParticleFxLoopedEvolution(Particle,"speed",1.0,false)
-
-	return Particle
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- STOPLIGHTTRAIL
------------------------------------------------------------------------------------------------------------------------------------------
-function StopLightTrail(Particle)
-	CreateThread(function()
-		local endTime = GetGameTimer() + 500
-		while GetGameTimer() < endTime do 
-			Wait(0)
-			local now = GetGameTimer()
-			local Scale = (endTime - now) / 500
-			SetParticleFxLoopedScale(Particle,Scale)
-			SetParticleFxLoopedAlpha(Particle,Scale)
-		end
-
-		StopParticleFxLooped(Particle)
-	end)
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SETPURGESPRAYS
 -----------------------------------------------------------------------------------------------------------------------------------------
