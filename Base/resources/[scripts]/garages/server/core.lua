@@ -883,27 +883,9 @@ AddEventHandler("garages:DeleteVehicle", function(Network, Plate)
 			Spawn[Plate] = nil
 		end
 
-		if string.sub(Plate, 1, 4) == "DISM" then
-			local Passport = parseInt(string.sub(Plate, 5, 8)) - 1000
-			local source = vRP.Source(Passport)
-			if source then
-				if Player(source)["state"]["Dismantle"] then
-					local Vehicle = vRP.Query("vehicles/selectVehicles", { Passport = Passport, Vehicle = Player(source)["state"]["DismantleModel"] })
-					if Vehicle[1] then
-						TriggerClientEvent("Notify", source, "Jimmy Jango", "Este veículo não foi adicionado em sua garagem pois você já possui um <b>" .. VehicleName(Player(source)["state"]["DismantleModel"]) .. "</b>.", "amarelo", 10000)
-					else
-						TriggerClientEvent("Notify", source, "Jimmy Jango", "Você escondeu o veículo <b>" .. VehicleName(Player(source)["state"]["DismantleModel"]) .. "</b> em sua garagem, o mesmo pode ser usado durante um período de <b>24 Horas</b>.", "azul", 10000)
-						vRP.Query("vehicles/dismantleVehicles", { Passport = Passport, Vehicle = Player(source)["state"]["DismantleModel"], Plate = vRP.GeneratePlate(), Work = "false" })
-					end
-				end
-
-				TriggerClientEvent("target:DismantleReset", source)
-			end
-		end
-
-		local Network = NetworkGetEntityFromNetworkId(Network)
-		if DoesEntityExist(Network) and not IsPedAPlayer(Network) and GetEntityType(Network) == 2 and GetVehicleNumberPlateText(Network) == Plate then
-			DeleteEntity(Network)
+		local Networked = NetworkGetEntityFromNetworkId(Network)
+		if DoesEntityExist(Networked) and GetEntityType(Networked) == 2 then
+			DeleteEntity(Networked)
 		end
 	end
 end)
