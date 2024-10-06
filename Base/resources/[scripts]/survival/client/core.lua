@@ -2,115 +2,208 @@
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Tunnel = module("vrp","lib/Tunnel")
-local Proxy = module("vrp","lib/Proxy")
 vRPS = Tunnel.getInterface("vRP")
-vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 Hensa = {}
-Tunnel.bindInterface("survival", Hensa)
+Tunnel.bindInterface("survival",Hensa)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Death = false
-local DeathTimer = TimeConfig
-local Cooldown = GetGameTimer()
+LocalPlayer["state"]:set("Crawl",false,true)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DEATH
+-----------------------------------------------------------------------------------------------------------------------------------------
+local Death = {
+	["Timer"] = 0,
+	["Pressed"] = 0,
+	["Default"] = 300,
+	["Status"] = false,
+	["Cooldown"] = GetGameTimer(),
+	["Title"] = "Nocauteado",
+	["Text"] = "Aguarde os primeiros socorros"
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CRAWL
+-----------------------------------------------------------------------------------------------------------------------------------------
+local Crawl = {
+	["Timer"] = 0,
+	["Minute"] = 60,
+	["Default"] = 60,
+	["Status"] = false,
+	["Mode"] = "onfront",
+	["Stand"] = GetGameTimer(),
+	["Cooldown"] = GetGameTimer(),
+	["Title"] = "Ferido",
+	["Text"] = "Aguarde os primeiros socorros"
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- TIMECRAWLING
+-----------------------------------------------------------------------------------------------------------------------------------------
+local TimeCrawling = {
+	["onfront"] = {
+		["fwd"] = 820,
+		["bwd"] = 990
+	},
+	["onback"] = {
+		["fwd"] = 1200,
+		["bwd"] = 1200
+	}
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- STANDCRAWLING
+-----------------------------------------------------------------------------------------------------------------------------------------
+function StandCrawling(Ped,Init,Mode)
+	Crawl["Status"] = true
+	Crawl["Stand"] = GetGameTimer() + 60000
+
+	TaskPlayAnim(Ped,"move_crawl",Init.."_"..Mode,8.0,-8.0,-1,2,0.0,false,false,false)
+
+	SetTimeout(TimeCrawling[Init][Mode],function()
+		Crawl["Stand"] = GetGameTimer() + 1000
+		Crawl["Status"] = false
+	end)
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- GAMEEVENTTRIGGERED
+-----------------------------------------------------------------------------------------------------------------------------------------
+AddEventHandler("gameEventTriggered",function(Event,Message)
+	if Event == "CEventNetworkEntityDamage" and PlayerPedId() == Message[1] and Death["Status"] and Crawl["Timer"] > 0 then
+		local Ped = PlayerPedId()
+		local Coords = GetEntityCoords(Ped)
+		NetworkResurrectLocalPlayer(Coords,0.0)
+
+		Crawl["Timer"] = 1
+		SetEntityHealth(Ped,100)
+		Death["Cooldown"] = GetGameTimer()
+	end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADSYSTEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
+	LoadAnim("dead")
+	LoadAnim("move_crawl")
+	LoadAnim("amb@world_human_sunbathe@male@front@idle_a")
+
 	while true do
-		local TimeDistance = 999
+		local TimeDistance = 100
 
 		if LocalPlayer["state"]["Active"] then
 			local Ped = PlayerPedId()
 			if GetEntityHealth(Ped) <= 100 then
-				if not Death then
-					Death = true
-
+				if not Death["Status"] then
 					local Coords = GetEntityCoords(Ped)
-					NetworkResurrectLocalPlayer(Coords, 0.0)
+					NetworkResurrectLocalPlayer(Coords,0.0)
 
-					SetFacialIdleAnimOverride(Ped, "mood_sleeping_1", 0)
-					LocalPlayer["state"]:set("Blastoise", true, false)
-					NetworkSetFriendlyFireOption(false)
-					SetEntityInvincible(Ped, true)
-					SetEntityHealth(Ped, 100)
+					LocalPlayer["state"]:set("Crawl",true,true)
+					Crawl["Timer"] = Crawl["Default"]
+					SetEntityHealth(Ped,100)
+					Death["Status"] = true
+					Death["Pressed"] = 0
 
-					if LocalPlayer["state"]["Route"] < 900000 then
-						DeathTimer = TimeConfig
-
-						if UsingLbPhone then
-							TriggerEvent("lb-phone:Close")
-						elseif GetResourceState("smartphone") == "started" then
-							-- Escolha a opção referente ao seu smartphone
-							-- exports["smartphone"]:close()
-							-- exports["smartphone"]:closeSmartphone()
-						end
-
-						TriggerEvent("hud:ScubaRemove")
-						TriggerEvent("radio:RadioClean")
-						TriggerEvent("inventory:Cancel")
-						TriggerEvent("hud:Active", false)
-
-						if IsPedArmed(Ped, 7) then
-							TriggerEvent("inventory:CleanWeapons")
-						end
-
-						TriggerServerEvent("paramedic:BloodDeath")
-						SendNUIMessage({ name = "Open", payload = true })
-
-						exports["pma-voice"]:Mute(true)
-					else
-						DeathTimer = 5
-					end
-
-					TriggerEvent("inventory:PreventWeapon", false)
+					SendNUIMessage({ Action = "Open" })
+					TriggerServerEvent("paramedic:bloodDeath")
+					-- exports["lb-phone"]:ToggleDisabled(true)
+					TriggerEvent("player:DeathUpdate",true)
+					TriggerEvent("inventory:CleanWeapons")
+					TriggerServerEvent("inventory:Cancel")
+					TriggerEvent("inventory:ScubaRemove")
+					TriggerEvent("radio:RadioClean")
+					TriggerEvent("hud:Active",false)
 					TriggerEvent("inventory:Close")
-
-					if SurvivalUsingAnim then
-						vRP.PlayAnim(false, { "dead", "dead_a" }, true)
-					end
+					TriggerEvent("hud:RemoveHood")
 				else
 					TimeDistance = 1
-					SetEntityHealth(Ped, 100)
 
-					DisableControlAction(0, 18, true)
-					DisableControlAction(0, 22, true)
-					DisableControlAction(0, 24, true)
-					DisableControlAction(0, 25, true)
-					DisableControlAction(0, 68, true)
-					DisableControlAction(0, 70, true)
-					DisableControlAction(0, 91, true)
-					DisableControlAction(0, 69, true)
-					DisableControlAction(0, 75, true)
-					DisableControlAction(0, 140, true)
-					DisableControlAction(0, 142, true)
-					DisableControlAction(0, 257, true)
-					DisablePlayerFiring(Ped, true)
+					DisableControlAction(0,18,true)
+					DisableControlAction(0,22,true)
+					DisableControlAction(0,24,true)
+					DisableControlAction(0,25,true)
+					DisableControlAction(0,68,true)
+					DisableControlAction(0,70,true)
+					DisableControlAction(0,91,true)
+					DisableControlAction(0,69,true)
+					DisableControlAction(0,75,true)
+					DisableControlAction(0,140,true)
+					DisableControlAction(0,142,true)
+					DisableControlAction(0,257,true)
+					DisablePlayerFiring(Ped,true)
+					SetEntityHealth(Ped,100)
 
-					if GetGameTimer() >= Cooldown then
-						Cooldown = GetGameTimer() + 1000
+					if GetGameTimer() >= Death["Cooldown"] then
+						Death["Cooldown"] = GetGameTimer() + 1000
 
-						if DeathTimer > 0 then
-							DeathTimer = DeathTimer - 1
-							SendNUIMessage({ name = "Update", payload = DeathTimer })
+						if Crawl["Timer"] > 0 then
+							Crawl["Timer"] = Crawl["Timer"] - 1
+							SendNUIMessage({ Action = "Update", Payload = { Crawl["Title"],Crawl["Text"],Crawl["Timer"] } })
+
+							if Crawl["Timer"] <= 0 then
+								exports["pma-voice"]:Mute(true)
+
+								local DeathTimer = Death["Default"]
+								if LocalPlayer["state"]["Esmeralda"] or LocalPlayer["state"]["Diamante"] or LocalPlayer["state"]["Platina"] or LocalPlayer["state"]["Ouro"] or LocalPlayer["state"]["Prata"] or LocalPlayer["state"]["Bronze"] or LocalPlayer["state"]["Ferro"] then
+									DeathTimer = (LocalPlayer["state"]["Esmeralda"] and (DeathTimer * 0.3)) or (LocalPlayer["state"]["Diamante"] and (DeathTimer * 0.5)) or (LocalPlayer["state"]["Platina"] and (DeathTimer * 0.6)) or (LocalPlayer["state"]["Ouro"] and (DeathTimer * 0.7)) or (LocalPlayer["state"]["Prata"] and (DeathTimer * 0.8)) or (LocalPlayer["state"]["Bronze"] and (DeathTimer * 0.9)) or (LocalPlayer["state"]["Ferro"] and (DeathTimer * 0.65))
+								end
+
+								Death["Timer"] = DeathTimer
+								LocalPlayer["state"]:set("Crawl",false,true)
+								SendNUIMessage({ Action = "Update", Payload = { Death["Title"],Death["Text"],Death["Timer"] } })
+								LocalPlayer["state"]:set("Blastoise",true,false)
+								NetworkSetFriendlyFireOption(false)
+								SetEntityInvincible(Ped,true)
+							end
+						elseif Death["Timer"] > 0 then
+							Death["Timer"] = Death["Timer"] - 1
+							SendNUIMessage({ Action = "Update", Payload = { Death["Title"],Death["Text"],Death["Timer"] } })
+
+							if Death["Timer"] <= 0 then
+								SendNUIMessage({ Action = "Update", Payload = { Death["Title"],Death["Text"],Death["Timer"],"Segure [E] por 10 segundos" } })
+								SetFacialIdleAnimOverride(Ped,"mood_sleeping_1",0)
+							end
 						end
-					end
-
-					if SurvivalUsingAnim then
-						if not IsEntityPlayingAnim(Ped, "dead", "dead_a", 3) and not IsPedInAnyVehicle(Ped) then
-							TaskPlayAnim(Ped, "dead", "dead_a", 8.0, 8.0, -1, 1, 1, 0, 0, 0)
-						end
-					else
-						SetPedToRagdoll(Ped, 1000, 1000, 0, 0, 0, 0)
 					end
 
 					if IsPedInAnyVehicle(Ped) then
 						local Vehicle = GetVehiclePedIsUsing(Ped)
-						if GetPedInVehicleSeat(Vehicle, -1) == Ped then
-							SetVehicleEngineOn(Vehicle, false, true, true)
+						if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+							SetVehicleEngineOn(Vehicle,false,true,true)
+						end
+					else
+						if Crawl["Timer"] > 0 then
+							local Forward,Backward = IsControlPressed(0,32),IsControlPressed(0,33)
+
+							if not Crawl["Status"] then
+								if Forward then
+									StandCrawling(Ped,Crawl["Mode"],"fwd")
+								elseif Backward then
+									StandCrawling(Ped,Crawl["Mode"],"bwd")
+								elseif GetGameTimer() >= Crawl["Stand"] and not IsEntityPlayingAnim(Ped,"amb@world_human_sunbathe@male@front@idle_a","idle_a",3) then
+									TaskPlayAnim(Ped,"amb@world_human_sunbathe@male@front@idle_a","idle_a",8.0,8.0,-1,1,1,0,0,0)
+								end
+							else
+								if IsControlPressed(0,34) then
+									local Heading = Forward and 1.0 or -1.0
+									SetEntityHeading(Ped,GetEntityHeading(Ped) + Heading)
+								elseif IsControlPressed(0,35) then
+									local Heading = Backward and 1.0 or -1.0
+									SetEntityHeading(Ped,GetEntityHeading(Ped) + Heading)
+								end
+							end
+						else
+							if not IsEntityPlayingAnim(Ped,"dead","dead_a",3) then
+								TaskPlayAnim(Ped,"dead","dead_a",8.0,8.0,-1,1,1,0,0,0)
+							end
+						end
+					end
+
+					if Death["Status"] and Death["Timer"] <= 0 and Crawl["Timer"] <= 0 and not LocalPlayer["state"]["Carry"] and IsControlPressed(0,38) then
+						Death["Pressed"] = Death["Pressed"] + 1
+
+						if Death["Pressed"] >= 1000 then
+							TriggerServerEvent("player:Survival")
+							FinishSurvival()
 						end
 					end
 				end
@@ -121,76 +214,94 @@ CreateThread(function()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHECKDEATH
+-- CHECKCRAWL
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.CheckDeath()
-	if Death and DeathTimer <= 0 then
-		return true
+function Hensa.CheckCrawl()
+	return Death["Status"] and Crawl["Timer"] > 0 and GetGameTimer() >= Crawl["Cooldown"] and true or false
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- UPDATECRAWL
+-----------------------------------------------------------------------------------------------------------------------------------------
+function Hensa.UpdateCrawl(Health)
+	if Health then
+		exports["survival"]:Revive(Health)
+		Crawl["Cooldown"] = GetGameTimer() + (Crawl["Minute"] * 60000)
+	else
+		Crawl["Cooldown"] = GetGameTimer()
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- FINISHSURVIVAL
+-----------------------------------------------------------------------------------------------------------------------------------------
+function FinishSurvival()
+	if Death["Status"] and Crawl["Timer"] > 0 then
+		LocalPlayer["state"]:set("Crawl",false,true)
 	end
 
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- DEATHTIMER
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.DeathTimer()
-	return DeathTimer
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- RESPAWN
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Respawn()
-	Death = false
-	DeathTimer = TimeConfig
+	Death["Status"] = false
+	Death["Timer"] = 0
 
-	ClearPedTasks(PlayerPedId())
+	Crawl["Status"] = false
+	Crawl["Timer"] = 0
+
+	local Ped = PlayerPedId()
+
+	ClearPedTasks(Ped)
+	SetEntityHealth(Ped,160)
+	SetEntityInvincible(Ped,false)
+	ClearFacialIdleAnimOverride(Ped)
 	NetworkSetFriendlyFireOption(true)
-	ClearPedBloodDamage(PlayerPedId())
-	SetEntityHealth(PlayerPedId(), 200)
-	SetEntityInvincible(PlayerPedId(), false)
-	ClearFacialIdleAnimOverride(PlayerPedId())
-	LocalPlayer["state"]:set("Blastoise", false, false)
+	LocalPlayer["state"]:set("Blastoise",false,false)
 
-	TriggerEvent("hud:Active", true)
 	TriggerEvent("paramedic:Reset")
-	TriggerEvent("inventory:CleanWeapons")
-	TriggerEvent("cinematicDeath")
-	LocalPlayer["state"]:set("Handcuff", false, true)
 	exports["pma-voice"]:Mute(false)
+	SendNUIMessage({ Action = "Close" })
+	TriggerEvent("inventory:CleanWeapons")
+	-- exports["lb-phone"]:ToggleDisabled(false)
+
+	if LocalPlayer["state"]["Handcuff"] then
+		LocalPlayer["state"]:set("Handcuff",false,true)
+	end
 
 	DoScreenFadeOut(0)
-	TriggerEvent("hud:Active", true)
-	SetEntityHeading(PlayerPedId(), 272.13)
-	SendNUIMessage({ name = "Open", payload = false })
-	SetEntityCoords(PlayerPedId(), 1135.1, -1519.6, 40.24)
 
-	SetTimeout(1000, function()
-		DoScreenFadeIn(1000)
+	SetTimeout(5000,function()
+		TriggerEvent("player:DeathUpdate",false)
+		TriggerEvent("hud:Active",true)
+		DoScreenFadeIn(2500)
 	end)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- REVIVE
 -----------------------------------------------------------------------------------------------------------------------------------------
-exports("Revive", function(Health)
+exports("Revive",function(Health)
 	local Ped = PlayerPedId()
 
-	SetEntityHealth(Ped, Health)
-	SetEntityInvincible(Ped, false)
-	LocalPlayer["state"]:set("Blastoise", false, false)
+	SetEntityInvincible(Ped,false)
+	SetEntityHealth(Ped,Health or 101)
+	LocalPlayer["state"]:set("Blastoise",false,false)
 
-	if Death then
-		Death = false
-		DeathTimer = TimeConfig
+	if Death["Status"] then
+		if Crawl["Timer"] > 0 then
+			LocalPlayer["state"]:set("Crawl",false,true)
+		end
+
+		Death["Status"] = false
+		Death["Timer"] = 0
+
+		Crawl["Status"] = false
+		Crawl["Timer"] = 0
 
 		ClearPedTasks(Ped)
 		ClearFacialIdleAnimOverride(Ped)
 		NetworkSetFriendlyFireOption(true)
 
-		TriggerEvent("hud:Active", true)
-		SendNUIMessage({ name = "Open", payload = false })
-
-		exports["pma-voice"]:Mute(false)
 		TriggerEvent("paramedic:Reset")
+		TriggerEvent("hud:Active",true)
+		exports["pma-voice"]:Mute(false)
+		SendNUIMessage({ Action = "Close" })
+		TriggerEvent("player:DeathUpdate",false)
+		-- exports["lb-phone"]:ToggleDisabled(false)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -199,10 +310,3 @@ end)
 function Hensa.Revive(Health)
 	exports["survival"]:Revive(Health)
 end
------------------------------------------------------------------------------------------------------------------------------------------
--- SURVIVAL:DEATHLOGIN
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("survival:DeathLogin")
-AddEventHandler("survival:DeathLogin", function()
-	DeathTimer = TimeConfig
-end)
