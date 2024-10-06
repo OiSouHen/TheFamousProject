@@ -6,6 +6,7 @@ local LastTravel = nil
 -- CLOSESTVEHICLE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.ClosestVehicle(Radius)
+	local Model = false
 	local Selected = false
 	local Ped = PlayerPedId()
 	local Radius = Radius + 0.0001
@@ -19,10 +20,41 @@ function tvRP.ClosestVehicle(Radius)
 		if EntityDistance < Radius then
 			Selected = Entity
 			Radius = EntityDistance
+			Model = GetEntityArchetypeName(Selected)
 		end
 	end
 
-	return Selected
+	return Selected,Model
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- VEHICLELIST
+-----------------------------------------------------------------------------------------------------------------------------------------
+function tvRP.VehicleList(Radius)
+	local Plate = ""
+	local Model = nil
+	local Class = false
+	local Vehicle = false
+	local Networked = false
+	local Ped = PlayerPedId()
+
+	if IsPedInAnyVehicle(Ped) then
+		Vehicle = GetVehiclePedIsUsing(Ped)
+	else
+		if not Radius then
+			Radius = 5.0
+		end
+
+		Vehicle = tvRP.ClosestVehicle(Radius + 0.0)
+	end
+
+	if Vehicle and DoesEntityExist(Vehicle) and IsEntityAVehicle(Vehicle) then
+		Networked = VehToNet(Vehicle)
+		Class = GetVehicleClass(Vehicle)
+		Model = GetEntityArchetypeName(Vehicle)
+		Plate = GetVehicleNumberPlateText(Vehicle)
+	end
+
+	return Vehicle,Networked,Plate,Model,Class,GetEntityCoords(Vehicle)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- INVEHICLE
@@ -30,27 +62,6 @@ end
 function tvRP.InsideVehicle()
 	local Ped = PlayerPedId()
 	return IsPedInAnyVehicle(Ped)
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- VEHICLELIST
------------------------------------------------------------------------------------------------------------------------------------------
-function tvRP.VehicleList(Radius)
-	local Vehicle = nil
-	local Ped = PlayerPedId()
-	if IsPedInAnyVehicle(Ped) then
-		Vehicle = GetVehiclePedIsUsing(Ped)
-	else
-		Vehicle = tvRP.ClosestVehicle(Radius)
-	end
-
-	if IsEntityAVehicle(Vehicle) then
-		local Network = VehToNet(Vehicle)
-		local Class = GetVehicleClass(Vehicle)
-		local Model = GetEntityArchetypeName(Vehicle)
-		local Plate = GetVehicleNumberPlateText(Vehicle)
-
-		return Vehicle,Network,Plate,Model,Class
-	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VEHICLEAROUND
@@ -74,7 +85,9 @@ end
 function tvRP.VehicleName()
 	local Ped = PlayerPedId()
 	if IsPedInAnyVehicle(Ped) then
-		return GetEntityArchetypeName(GetVehiclePedIsUsing(Ped))
+		local Vehicle = GetVehiclePedIsUsing(Ped)
+
+		return GetEntityArchetypeName(Vehicle),VehToNet(Vehicle),GetVehicleNumberPlateText(Vehicle)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
