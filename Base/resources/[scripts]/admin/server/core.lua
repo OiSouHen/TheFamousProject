@@ -80,19 +80,15 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RACECONFIG
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.RaceConfig(Left,Center,Right,Distance)
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport then
-		vRP.Archive(Passport..".txt","{")
+function Hensa.RaceConfig(Left,Center,Right,Distance,Name)
+	vRP.Archive(Name..".txt","{")
 
-		vRP.Archive(Passport..".txt","['Left'] = vec3("..Optimize(Left["x"])..","..Optimize(Left["y"])..","..Optimize(Left["z"]).."),")
-		vRP.Archive(Passport..".txt","['Center'] = vec3("..Optimize(Center["x"])..","..Optimize(Center["y"])..","..Optimize(Center["z"]).."),")
-		vRP.Archive(Passport..".txt","['Right'] = vec3("..Optimize(Right["x"])..","..Optimize(Right["y"])..","..Optimize(Right["z"]).."),")
-		vRP.Archive(Passport..".txt","['Distance'] = "..Distance)
+	vRP.Archive(Name..".txt","['Left'] = vec3("..Optimize(Left["x"])..","..Optimize(Left["y"])..","..Optimize(Left["z"]).."),")
+	vRP.Archive(Name..".txt","['Center'] = vec3("..Optimize(Center["x"])..","..Optimize(Center["y"])..","..Optimize(Center["z"]).."),")
+	vRP.Archive(Name..".txt","['Right'] = vec3("..Optimize(Right["x"])..","..Optimize(Right["y"])..","..Optimize(Right["z"]).."),")
+	vRP.Archive(Name..".txt","['Distance'] = "..Distance)
 
-		vRP.Archive(Passport..".txt","},")
-	end
+	vRP.Archive(Name..".txt","},")
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DEVTOOLSKICK
