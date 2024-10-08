@@ -26,7 +26,7 @@ end
 -- POSTIT:INITPOSTIT
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("postit:initPostit")
-AddEventHandler("postit:initPostit",function(Admin)
+AddEventHandler("postit:initPostit",function()
 	if not Active then
 		Active = true
 
@@ -40,7 +40,7 @@ AddEventHandler("postit:initPostit",function(Admin)
 				DrawMarker(28,Coords["x"],Coords["y"],Coords["z"],0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.05,0.05,88,101,242,175,0,0,0,0)
 
 				if IsControlJustPressed(1,38) then
-					if Admin then
+					if GetCoords then
 						exports["keyboard"]:Copy("Cordenadas",Optimize(Coords["x"])..","..Optimize(Coords["y"])..","..Optimize(Coords["z"]))
 					else
 						vSERVER.Add(Coords)
