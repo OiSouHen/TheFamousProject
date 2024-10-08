@@ -1533,6 +1533,8 @@ end
 function vRP.CheckWeight(Passport, Item, Amount)
 	local source = vRP.Source(Passport)
 	if source then
+		Amount = Amount or 1
+
 		if (vRP.InventoryWeight(Passport) + ItemWeight(Item) * Amount) <= vRP.GetWeight(Passport) then
 			return true
 		end
