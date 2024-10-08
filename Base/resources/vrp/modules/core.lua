@@ -1945,7 +1945,7 @@ function vRP.StoreChest(Passport, Data, Amount, Weight, Slot, Target)
 	local Source = vRP.Source(Passport)
 	local Slot = tostring(Slot)
 	local Target = tostring(Target)
-	local AmountInt = parseInt(Amount, true)
+	local AmountInt = parseInt(Amount)
 
 	if Source and AmountInt > 0 and Inventory[Slot] then
 		if Weight >= (vRP.ChestWeight(Datatable) + ItemWeight(Inventory[Slot].item)) * AmountInt then
@@ -1992,7 +1992,7 @@ function vRP.UpdateChest(Passport, Data, Slot, Target, Amount)
 	local Datatable = vRP.GetServerData(Data)
 	local Slot = tostring(Slot)
 	local Target = tostring(Target)
-	local Amount = parseInt(Amount, true)
+	local Amount = parseInt(Amount)
 
 	if vRP.Source(Passport) and Amount > 0 and Datatable[Slot] then
 		local sourceItem = Datatable[Slot]
@@ -2455,7 +2455,7 @@ end
 -- PAYMENTFULL
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.PaymentFull(Passport, Amount)
-	local Amount = parseInt(Amount, true)
+	local Amount = parseInt(Amount)
 	local Source = vRP.Source(Passport)
 
 	if Amount and Amount > 0 then
