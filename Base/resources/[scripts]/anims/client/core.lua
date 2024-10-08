@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
-local Proxy = module("vrp", "lib/Proxy")
+local Tunnel = module("vrp","lib/Tunnel")
+local Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
@@ -11,21 +11,17 @@ vSERVER = Tunnel.getInterface("inventory")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ANIMAÇÕES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Anims = {
-	["garcom"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "vw_prop_vw_tray_01a", flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.0, pos3 = 0.015, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0 },
-	["garcom2"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "prop_food_tray_01", flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0 },
-	["garcom3"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "prop_food_tray_02", flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0 },
-	["garcom4"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "prop_food_tray_03", flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0 },
-	["garcom5"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "h4_prop_h4_champ_tray_01b", flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0 },
-	["garcom6"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "h4_prop_h4_champ_tray_01c", flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0 },
+local animacoes = {
+	["tv"] = { dict = "beachanims@molly", anim = "beachanim_surf_clip", prop = "xs_prop_arena_screen_tv_01", flag = 49, mao = 28252, altura = 0.2600, pos1 = 0.1100, pos2 = -0.1400, pos3 = 96.1620, pos4 = 168.9069, pos5 = 84.2402 },
+	["garcom"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "vw_prop_vw_tray_01a", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.015, pos4 = 0.0, pos5 = 0.0 },
+	["garcom2"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "prop_food_tray_01", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0 },
+	["garcom3"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "prop_food_tray_02", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0 },
+	["garcom4"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "prop_food_tray_03", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0 },
+	["garcom5"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "h4_prop_h4_champ_tray_01b", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0 },
+	["garcom6"] = { dict = "anim@move_f@waitress", anim = "idle", prop = "h4_prop_h4_champ_tray_01c", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.01, pos4 = 0.0, pos5 = 0.0 },
 	["esquentar"] = { dict = "amb@world_human_stand_fire@male@base", anim = "base", walk = false, loop = true },
 	["churrasco2"] = { dict = "amb@prop_human_bbq@male@idle_a", anim = "idle_c", walk = false, loop = true },
-	["spray"] = { dict = "switch@franklin@lamar_tagging_wall", anim = "lamar_tagging_exit_loop_lamar", prop =
-	"prop_cs_spray_can", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
-	["spray2"] = { dict = "switch@franklin@lamar_tagging_wall", anim = "lamar_tagging_wall_loop_lamar", prop =
-	"prop_cs_spray_can", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = 0.0, pos3 = 0.0, pos4 = 0.0, pos5 = 130.0 },
-	["tablet2"] = { dict = "amb@code_human_in_bus_passenger_idles@female@tablet@idle_a", anim = "idle_a", prop =
-	"prop_cs_tablet", flag = 49, mao = 28422, altura = -0.05, pos1 = 0.0, pos2 = 0.0, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
+	["tablet2"] = { dict = "amb@code_human_in_bus_passenger_idles@female@tablet@idle_a", anim = "idle_a", prop = "prop_cs_tablet", flag = 49, mao = 28422, altura = -0.05, pos1 = 0.0, pos2 = 0.0, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
 	["agitar"] = { dict = "random@street_race", anim = "_streetracer_accepted", walk = false, loop = false },
 	["agitar2"] = { dict = "random@street_race", anim = "grid_girl_a", walk = false, loop = false },
 	["agitar3"] = { dict = "random@street_race", anim = "grid_girl_b", walk = false, loop = false },
@@ -73,6 +69,7 @@ local Anims = {
 	["mic3"] = { dict = "anim@random@shop_clothes@watches", anim = "base", prop = "p_ing_microphonel_01", flag = 49, mao = 60309, altura = 0.10, pos1 = 0.04, pos2 = 0.012, pos3 = -60.0, pos4 = 60.0, pos5 = -30.0 },
 	["megaphone"] = { dict = "anim@random@shop_clothes@watches", anim = "base", prop = "prop_megaphone_01", flag = 49, mao = 60309, altura = 0.10, pos1 = 0.04, pos2 = 0.012, pos3 = -60.0, pos4 = 100.0, pos5 = -30.0 },
 	["livro"] = { dict = "cellphone@", anim = "cellphone_text_read_base", prop = "prop_novel_01", flag = 49, mao = 6286, altura = 0.15, pos1 = 0.03, pos2 = -0.065, pos3 = 0.0, pos4 = 180.0, pos5 = 90.0 },
+	["radio"] = { dict = "cellphone@", anim = "cellphone_call_in", prop = "prop_cs_hand_radio", flag = 50, mao = 28422 },
 	["radio2"] = { prop = "prop_boombox_01", flag = 50, mao = 57005, altura = 0.30, pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 260.0, pos5 = 60.0 },
 	["bolsa"] = { prop = "prop_ld_case_01", flag = 50, mao = 57005, altura = 0.16, pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 260.0, pos5 = 60.0 },
 	["bolsa2"] = { prop = "prop_ld_case_01_s", flag = 50, mao = 57005, altura = 0.16, pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 260.0, pos5 = 60.0 },
@@ -82,11 +79,9 @@ local Anims = {
 	["caixa2"] = { prop = "prop_tool_box_04", flag = 50, mao = 57005, altura = 0.45, pos1 = 0, pos2 = 0.05, pos3 = 0, pos4 = 260.0, pos5 = 60.0 },
 	["lixo"] = { prop = "prop_cs_rub_binbag_01", flag = 50, mao = 57005, altura = 0.11, pos1 = 0, pos2 = 0.0, pos3 = 0, pos4 = 260.0, pos5 = 60.0 },
 	["prebeber"] = { dict = "amb@code_human_wander_drinking@beer@male@base", anim = "static", prop = "p_amb_coffeecup_01", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = -0.05, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
-	["prebeber2"] = { dict = "amb@code_human_wander_drinking@beer@male@base", anim = "static", prop =
-	"prop_ld_flow_bottle", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = -0.05, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
+	["prebeber2"] = { dict = "amb@code_human_wander_drinking@beer@male@base", anim = "static", prop = "prop_ld_flow_bottle", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = -0.05, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
 	["prebeber3"] = { dict = "amb@code_human_wander_drinking@beer@male@base", anim = "static", prop = "prop_cs_bs_cup", flag = 49, mao = 28422, altura = 0.0, pos1 = 0.0, pos2 = -0.10, pos3 = 0.0, pos4 = 0.0, pos5 = 0.0 },
-	["prebeber4"] = { dict = "anim@heists@humane_labs@finale@keycards", anim = "ped_a_enter_loop", prop =
-	"prop_drink_champ", flag = 49, mao = 18905, altura = 0.10, pos1 = -0.05, pos2 = 0.03, pos3 = -100.0, pos4 = 0.0, pos5 = -10.0 },
+	["prebeber4"] = { dict = "anim@heists@humane_labs@finale@keycards", anim = "ped_a_enter_loop", prop = "prop_drink_champ", flag = 49, mao = 18905, altura = 0.10, pos1 = -0.05, pos2 = 0.03, pos3 = -100.0, pos4 = 0.0, pos5 = -10.0 },
 	["verificar"] = { dict = "amb@medic@standing@tendtodead@idle_a", anim = "idle_a", walk = false, loop = true },
 	["mexer"] = { dict = "amb@prop_human_parking_meter@female@idle_a", anim = "idle_a_female", walk = true, loop = true },
 	["cuidar"] = { dict = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", walk = true, loop = true },
@@ -116,7 +111,6 @@ local Anims = {
 	["beijo"] = { dict = "anim@mp_player_intselfieblow_kiss", anim = "exit", walk = true, loop = false },
 	["malicia"] = { dict = "anim@mp_player_intupperdock", anim = "idle_a", walk = true, loop = false },
 	["ligar"] = { dict = "cellphone@", anim = "cellphone_call_in", prop = "prop_npc_phone_02", flag = 50, mao = 28422 },
-	["radio"] = { dict = "cellphone@", anim = "cellphone_call_in", prop = "prop_cs_hand_radio", flag = 50, mao = 28422 },
 	["cafe"] = { dict = "amb@world_human_aa_coffee@base", anim = "base", prop = "p_amb_coffeecup_01", flag = 50, mao = 28422 },
 	["cafe2"] = { dict = "amb@world_human_aa_coffee@idle_a", anim = "idle_a", prop = "p_amb_coffeecup_01", flag = 49, mao = 28422 },
 	["cafe3"] = { dict = "amb@world_human_drinking@coffee@male@idle_a", anim = "idle_c", prop = "p_amb_coffeecup_01", flag = 49, mao = 28422 },
@@ -154,8 +148,7 @@ local Anims = {
 	["musica2"] = { dict = "amb@world_human_musician@guitar@male@base", anim = "base", prop = "prop_el_guitar_02", flag = 49, mao = 60309 },
 	["musica3"] = { dict = "amb@world_human_musician@guitar@male@base", anim = "base", prop = "prop_el_guitar_03", flag = 49, mao = 60309 },
 	["musica4"] = { dict = "amb@world_human_musician@guitar@male@base", anim = "base", prop = "prop_acc_guitar_01", flag = 49, mao = 60309 },
-	["musica5"] = { dict = "switch@trevor@guitar_beatdown", anim = "001370_02_trvs_8_guitar_beatdown_idle_busker", prop =
-	"prop_acc_guitar_01", flag = 49, mao = 24818, altura = -0.05, pos1 = 0.31, pos2 = 0.1, pos3 = 0.0, pos4 = 20.0, pos5 = 150.0 },
+	["musica5"] = { dict = "switch@trevor@guitar_beatdown", anim = "001370_02_trvs_8_guitar_beatdown_idle_busker", prop = "prop_acc_guitar_01", flag = 49, mao = 24818, altura = -0.05, pos1 = 0.31, pos2 = 0.1, pos3 = 0.0, pos4 = 20.0, pos5 = 150.0 },
 	["camera"] = { dict = "missfinale_c2mcs_1", anim = "fin_c2_mcs_1_camman", prop = "prop_v_cam_01", flag = 49, mao = 28422 },
 	["anotar"] = { dict = "amb@medic@standing@timeofdeath@base", anim = "base", prop = "prop_notepad_01", flag = 49, mao = 60309 },
 	["peace"] = { dict = "mp_player_int_upperpeace_sign", anim = "mp_player_int_peace_sign", walk = true, loop = true },
@@ -176,438 +169,222 @@ local Anims = {
 	["dancar8"] = { dict = "special_ped@mountain_dancer@monologue_3@monologue_3a", anim = "mnt_dnc_buttwag", walk = false, loop = true },
 	["dancar9"] = { dict = "missfbi3_sniping", anim = "dance_m_default", walk = false, loop = true },
 	["dancar10"] = { dict = "anim@amb@nightclub@dancers@black_madonna_entourage@", anim = "hi_dance_facedj_09_v2_male^5", walk = false, loop = true },
-	["dancar11"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_female^1", walk = false, loop = true },
-	["dancar12"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_female^2", walk = false, loop = true },
-	["dancar13"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_female^3", walk = false, loop = true },
-	["dancar14"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_female^4", walk = false, loop = true },
-	["dancar15"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_female^5", walk = false, loop = true },
-	["dancar16"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_female^6", walk = false, loop = true },
-	["dancar17"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_male^1", walk = false, loop = true },
-	["dancar18"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_male^2", walk = false, loop = true },
-	["dancar19"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_male^3", walk = false, loop = true },
-	["dancar20"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_male^4", walk = false, loop = true },
-	["dancar21"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_male^5", walk = false, loop = true },
-	["dancar22"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v1_male^6", walk = false, loop = true },
-	["dancar23"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_female^1", walk = false, loop = true },
-	["dancar24"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_female^2", walk = false, loop = true },
-	["dancar25"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_female^3", walk = false, loop = true },
-	["dancar26"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_female^4", walk = false, loop = true },
-	["dancar27"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_female^5", walk = false, loop = true },
-	["dancar28"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_female^6", walk = false, loop = true },
-	["dancar29"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_male^1", walk = false, loop = true },
-	["dancar30"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_male^2", walk = false, loop = true },
-	["dancar31"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_male^3", walk = false, loop = true },
-	["dancar32"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_male^4", walk = false, loop = true },
-	["dancar33"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_male^5", walk = false, loop = true },
-	["dancar34"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_09_v2_male^6", walk = false, loop = true },
-	["dancar35"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_female^1", walk = false, loop = true },
-	["dancar36"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_female^2", walk = false, loop = true },
-	["dancar37"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_female^3", walk = false, loop = true },
-	["dancar38"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_female^4", walk = false, loop = true },
-	["dancar39"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_female^5", walk = false, loop = true },
-	["dancar40"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_female^6", walk = false, loop = true },
-	["dancar41"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_male^1", walk = false, loop = true },
-	["dancar42"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_male^2", walk = false, loop = true },
-	["dancar43"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_male^3", walk = false, loop = true },
-	["dancar44"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_male^4", walk = false, loop = true },
-	["dancar45"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_male^5", walk = false, loop = true },
-	["dancar46"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v1_male^6", walk = false, loop = true },
-	["dancar47"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_female^1", walk = false, loop = true },
-	["dancar48"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_female^2", walk = false, loop = true },
-	["dancar49"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_female^3", walk = false, loop = true },
-	["dancar50"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_female^4", walk = false, loop = true },
-	["dancar51"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_female^5", walk = false, loop = true },
-	["dancar52"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_female^6", walk = false, loop = true },
-	["dancar53"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_male^1", walk = false, loop = true },
-	["dancar54"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_male^2", walk = false, loop = true },
-	["dancar55"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_male^3", walk = false, loop = true },
-	["dancar56"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_male^4", walk = false, loop = true },
-	["dancar57"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_male^5", walk = false, loop = true },
-	["dancar58"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_11_v2_male^6", walk = false, loop = true },
-	["dancar59"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_female^1", walk = false, loop = true },
-	["dancar60"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_female^2", walk = false, loop = true },
-	["dancar61"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_female^3", walk = false, loop = true },
-	["dancar62"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_female^4", walk = false, loop = true },
-	["dancar63"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_female^5", walk = false, loop = true },
-	["dancar64"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_female^6", walk = false, loop = true },
-	["dancar65"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_male^1", walk = false, loop = true },
-	["dancar66"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_male^2", walk = false, loop = true },
-	["dancar67"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_male^3", walk = false, loop = true },
-	["dancar68"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_male^4", walk = false, loop = true },
-	["dancar69"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_male^5", walk = false, loop = true },
-	["dancar70"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v1_male^6", walk = false, loop = true },
-	["dancar71"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_female^1", walk = false, loop = true },
-	["dancar72"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_female^2", walk = false, loop = true },
-	["dancar73"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_female^3", walk = false, loop = true },
-	["dancar74"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_female^4", walk = false, loop = true },
-	["dancar75"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_female^5", walk = false, loop = true },
-	["dancar76"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_female^6", walk = false, loop = true },
-	["dancar77"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_male^1", walk = false, loop = true },
-	["dancar78"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_male^2", walk = false, loop = true },
-	["dancar79"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_male^3", walk = false, loop = true },
-	["dancar80"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_male^4", walk = false, loop = true },
-	["dancar81"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_male^5", walk = false, loop = true },
-	["dancar82"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_13_v2_male^6", walk = false, loop = true },
-	["dancar83"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_female^1", walk = false, loop = true },
-	["dancar84"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_female^2", walk = false, loop = true },
-	["dancar85"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_female^3", walk = false, loop = true },
-	["dancar86"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_female^4", walk = false, loop = true },
-	["dancar87"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_female^5", walk = false, loop = true },
-	["dancar88"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_female^6", walk = false, loop = true },
-	["dancar89"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_male^1", walk = false, loop = true },
-	["dancar90"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_male^2", walk = false, loop = true },
-	["dancar91"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_male^3", walk = false, loop = true },
-	["dancar92"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_male^4", walk = false, loop = true },
-	["dancar93"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_male^5", walk = false, loop = true },
-	["dancar94"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v1_male^6", walk = false, loop = true },
-	["dancar95"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_female^1", walk = false, loop = true },
-	["dancar96"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_female^2", walk = false, loop = true },
-	["dancar97"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_female^3", walk = false, loop = true },
-	["dancar98"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_female^4", walk = false, loop = true },
-	["dancar99"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_female^5", walk = false, loop = true },
-	["dancar100"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_female^6", walk = false, loop = true },
-	["dancar101"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_male^1", walk = false, loop = true },
-	["dancar102"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_male^2", walk = false, loop = true },
-	["dancar103"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_male^3", walk = false, loop = true },
-	["dancar104"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_male^4", walk = false, loop = true },
-	["dancar105"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_male^5", walk = false, loop = true },
-	["dancar106"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_15_v2_male^6", walk = false, loop = true },
-	["dancar107"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_female^1", walk = false, loop = true },
-	["dancar108"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_female^2", walk = false, loop = true },
-	["dancar109"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_female^3", walk = false, loop = true },
-	["dancar110"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_female^4", walk = false, loop = true },
-	["dancar111"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_female^5", walk = false, loop = true },
-	["dancar112"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_female^6", walk = false, loop = true },
-	["dancar113"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_male^1", walk = false, loop = true },
-	["dancar114"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_male^2", walk = false, loop = true },
-	["dancar115"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_male^3", walk = false, loop = true },
-	["dancar116"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_male^4", walk = false, loop = true },
-	["dancar117"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_male^5", walk = false, loop = true },
-	["dancar118"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v1_male^6", walk = false, loop = true },
-	["dancar119"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_female^1", walk = false, loop = true },
-	["dancar120"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_female^2", walk = false, loop = true },
-	["dancar121"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_female^3", walk = false, loop = true },
-	["dancar122"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_female^4", walk = false, loop = true },
-	["dancar123"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_female^5", walk = false, loop = true },
-	["dancar124"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_female^6", walk = false, loop = true },
-	["dancar125"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_male^1", walk = false, loop = true },
-	["dancar126"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_male^2", walk = false, loop = true },
-	["dancar127"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_male^3", walk = false, loop = true },
-	["dancar128"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_male^4", walk = false, loop = true },
-	["dancar129"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_male^5", walk = false, loop = true },
-	["dancar130"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim =
-	"hi_dance_facedj_17_v2_male^6", walk = false, loop = true },
-	["dancar131"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_female^1", walk = false, loop = true },
-	["dancar132"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_female^2", walk = false, loop = true },
-	["dancar133"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_female^3", walk = false, loop = true },
-	["dancar134"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_female^4", walk = false, loop = true },
-	["dancar135"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_female^5", walk = false, loop = true },
-	["dancar136"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_female^6", walk = false, loop = true },
-	["dancar137"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_male^1", walk = false, loop = true },
-	["dancar138"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_male^2", walk = false, loop = true },
-	["dancar139"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_male^3", walk = false, loop = true },
-	["dancar140"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_male^4", walk = false, loop = true },
-	["dancar141"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_male^5", walk = false, loop = true },
-	["dancar142"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v1_male^6", walk = false, loop = true },
-	["dancar143"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_female^1", walk = false, loop = true },
-	["dancar144"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_female^2", walk = false, loop = true },
-	["dancar145"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_female^3", walk = false, loop = true },
-	["dancar146"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_female^4", walk = false, loop = true },
-	["dancar147"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_female^5", walk = false, loop = true },
-	["dancar148"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_female^6", walk = false, loop = true },
-	["dancar149"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_male^1", walk = false, loop = true },
-	["dancar150"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_male^2", walk = false, loop = true },
-	["dancar151"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_male^3", walk = false, loop = true },
-	["dancar152"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_male^4", walk = false, loop = true },
-	["dancar153"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_male^5", walk = false, loop = true },
-	["dancar154"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_09_v2_male^6", walk = false, loop = true },
-	["dancar155"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_female^1", walk = false, loop = true },
-	["dancar156"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_female^2", walk = false, loop = true },
-	["dancar157"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_female^3", walk = false, loop = true },
-	["dancar158"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_female^4", walk = false, loop = true },
-	["dancar159"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_female^5", walk = false, loop = true },
-	["dancar160"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_female^6", walk = false, loop = true },
-	["dancar161"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_male^1", walk = false, loop = true },
-	["dancar162"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_male^2", walk = false, loop = true },
-	["dancar163"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_male^3", walk = false, loop = true },
-	["dancar164"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_male^4", walk = false, loop = true },
-	["dancar165"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_male^5", walk = false, loop = true },
-	["dancar166"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_11_v1_male^6", walk = false, loop = true },
-	["dancar167"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_female^1", walk = false, loop = true },
-	["dancar168"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_female^2", walk = false, loop = true },
-	["dancar169"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_female^3", walk = false, loop = true },
-	["dancar170"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_female^4", walk = false, loop = true },
-	["dancar171"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_female^5", walk = false, loop = true },
-	["dancar172"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_female^6", walk = false, loop = true },
-	["dancar173"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_male^1", walk = false, loop = true },
-	["dancar174"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_male^2", walk = false, loop = true },
-	["dancar175"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_male^3", walk = false, loop = true },
-	["dancar176"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_male^4", walk = false, loop = true },
-	["dancar177"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_male^5", walk = false, loop = true },
-	["dancar178"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_13_v2_male^6", walk = false, loop = true },
-	["dancar179"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_female^1", walk = false, loop = true },
-	["dancar180"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_female^2", walk = false, loop = true },
-	["dancar181"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_female^3", walk = false, loop = true },
-	["dancar182"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_female^4", walk = false, loop = true },
-	["dancar183"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_female^5", walk = false, loop = true },
-	["dancar184"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_female^6", walk = false, loop = true },
-	["dancar185"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_male^1", walk = false, loop = true },
-	["dancar186"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_male^2", walk = false, loop = true },
-	["dancar187"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_male^3", walk = false, loop = true },
-	["dancar188"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_male^4", walk = false, loop = true },
-	["dancar189"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_male^5", walk = false, loop = true },
-	["dancar190"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v1_male^6", walk = false, loop = true },
-	["dancar191"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_female^1", walk = false, loop = true },
-	["dancar192"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_female^2", walk = false, loop = true },
-	["dancar193"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_female^3", walk = false, loop = true },
-	["dancar194"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_female^4", walk = false, loop = true },
-	["dancar195"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_female^5", walk = false, loop = true },
-	["dancar196"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_female^6", walk = false, loop = true },
-	["dancar197"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_male^1", walk = false, loop = true },
-	["dancar198"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_male^2", walk = false, loop = true },
-	["dancar199"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_male^3", walk = false, loop = true },
-	["dancar200"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_male^4", walk = false, loop = true },
-	["dancar201"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_male^5", walk = false, loop = true },
-	["dancar202"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_15_v2_male^6", walk = false, loop = true },
-	["dancar203"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_female^1", walk = false, loop = true },
-	["dancar204"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_female^2", walk = false, loop = true },
-	["dancar205"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_female^3", walk = false, loop = true },
-	["dancar206"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_female^4", walk = false, loop = true },
-	["dancar207"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_female^5", walk = false, loop = true },
-	["dancar208"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_female^6", walk = false, loop = true },
-	["dancar209"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_male^1", walk = false, loop = true },
-	["dancar210"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_male^2", walk = false, loop = true },
-	["dancar211"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_male^3", walk = false, loop = true },
-	["dancar212"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_male^4", walk = false, loop = true },
-	["dancar213"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_male^5", walk = false, loop = true },
-	["dancar214"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v1_male^6", walk = false, loop = true },
-	["dancar215"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_female^1", walk = false, loop = true },
-	["dancar216"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_female^2", walk = false, loop = true },
-	["dancar217"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_female^3", walk = false, loop = true },
-	["dancar218"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_female^4", walk = false, loop = true },
-	["dancar219"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_female^5", walk = false, loop = true },
-	["dancar220"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_female^6", walk = false, loop = true },
-	["dancar221"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_male^1", walk = false, loop = true },
-	["dancar222"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_male^2", walk = false, loop = true },
-	["dancar223"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_male^3", walk = false, loop = true },
-	["dancar224"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_male^4", walk = false, loop = true },
-	["dancar225"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_male^5", walk = false, loop = true },
-	["dancar226"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim =
-	"hi_dance_crowd_17_v2_male^6", walk = false, loop = true },
+	["dancar11"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_female^1", walk = false, loop = true },
+	["dancar12"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_female^2", walk = false, loop = true },
+	["dancar13"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_female^3", walk = false, loop = true },
+	["dancar14"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_female^4", walk = false, loop = true },
+	["dancar15"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_female^5", walk = false, loop = true },
+	["dancar16"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_female^6", walk = false, loop = true },
+	["dancar17"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_male^1", walk = false, loop = true },
+	["dancar18"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_male^2", walk = false, loop = true },
+	["dancar19"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_male^3", walk = false, loop = true },
+	["dancar20"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_male^4", walk = false, loop = true },
+	["dancar21"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_male^5", walk = false, loop = true },
+	["dancar22"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v1_male^6", walk = false, loop = true },
+	["dancar23"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_female^1", walk = false, loop = true },
+	["dancar24"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_female^2", walk = false, loop = true },
+	["dancar25"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_female^3", walk = false, loop = true },
+	["dancar26"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_female^4", walk = false, loop = true },
+	["dancar27"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_female^5", walk = false, loop = true },
+	["dancar28"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_female^6", walk = false, loop = true },
+	["dancar29"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_male^1", walk = false, loop = true },
+	["dancar30"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_male^2", walk = false, loop = true },
+	["dancar31"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_male^3", walk = false, loop = true },
+	["dancar32"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_male^4", walk = false, loop = true },
+	["dancar33"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_male^5", walk = false, loop = true },
+	["dancar34"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_09_v2_male^6", walk = false, loop = true },
+	["dancar35"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_female^1", walk = false, loop = true },
+	["dancar36"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_female^2", walk = false, loop = true },
+	["dancar37"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_female^3", walk = false, loop = true },
+	["dancar38"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_female^4", walk = false, loop = true },
+	["dancar39"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_female^5", walk = false, loop = true },
+	["dancar40"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_female^6", walk = false, loop = true },
+	["dancar41"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_male^1", walk = false, loop = true },
+	["dancar42"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_male^2", walk = false, loop = true },
+	["dancar43"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_male^3", walk = false, loop = true },
+	["dancar44"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_male^4", walk = false, loop = true },
+	["dancar45"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_male^5", walk = false, loop = true },
+	["dancar46"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v1_male^6", walk = false, loop = true },
+	["dancar47"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_female^1", walk = false, loop = true },
+	["dancar48"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_female^2", walk = false, loop = true },
+	["dancar49"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_female^3", walk = false, loop = true },
+	["dancar50"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_female^4", walk = false, loop = true },
+	["dancar51"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_female^5", walk = false, loop = true },
+	["dancar52"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_female^6", walk = false, loop = true },
+	["dancar53"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_male^1", walk = false, loop = true },
+	["dancar54"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_male^2", walk = false, loop = true },
+	["dancar55"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_male^3", walk = false, loop = true },
+	["dancar56"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_male^4", walk = false, loop = true },
+	["dancar57"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_male^5", walk = false, loop = true },
+	["dancar58"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_11_v2_male^6", walk = false, loop = true },
+	["dancar59"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_female^1", walk = false, loop = true },
+	["dancar60"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_female^2", walk = false, loop = true },
+	["dancar61"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_female^3", walk = false, loop = true },
+	["dancar62"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_female^4", walk = false, loop = true },
+	["dancar63"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_female^5", walk = false, loop = true },
+	["dancar64"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_female^6", walk = false, loop = true },
+	["dancar65"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_male^1", walk = false, loop = true },
+	["dancar66"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_male^2", walk = false, loop = true },
+	["dancar67"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_male^3", walk = false, loop = true },
+	["dancar68"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_male^4", walk = false, loop = true },
+	["dancar69"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_male^5", walk = false, loop = true },
+	["dancar70"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v1_male^6", walk = false, loop = true },
+	["dancar71"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_female^1", walk = false, loop = true },
+	["dancar72"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_female^2", walk = false, loop = true },
+	["dancar73"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_female^3", walk = false, loop = true },
+	["dancar74"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_female^4", walk = false, loop = true },
+	["dancar75"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_female^5", walk = false, loop = true },
+	["dancar76"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_female^6", walk = false, loop = true },
+	["dancar77"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_male^1", walk = false, loop = true },
+	["dancar78"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_male^2", walk = false, loop = true },
+	["dancar79"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_male^3", walk = false, loop = true },
+	["dancar80"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_male^4", walk = false, loop = true },
+	["dancar81"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_male^5", walk = false, loop = true },
+	["dancar82"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_13_v2_male^6", walk = false, loop = true },
+	["dancar83"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_female^1", walk = false, loop = true },
+	["dancar84"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_female^2", walk = false, loop = true },
+	["dancar85"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_female^3", walk = false, loop = true },
+	["dancar86"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_female^4", walk = false, loop = true },
+	["dancar87"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_female^5", walk = false, loop = true },
+	["dancar88"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_female^6", walk = false, loop = true },
+	["dancar89"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_male^1", walk = false, loop = true },
+	["dancar90"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_male^2", walk = false, loop = true },
+	["dancar91"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_male^3", walk = false, loop = true },
+	["dancar92"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_male^4", walk = false, loop = true },
+	["dancar93"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_male^5", walk = false, loop = true },
+	["dancar94"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v1_male^6", walk = false, loop = true },
+	["dancar95"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_female^1", walk = false, loop = true },
+	["dancar96"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_female^2", walk = false, loop = true },
+	["dancar97"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_female^3", walk = false, loop = true },
+	["dancar98"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_female^4", walk = false, loop = true },
+	["dancar99"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_female^5", walk = false, loop = true },
+	["dancar100"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_female^6", walk = false, loop = true },
+	["dancar101"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_male^1", walk = false, loop = true },
+	["dancar102"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_male^2", walk = false, loop = true },
+	["dancar103"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_male^3", walk = false, loop = true },
+	["dancar104"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_male^4", walk = false, loop = true },
+	["dancar105"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_male^5", walk = false, loop = true },
+	["dancar106"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_15_v2_male^6", walk = false, loop = true },
+	["dancar107"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_female^1", walk = false, loop = true },
+	["dancar108"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_female^2", walk = false, loop = true },
+	["dancar109"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_female^3", walk = false, loop = true },
+	["dancar110"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_female^4", walk = false, loop = true },
+	["dancar111"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_female^5", walk = false, loop = true },
+	["dancar112"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_female^6", walk = false, loop = true },
+	["dancar113"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_male^1", walk = false, loop = true },
+	["dancar114"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_male^2", walk = false, loop = true },
+	["dancar115"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_male^3", walk = false, loop = true },
+	["dancar116"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_male^4", walk = false, loop = true },
+	["dancar117"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_male^5", walk = false, loop = true },
+	["dancar118"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v1_male^6", walk = false, loop = true },
+	["dancar119"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_female^1", walk = false, loop = true },
+	["dancar120"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_female^2", walk = false, loop = true },
+	["dancar121"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_female^3", walk = false, loop = true },
+	["dancar122"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_female^4", walk = false, loop = true },
+	["dancar123"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_female^5", walk = false, loop = true },
+	["dancar124"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_female^6", walk = false, loop = true },
+	["dancar125"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_male^1", walk = false, loop = true },
+	["dancar126"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_male^2", walk = false, loop = true },
+	["dancar127"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_male^3", walk = false, loop = true },
+	["dancar128"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_male^4", walk = false, loop = true },
+	["dancar129"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_male^5", walk = false, loop = true },
+	["dancar130"] = { dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", anim = "hi_dance_facedj_17_v2_male^6", walk = false, loop = true },
+	["dancar131"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_female^1", walk = false, loop = true },
+	["dancar132"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_female^2", walk = false, loop = true },
+	["dancar133"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_female^3", walk = false, loop = true },
+	["dancar134"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_female^4", walk = false, loop = true },
+	["dancar135"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_female^5", walk = false, loop = true },
+	["dancar136"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_female^6", walk = false, loop = true },
+	["dancar137"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_male^1", walk = false, loop = true },
+	["dancar138"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_male^2", walk = false, loop = true },
+	["dancar139"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_male^3", walk = false, loop = true },
+	["dancar140"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_male^4", walk = false, loop = true },
+	["dancar141"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_male^5", walk = false, loop = true },
+	["dancar142"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v1_male^6", walk = false, loop = true },
+	["dancar143"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_female^1", walk = false, loop = true },
+	["dancar144"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_female^2", walk = false, loop = true },
+	["dancar145"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_female^3", walk = false, loop = true },
+	["dancar146"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_female^4", walk = false, loop = true },
+	["dancar147"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_female^5", walk = false, loop = true },
+	["dancar148"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_female^6", walk = false, loop = true },
+	["dancar149"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_male^1", walk = false, loop = true },
+	["dancar150"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_male^2", walk = false, loop = true },
+	["dancar151"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_male^3", walk = false, loop = true },
+	["dancar152"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_male^4", walk = false, loop = true },
+	["dancar153"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_male^5", walk = false, loop = true },
+	["dancar154"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_09_v2_male^6", walk = false, loop = true },
+	["dancar155"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_female^1", walk = false, loop = true },
+	["dancar156"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_female^2", walk = false, loop = true },
+	["dancar157"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_female^3", walk = false, loop = true },
+	["dancar158"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_female^4", walk = false, loop = true },
+	["dancar159"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_female^5", walk = false, loop = true },
+	["dancar160"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_female^6", walk = false, loop = true },
+	["dancar161"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_male^1", walk = false, loop = true },
+	["dancar162"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_male^2", walk = false, loop = true },
+	["dancar163"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_male^3", walk = false, loop = true },
+	["dancar164"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_male^4", walk = false, loop = true },
+	["dancar165"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_male^5", walk = false, loop = true },
+	["dancar166"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_11_v1_male^6", walk = false, loop = true },
+	["dancar167"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_female^1", walk = false, loop = true },
+	["dancar168"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_female^2", walk = false, loop = true },
+	["dancar169"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_female^3", walk = false, loop = true },
+	["dancar170"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_female^4", walk = false, loop = true },
+	["dancar171"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_female^5", walk = false, loop = true },
+	["dancar172"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_female^6", walk = false, loop = true },
+	["dancar173"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_male^1", walk = false, loop = true },
+	["dancar174"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_male^2", walk = false, loop = true },
+	["dancar175"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_male^3", walk = false, loop = true },
+	["dancar176"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_male^4", walk = false, loop = true },
+	["dancar177"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_male^5", walk = false, loop = true },
+	["dancar178"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_13_v2_male^6", walk = false, loop = true },
+	["dancar179"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_female^1", walk = false, loop = true },
+	["dancar180"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_female^2", walk = false, loop = true },
+	["dancar181"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_female^3", walk = false, loop = true },
+	["dancar182"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_female^4", walk = false, loop = true },
+	["dancar183"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_female^5", walk = false, loop = true },
+	["dancar184"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_female^6", walk = false, loop = true },
+	["dancar185"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_male^1", walk = false, loop = true },
+	["dancar186"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_male^2", walk = false, loop = true },
+	["dancar187"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_male^3", walk = false, loop = true },
+	["dancar188"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_male^4", walk = false, loop = true },
+	["dancar189"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_male^5", walk = false, loop = true },
+	["dancar190"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v1_male^6", walk = false, loop = true },
+	["dancar191"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_female^1", walk = false, loop = true },
+	["dancar192"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_female^2", walk = false, loop = true },
+	["dancar193"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_female^3", walk = false, loop = true },
+	["dancar194"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_female^4", walk = false, loop = true },
+	["dancar195"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_female^5", walk = false, loop = true },
+	["dancar196"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_female^6", walk = false, loop = true },
+	["dancar197"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_male^1", walk = false, loop = true },
+	["dancar198"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_male^2", walk = false, loop = true },
+	["dancar199"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_male^3", walk = false, loop = true },
+	["dancar200"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_male^4", walk = false, loop = true },
+	["dancar201"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_male^5", walk = false, loop = true },
+	["dancar202"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_15_v2_male^6", walk = false, loop = true },
+	["dancar203"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_female^1", walk = false, loop = true },
+	["dancar204"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_female^2", walk = false, loop = true },
+	["dancar205"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_female^3", walk = false, loop = true },
+	["dancar206"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_female^4", walk = false, loop = true },
+	["dancar207"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_female^5", walk = false, loop = true },
+	["dancar208"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_female^6", walk = false, loop = true },
+	["dancar209"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_male^1", walk = false, loop = true },
+	["dancar210"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_male^2", walk = false, loop = true },
+	["dancar211"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_male^3", walk = false, loop = true },
+	["dancar212"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_male^4", walk = false, loop = true },
+	["dancar213"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_male^5", walk = false, loop = true },
+	["dancar214"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v1_male^6", walk = false, loop = true },
+	["dancar215"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_female^1", walk = false, loop = true },
+	["dancar216"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_female^2", walk = false, loop = true },
+	["dancar217"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_female^3", walk = false, loop = true },
+	["dancar218"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_female^4", walk = false, loop = true },
+	["dancar219"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_female^5", walk = false, loop = true },
+	["dancar220"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_female^6", walk = false, loop = true },
+	["dancar221"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_male^1", walk = false, loop = true },
+	["dancar222"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_male^2", walk = false, loop = true },
+	["dancar223"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_male^3", walk = false, loop = true },
+	["dancar224"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_male^4", walk = false, loop = true },
+	["dancar225"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_male^5", walk = false, loop = true },
+	["dancar226"] = { dict = "anim@amb@nightclub@dancers@crowddance_groups@hi_intensity", anim = "hi_dance_crowd_17_v2_male^6", walk = false, loop = true },
 	["dancar227"] = { dict = "anim@amb@nightclub@lazlow@hi_podium@", anim = "danceidle_hi_11_buttwiggle_b_laz", walk = false, loop = true },
 	["dancar228"] = { dict = "timetable@tracy@ig_5@idle_a", anim = "idle_a", walk = false, loop = true },
 	["dancar229"] = { dict = "anim@amb@nightclub@mini@dance@dance_solo@male@var_b@", anim = "high_center_down", walk = false, loop = true },
@@ -762,8 +539,7 @@ local Anims = {
 	["dancar378"] = { dict = "anim@amb@nightclub@mini@dance@dance_solo@female@var_b@", anim = "low_left_up", walk = false, loop = true },
 	["dancar379"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_f@", anim = "ped_a_dance_idle", walk = false, loop = true },
 	["dancar380"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_f@", anim = "ped_b_dance_idle", walk = false, loop = true },
-	["dancar381"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_male^1", walk = false, loop = true },
+	["dancar381"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_male^1", walk = false, loop = true },
 	["dancar382"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_h@", anim = "ped_b_dance_idle", walk = false, loop = true },
 	["dancar383"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_j@", anim = "ped_a_dance_idle", walk = false, loop = true },
 	["dancar384"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_m@", anim = "ped_a_dance_idle", walk = false, loop = true },
@@ -796,8 +572,7 @@ local Anims = {
 	["dancar411"] = { dict = "anim@amb@nightclub_island@dancers@club@", anim = "hi_loop_f02", walk = false, loop = true },
 	["dancar412"] = { dict = "anim@amb@nightclub_island@dancers@club@", anim = "hi_loop_f03", walk = false, loop = true },
 	["dancar413"] = { dict = "anim@amb@nightclub_island@dancers@club@", anim = "hi_loop_m01", walk = false, loop = true },
-	["dancar414"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_facedj@", anim =
-	"mi_dance_facedj_17_v2_male^4", walk = false, loop = true },
+	["dancar414"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_facedj@", anim = "mi_dance_facedj_17_v2_male^4", walk = false, loop = true },
 	["dancar415"] = { dict = "anim@mp_player_intuppersalsa_roll", anim = "idle_a", walk = false, loop = true },
 	["dancar416"] = { dict = "anim@amb@nightclub@mini@dance@dance_solo@techno_monkey@", anim = "high_center", walk = false, loop = true },
 	["dancar417"] = { dict = "anim@amb@nightclub@mini@dance@dance_solo@techno_monkey@", anim = "high_center_down", walk = false, loop = true },
@@ -806,552 +581,279 @@ local Anims = {
 	["dancar420"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_d@", anim = "ped_a_dance_idle", walk = false, loop = true },
 	["dancar421"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_b@", anim = "ped_a_dance_idle", walk = false, loop = true },
 	["dancar422"] = { dict = "anim@amb@nightclub@mini@dance@dance_paired@dance_a@", anim = "ped_a_dance_idle", walk = false, loop = true },
-	["dancar423"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_female^6", walk = false, loop = true },
-	["dancar424"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_female^5", walk = false, loop = true },
-	["dancar425"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_female^4", walk = false, loop = true },
-	["dancar426"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_female^2", walk = false, loop = true },
-	["dancar427"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_female^1", walk = false, loop = true },
-	["dancar428"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_male^6", walk = false, loop = true },
-	["dancar429"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_male^5", walk = false, loop = true },
-	["dancar430"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_male^4", walk = false, loop = true },
-	["dancar431"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_male^3", walk = false, loop = true },
-	["dancar432"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_male^2", walk = false, loop = true },
-	["dancar433"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_male^1", walk = false, loop = true },
-	["dancar434"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_male^3", walk = false, loop = true },
-	["dancar435"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_male^2", walk = false, loop = true },
-	["dancar436"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_male^1", walk = false, loop = true },
-	["dancar437"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_male^6", walk = false, loop = true },
-	["dancar438"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_male^5", walk = false, loop = true },
-	["dancar439"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_male^4", walk = false, loop = true },
-	["dancar440"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_female^6", walk = false, loop = true },
-	["dancar441"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_female^5", walk = false, loop = true },
-	["dancar442"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_female^4", walk = false, loop = true },
-	["dancar443"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_female^3", walk = false, loop = true },
-	["dancar444"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_male^2", walk = false, loop = true },
-	["dancar445"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_male^1", walk = false, loop = true },
-	["dancar446"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_male^6", walk = false, loop = true },
-	["dancar447"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_male^5", walk = false, loop = true },
-	["dancar448"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_male^4", walk = false, loop = true },
-	["dancar449"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_female^6", walk = false, loop = true },
-	["dancar450"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_female^5", walk = false, loop = true },
-	["dancar451"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_female^4", walk = false, loop = true },
-	["dancar452"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_female^3", walk = false, loop = true },
-	["dancar453"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_female^2", walk = false, loop = true },
-	["dancar454"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_male^3", walk = false, loop = true },
-	["dancar455"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_female^5", walk = false, loop = true },
-	["dancar456"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_female^4", walk = false, loop = true },
-	["dancar457"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_female^3", walk = false, loop = true },
-	["dancar458"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_female^2", walk = false, loop = true },
-	["dancar459"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_female^5", walk = false, loop = true },
-	["dancar460"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_female^4", walk = false, loop = true },
-	["dancar461"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_female^3", walk = false, loop = true },
-	["dancar462"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_female^2", walk = false, loop = true },
-	["dancar463"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_female^1", walk = false, loop = true },
-	["dancar464"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_female^6", walk = false, loop = true },
-	["dancar465"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_female^1", walk = false, loop = true },
-	["dancar466"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_male^6", walk = false, loop = true },
-	["dancar367"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_male^5", walk = false, loop = true },
-	["dancar468"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_male^4", walk = false, loop = true },
-	["dancar469"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_male^3", walk = false, loop = true },
-	["dancar470"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_male^2", walk = false, loop = true },
-	["dancar471"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_09_v1_male^1", walk = false, loop = true },
-	["dancar472"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_female^6", walk = false, loop = true },
-	["dancar473"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_female^5", walk = false, loop = true },
-	["dancar474"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_female^4", walk = false, loop = true },
-	["dancar475"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_female^3", walk = false, loop = true },
-	["dancar476"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_female^2", walk = false, loop = true },
-	["dancar477"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_female^1", walk = false, loop = true },
-	["dancar478"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_female^6", walk = false, loop = true },
-	["dancar479"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_male^6", walk = false, loop = true },
-	["dancar480"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_male^5", walk = false, loop = true },
-	["dancar481"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_male^1", walk = false, loop = true },
-	["dancar482"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_male^4", walk = false, loop = true },
-	["dancar483"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_male^3", walk = false, loop = true },
-	["dancar484"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_male^2", walk = false, loop = true },
-	["dancar485"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_male^5", walk = false, loop = true },
-	["dancar486"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_female^1", walk = false, loop = true },
-	["dancar487"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_male^6", walk = false, loop = true },
-	["dancar488"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_female^6", walk = false, loop = true },
-	["dancar489"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_female^3", walk = false, loop = true },
-	["dancar490"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_female^2", walk = false, loop = true },
-	["dancar491"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v2_female^4", walk = false, loop = true },
-	["dancar492"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v2_female^3", walk = false, loop = true },
-	["dancar493"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v2_female^2", walk = false, loop = true },
-	["dancar494"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v2_female^1", walk = false, loop = true },
-	["dancar495"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_male^4", walk = false, loop = true },
-	["dancar496"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_male^3", walk = false, loop = true },
-	["dancar497"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_male^2", walk = false, loop = true },
-	["dancar498"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_male^1", walk = false, loop = true },
-	["dancar499"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_female^1", walk = false, loop = true },
-	["dancar500"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_female^5", walk = false, loop = true },
-	["dancar501"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_11_v1_female^4", walk = false, loop = true },
-	["dancar502"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_male^6", walk = false, loop = true },
-	["dancar503"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_male^5", walk = false, loop = true },
-	["dancar504"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_male^4", walk = false, loop = true },
-	["dancar505"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_male^3", walk = false, loop = true },
-	["dancar506"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_male^2", walk = false, loop = true },
-	["dancar507"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v1_male^1", walk = false, loop = true },
-	["dancar508"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v2_female^6", walk = false, loop = true },
-	["dancar509"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v2_female^5", walk = false, loop = true },
-	["dancar510"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_male^5", walk = false, loop = true },
-	["dancar511"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_male^3", walk = false, loop = true },
-	["dancar512"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_male^2", walk = false, loop = true },
-	["dancar513"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_male^1", walk = false, loop = true },
-	["dancar514"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_female^3", walk = false, loop = true },
-	["dancar515"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_male^4", walk = false, loop = true },
-	["dancar516"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_female^6", walk = false, loop = true },
-	["dancar517"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_female^5", walk = false, loop = true },
-	["dancar518"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_female^4", walk = false, loop = true },
-	["dancar519"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_female^2", walk = false, loop = true },
-	["dancar520"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_17_v1_female^1", walk = false, loop = true },
-	["dancar521"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_15_v1_male^6", walk = false, loop = true },
-	["dancar522"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_female^5", walk = false, loop = true },
-	["dancar523"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_female^4", walk = false, loop = true },
-	["dancar524"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_female^3", walk = false, loop = true },
-	["dancar525"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_female^2", walk = false, loop = true },
-	["dancar526"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_male^3", walk = false, loop = true },
-	["dancar527"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_male^2", walk = false, loop = true },
-	["dancar528"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_male^1", walk = false, loop = true },
-	["dancar529"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_female^6", walk = false, loop = true },
-	["dancar530"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_09_v1_female^1", walk = false, loop = true },
-	["dancar531"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_female^6", walk = false, loop = true },
-	["dancar532"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_male^6", walk = false, loop = true },
-	["dancar533"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_male^5", walk = false, loop = true },
-	["dancar534"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_17_v1_male^4", walk = false, loop = true },
-	["dancar535"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_female^4", walk = false, loop = true },
-	["dancar536"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_female^3", walk = false, loop = true },
-	["dancar537"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_female^2", walk = false, loop = true },
-	["dancar538"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_female^1", walk = false, loop = true },
-	["dancar539"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_female^6", walk = false, loop = true },
-	["dancar540"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_female^5", walk = false, loop = true },
-	["dancar541"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_male^6", walk = false, loop = true },
-	["dancar542"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_male^5", walk = false, loop = true },
-	["dancar543"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_male^4", walk = false, loop = true },
-	["dancar544"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_male^2", walk = false, loop = true },
-	["dancar545"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_male^1", walk = false, loop = true },
-	["dancar546"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v1_male^3", walk = false, loop = true },
-	["dancar547"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_female^4", walk = false, loop = true },
-	["dancar548"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_female^3", walk = false, loop = true },
-	["dancar549"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_female^2", walk = false, loop = true },
-	["dancar550"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_female^1", walk = false, loop = true },
-	["dancar551"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_female^6", walk = false, loop = true },
-	["dancar552"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_13_v2_female^5", walk = false, loop = true },
-	["dancar553"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_male^6", walk = false, loop = true },
-	["dancar554"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_male^5", walk = false, loop = true },
-	["dancar555"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_male^4", walk = false, loop = true },
-	["dancar556"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_male^3", walk = false, loop = true },
-	["dancar557"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_male^2", walk = false, loop = true },
-	["dancar558"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_15_v1_male^1", walk = false, loop = true },
-	["dancar559"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v1_male^6", walk = false, loop = true },
-	["dancar560"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v1_male^5", walk = false, loop = true },
-	["dancar561"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v1_male^4", walk = false, loop = true },
-	["dancar562"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v1_male^3", walk = false, loop = true },
-	["dancar563"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v1_male^2", walk = false, loop = true },
-	["dancar564"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_13_v1_male^1", walk = false, loop = true },
-	["dancar565"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_female^3", walk = false, loop = true },
-	["dancar566"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_female^2", walk = false, loop = true },
-	["dancar567"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_female^1", walk = false, loop = true },
-	["dancar568"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_female^5", walk = false, loop = true },
-	["dancar569"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_female^4", walk = false, loop = true },
-	["dancar570"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_male^6", walk = false, loop = true },
-	["dancar571"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_male^5", walk = false, loop = true },
-	["dancar572"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_male^4", walk = false, loop = true },
-	["dancar573"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_male^3", walk = false, loop = true },
-	["dancar574"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_male^2", walk = false, loop = true },
-	["dancar575"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_male^1", walk = false, loop = true },
-	["dancar576"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_male^2", walk = false, loop = true },
-	["dancar577"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_male^1", walk = false, loop = true },
-	["dancar578"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_male^6", walk = false, loop = true },
-	["dancar579"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_male^6", walk = false, loop = true },
-	["dancar580"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_male^5", walk = false, loop = true },
-	["dancar581"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_male^4", walk = false, loop = true },
-	["dancar582"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_male^3", walk = false, loop = true },
-	["dancar583"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_11_v1_male^3", walk = false, loop = true },
-	["dancar584"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_11_v1_male^2", walk = false, loop = true },
-	["dancar585"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_11_v1_male^1", walk = false, loop = true },
-	["dancar586"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_male^5", walk = false, loop = true },
-	["dancar587"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_male^4", walk = false, loop = true },
-	["dancar588"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_male^3", walk = false, loop = true },
-	["dancar589"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_male^2", walk = false, loop = true },
-	["dancar590"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_male^1", walk = false, loop = true },
-	["dancar591"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_female^6", walk = false, loop = true },
-	["dancar592"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_male^6", walk = false, loop = true },
-	["dancar593"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_male^5", walk = false, loop = true },
-	["dancar594"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_male^4", walk = false, loop = true },
-	["dancar595"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"mi_dance_prop_17_v1_male^3", walk = false, loop = true },
-	["dancar596"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_15_v1_female^6", walk = false, loop = true },
-	["dancar597"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_female^5", walk = false, loop = true },
-	["dancar598"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_female^4", walk = false, loop = true },
-	["dancar599"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_female^3", walk = false, loop = true },
-	["dancar601"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_female^2", walk = false, loop = true },
-	["dancar602"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_09_v1_female^1", walk = false, loop = true },
-	["dancar603"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_female^6", walk = false, loop = true },
-	["dancar604"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_female^5", walk = false, loop = true },
-	["dancar605"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_female^4", walk = false, loop = true },
-	["dancar606"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_female^3", walk = false, loop = true },
-	["dancar607"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_female^2", walk = false, loop = true },
-	["dancar608"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"hi_dance_prop_11_v1_female^1", walk = false, loop = true },
-	["dancar609"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_female^4", walk = false, loop = true },
-	["dancar610"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_female^3", walk = false, loop = true },
-	["dancar611"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_female^5", walk = false, loop = true },
-	["dancar612"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_female^2", walk = false, loop = true },
-	["dancar613"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim =
-	"li_dance_prop_13_v2_female^1", walk = false, loop = true },
-	["dancar614"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_female^6", walk = false, loop = true },
-	["dancar615"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_female^2", walk = false, loop = true },
-	["dancar616"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_male^5", walk = false, loop = true },
-	["dancar617"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_male^3", walk = false, loop = true },
-	["dancar618"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_male^1", walk = false, loop = true },
-	["dancar619"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_female^1", walk = false, loop = true },
-	["dancar620"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_male^3", walk = false, loop = true },
-	["dancar621"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_female^6", walk = false, loop = true },
-	["dancar622"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_male^4", walk = false, loop = true },
-	["dancar623"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_female^5", walk = false, loop = true },
-	["dancar624"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_female^3", walk = false, loop = true },
-	["dancar625"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_female^4", walk = false, loop = true },
-	["dancar626"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_female^6", walk = false, loop = true },
-	["dancar627"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_female^2", walk = false, loop = true },
-	["dancar628"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_female^3", walk = false, loop = true },
-	["dancar629"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_female^2", walk = false, loop = true },
-	["dancar630"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_male^4", walk = false, loop = true },
-	["dancar631"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_male^1", walk = false, loop = true },
-	["dancar632"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_male^5", walk = false, loop = true },
-	["dancar633"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_female^3", walk = false, loop = true },
-	["dancar634"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_female^1", walk = false, loop = true },
-	["dancar635"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_female^4", walk = false, loop = true },
-	["dancar636"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_male^5", walk = false, loop = true },
-	["dancar637"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_male^3", walk = false, loop = true },
-	["dancar638"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_male^5", walk = false, loop = true },
-	["dancar639"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_male^1", walk = false, loop = true },
-	["dancar640"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_female^6", walk = false, loop = true },
-	["dancar641"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_male^2", walk = false, loop = true },
-	["dancar642"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_female^4", walk = false, loop = true },
-	["dancar643"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_male^5", walk = false, loop = true },
-	["dancar644"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_female^5", walk = false, loop = true },
-	["dancar645"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_female^3", walk = false, loop = true },
-	["dancar646"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_male^6", walk = false, loop = true },
-	["dancar647"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_female^6", walk = false, loop = true },
-	["dancar648"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_male^2", walk = false, loop = true },
-	["dancar649"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_female^5", walk = false, loop = true },
-	["dancar650"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_male^4", walk = false, loop = true },
-	["dancar651"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_female^1", walk = false, loop = true },
-	["dancar652"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_female^2", walk = false, loop = true },
-	["dancar653"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_female^2", walk = false, loop = true },
-	["dancar654"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_male^2", walk = false, loop = true },
-	["dancar655"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_female^3", walk = false, loop = true },
-	["dancar656"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_female^2", walk = false, loop = true },
-	["dancar657"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_female^5", walk = false, loop = true },
-	["dancar658"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_female^1", walk = false, loop = true },
-	["dancar659"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_male^2", walk = false, loop = true },
-	["dancar660"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_female^6", walk = false, loop = true },
-	["dancar661"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_male^4", walk = false, loop = true },
-	["dancar662"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_female^4", walk = false, loop = true },
-	["dancar663"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_male^6", walk = false, loop = true },
-	["dancar664"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_male^3", walk = false, loop = true },
-	["dancar665"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_male^1", walk = false, loop = true },
-	["dancar666"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_female^5", walk = false, loop = true },
-	["dancar667"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_male^3", walk = false, loop = true },
-	["dancar668"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_male^4", walk = false, loop = true },
-	["dancar669"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_male^3", walk = false, loop = true },
-	["dancar670"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_female^1", walk = false, loop = true },
-	["dancar671"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_male^6", walk = false, loop = true },
-	["dancar672"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_female^4", walk = false, loop = true },
-	["dancar673"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_male^5", walk = false, loop = true },
-	["dancar674"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_female^1", walk = false, loop = true },
-	["dancar675"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_male^1", walk = false, loop = true },
-	["dancar676"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_male^6", walk = false, loop = true },
-	["dancar677"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_female^4", walk = false, loop = true },
-	["dancar678"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_male^3", walk = false, loop = true },
-	["dancar679"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_male^1", walk = false, loop = true },
-	["dancar680"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_male^2", walk = false, loop = true },
-	["dancar681"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_male^6", walk = false, loop = true },
-	["dancar682"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_male^4", walk = false, loop = true },
-	["dancar683"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_09_v1_female^5", walk = false, loop = true },
-	["dancar684"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_female^3", walk = false, loop = true },
-	["dancar685"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_female^3", walk = false, loop = true },
-	["dancar686"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_male^5", walk = false, loop = true },
-	["dancar687"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_male^4", walk = false, loop = true },
-	["dancar688"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_li_09_v1_male^2", walk = false, loop = true },
-	["dancar689"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_mi_11_v1_female^2", walk = false, loop = true },
-	["dancar690"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_female^5", walk = false, loop = true },
-	["dancar691"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_li_11_v1_male^6", walk = false, loop = true },
-	["dancar692"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_male^6", walk = false, loop = true },
-	["dancar693"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_li_to_hi_07_v1_male^2", walk = false, loop = true },
-	["dancar694"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_female^6", walk = false, loop = true },
-	["dancar695"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_mi_to_hi_11_v1_female^1", walk = false, loop = true },
-	["dancar696"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim =
-	"trans_dance_prop_hi_to_mi_11_v1_female^4", walk = false, loop = true },
+	["dancar423"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_female^6", walk = false, loop = true },
+	["dancar424"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_female^5", walk = false, loop = true },
+	["dancar425"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_female^4", walk = false, loop = true },
+	["dancar426"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_female^2", walk = false, loop = true },
+	["dancar427"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_female^1", walk = false, loop = true },
+	["dancar428"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_male^6", walk = false, loop = true },
+	["dancar429"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_male^5", walk = false, loop = true },
+	["dancar430"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_male^4", walk = false, loop = true },
+	["dancar431"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_male^3", walk = false, loop = true },
+	["dancar432"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_male^2", walk = false, loop = true },
+	["dancar433"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_male^1", walk = false, loop = true },
+	["dancar434"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_male^3", walk = false, loop = true },
+	["dancar435"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_male^2", walk = false, loop = true },
+	["dancar436"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_male^1", walk = false, loop = true },
+	["dancar437"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_male^6", walk = false, loop = true },
+	["dancar438"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_male^5", walk = false, loop = true },
+	["dancar439"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_male^4", walk = false, loop = true },
+	["dancar440"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_female^6", walk = false, loop = true },
+	["dancar441"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_female^5", walk = false, loop = true },
+	["dancar442"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_female^4", walk = false, loop = true },
+	["dancar443"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_female^3", walk = false, loop = true },
+	["dancar444"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_male^2", walk = false, loop = true },
+	["dancar445"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_male^1", walk = false, loop = true },
+	["dancar446"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_male^6", walk = false, loop = true },
+	["dancar447"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_male^5", walk = false, loop = true },
+	["dancar448"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_male^4", walk = false, loop = true },
+	["dancar449"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_female^6", walk = false, loop = true },
+	["dancar450"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_female^5", walk = false, loop = true },
+	["dancar451"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_female^4", walk = false, loop = true },
+	["dancar452"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_female^3", walk = false, loop = true },
+	["dancar453"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_female^2", walk = false, loop = true },
+	["dancar454"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_male^3", walk = false, loop = true },
+	["dancar455"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_female^5", walk = false, loop = true },
+	["dancar456"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_female^4", walk = false, loop = true },
+	["dancar457"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_female^3", walk = false, loop = true },
+	["dancar458"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_female^2", walk = false, loop = true },
+	["dancar459"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_female^5", walk = false, loop = true },
+	["dancar460"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_female^4", walk = false, loop = true },
+	["dancar461"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_female^3", walk = false, loop = true },
+	["dancar462"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_female^2", walk = false, loop = true },
+	["dancar463"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_female^1", walk = false, loop = true },
+	["dancar464"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_female^6", walk = false, loop = true },
+	["dancar465"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_female^1", walk = false, loop = true },
+	["dancar466"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_male^6", walk = false, loop = true },
+	["dancar367"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_male^5", walk = false, loop = true },
+	["dancar468"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_male^4", walk = false, loop = true },
+	["dancar469"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_male^3", walk = false, loop = true },
+	["dancar470"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_male^2", walk = false, loop = true },
+	["dancar471"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_09_v1_male^1", walk = false, loop = true },
+	["dancar472"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_female^6", walk = false, loop = true },
+	["dancar473"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_female^5", walk = false, loop = true },
+	["dancar474"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_female^4", walk = false, loop = true },
+	["dancar475"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_female^3", walk = false, loop = true },
+	["dancar476"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_female^2", walk = false, loop = true },
+	["dancar477"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_female^1", walk = false, loop = true },
+	["dancar478"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_female^6", walk = false, loop = true },
+	["dancar479"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_male^6", walk = false, loop = true },
+	["dancar480"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_male^5", walk = false, loop = true },
+	["dancar481"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_male^1", walk = false, loop = true },
+	["dancar482"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_male^4", walk = false, loop = true },
+	["dancar483"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_male^3", walk = false, loop = true },
+	["dancar484"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_male^2", walk = false, loop = true },
+	["dancar485"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_male^5", walk = false, loop = true },
+	["dancar486"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_female^1", walk = false, loop = true },
+	["dancar487"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_male^6", walk = false, loop = true },
+	["dancar488"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_female^6", walk = false, loop = true },
+	["dancar489"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_female^3", walk = false, loop = true },
+	["dancar490"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_female^2", walk = false, loop = true },
+	["dancar491"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v2_female^4", walk = false, loop = true },
+	["dancar492"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v2_female^3", walk = false, loop = true },
+	["dancar493"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v2_female^2", walk = false, loop = true },
+	["dancar494"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v2_female^1", walk = false, loop = true },
+	["dancar495"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_male^4", walk = false, loop = true },
+	["dancar496"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_male^3", walk = false, loop = true },
+	["dancar497"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_male^2", walk = false, loop = true },
+	["dancar498"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_male^1", walk = false, loop = true },
+	["dancar499"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_female^1", walk = false, loop = true },
+	["dancar500"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_female^5", walk = false, loop = true },
+	["dancar501"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_11_v1_female^4", walk = false, loop = true },
+	["dancar502"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_male^6", walk = false, loop = true },
+	["dancar503"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_male^5", walk = false, loop = true },
+	["dancar504"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_male^4", walk = false, loop = true },
+	["dancar505"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_male^3", walk = false, loop = true },
+	["dancar506"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_male^2", walk = false, loop = true },
+	["dancar507"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v1_male^1", walk = false, loop = true },
+	["dancar508"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v2_female^6", walk = false, loop = true },
+	["dancar509"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v2_female^5", walk = false, loop = true },
+	["dancar510"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_male^5", walk = false, loop = true },
+	["dancar511"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_male^3", walk = false, loop = true },
+	["dancar512"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_male^2", walk = false, loop = true },
+	["dancar513"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_male^1", walk = false, loop = true },
+	["dancar514"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_female^3", walk = false, loop = true },
+	["dancar515"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_male^4", walk = false, loop = true },
+	["dancar516"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_female^6", walk = false, loop = true },
+	["dancar517"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_female^5", walk = false, loop = true },
+	["dancar518"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_female^4", walk = false, loop = true },
+	["dancar519"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_female^2", walk = false, loop = true },
+	["dancar520"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_17_v1_female^1", walk = false, loop = true },
+	["dancar521"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_15_v1_male^6", walk = false, loop = true },
+	["dancar522"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_female^5", walk = false, loop = true },
+	["dancar523"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_female^4", walk = false, loop = true },
+	["dancar524"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_female^3", walk = false, loop = true },
+	["dancar525"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_female^2", walk = false, loop = true },
+	["dancar526"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_male^3", walk = false, loop = true },
+	["dancar527"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_male^2", walk = false, loop = true },
+	["dancar528"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_male^1", walk = false, loop = true },
+	["dancar529"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_female^6", walk = false, loop = true },
+	["dancar530"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_09_v1_female^1", walk = false, loop = true },
+	["dancar531"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_female^6", walk = false, loop = true },
+	["dancar532"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_male^6", walk = false, loop = true },
+	["dancar533"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_male^5", walk = false, loop = true },
+	["dancar534"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_17_v1_male^4", walk = false, loop = true },
+	["dancar535"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_female^4", walk = false, loop = true },
+	["dancar536"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_female^3", walk = false, loop = true },
+	["dancar537"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_female^2", walk = false, loop = true },
+	["dancar538"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_female^1", walk = false, loop = true },
+	["dancar539"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_female^6", walk = false, loop = true },
+	["dancar540"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_female^5", walk = false, loop = true },
+	["dancar541"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_male^6", walk = false, loop = true },
+	["dancar542"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_male^5", walk = false, loop = true },
+	["dancar543"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_male^4", walk = false, loop = true },
+	["dancar544"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_male^2", walk = false, loop = true },
+	["dancar545"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_male^1", walk = false, loop = true },
+	["dancar546"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v1_male^3", walk = false, loop = true },
+	["dancar547"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_female^4", walk = false, loop = true },
+	["dancar548"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_female^3", walk = false, loop = true },
+	["dancar549"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_female^2", walk = false, loop = true },
+	["dancar550"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_female^1", walk = false, loop = true },
+	["dancar551"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_female^6", walk = false, loop = true },
+	["dancar552"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_13_v2_female^5", walk = false, loop = true },
+	["dancar553"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_male^6", walk = false, loop = true },
+	["dancar554"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_male^5", walk = false, loop = true },
+	["dancar555"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_male^4", walk = false, loop = true },
+	["dancar556"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_male^3", walk = false, loop = true },
+	["dancar557"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_male^2", walk = false, loop = true },
+	["dancar558"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_15_v1_male^1", walk = false, loop = true },
+	["dancar559"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v1_male^6", walk = false, loop = true },
+	["dancar560"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v1_male^5", walk = false, loop = true },
+	["dancar561"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v1_male^4", walk = false, loop = true },
+	["dancar562"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v1_male^3", walk = false, loop = true },
+	["dancar563"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v1_male^2", walk = false, loop = true },
+	["dancar564"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_13_v1_male^1", walk = false, loop = true },
+	["dancar565"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_female^3", walk = false, loop = true },
+	["dancar566"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_female^2", walk = false, loop = true },
+	["dancar567"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_female^1", walk = false, loop = true },
+	["dancar568"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_female^5", walk = false, loop = true },
+	["dancar569"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_female^4", walk = false, loop = true },
+	["dancar570"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_male^6", walk = false, loop = true },
+	["dancar571"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_male^5", walk = false, loop = true },
+	["dancar572"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_male^4", walk = false, loop = true },
+	["dancar573"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_male^3", walk = false, loop = true },
+	["dancar574"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_male^2", walk = false, loop = true },
+	["dancar575"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_male^1", walk = false, loop = true },
+	["dancar576"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_male^2", walk = false, loop = true },
+	["dancar577"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_male^1", walk = false, loop = true },
+	["dancar578"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_male^6", walk = false, loop = true },
+	["dancar579"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_male^6", walk = false, loop = true },
+	["dancar580"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_male^5", walk = false, loop = true },
+	["dancar581"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_male^4", walk = false, loop = true },
+	["dancar582"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_male^3", walk = false, loop = true },
+	["dancar583"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_11_v1_male^3", walk = false, loop = true },
+	["dancar584"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_11_v1_male^2", walk = false, loop = true },
+	["dancar585"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_11_v1_male^1", walk = false, loop = true },
+	["dancar586"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_male^5", walk = false, loop = true },
+	["dancar587"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_male^4", walk = false, loop = true },
+	["dancar588"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_male^3", walk = false, loop = true },
+	["dancar589"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_male^2", walk = false, loop = true },
+	["dancar590"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_male^1", walk = false, loop = true },
+	["dancar591"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_female^6", walk = false, loop = true },
+	["dancar592"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_male^6", walk = false, loop = true },
+	["dancar593"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_male^5", walk = false, loop = true },
+	["dancar594"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_male^4", walk = false, loop = true },
+	["dancar595"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "mi_dance_prop_17_v1_male^3", walk = false, loop = true },
+	["dancar596"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_15_v1_female^6", walk = false, loop = true },
+	["dancar597"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_female^5", walk = false, loop = true },
+	["dancar598"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_female^4", walk = false, loop = true },
+	["dancar599"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_female^3", walk = false, loop = true },
+	["dancar601"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_female^2", walk = false, loop = true },
+	["dancar602"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_09_v1_female^1", walk = false, loop = true },
+	["dancar603"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_female^6", walk = false, loop = true },
+	["dancar604"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_female^5", walk = false, loop = true },
+	["dancar605"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_female^4", walk = false, loop = true },
+	["dancar606"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_female^3", walk = false, loop = true },
+	["dancar607"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_female^2", walk = false, loop = true },
+	["dancar608"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "hi_dance_prop_11_v1_female^1", walk = false, loop = true },
+	["dancar609"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_female^4", walk = false, loop = true },
+	["dancar610"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_female^3", walk = false, loop = true },
+	["dancar611"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_female^5", walk = false, loop = true },
+	["dancar612"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_female^2", walk = false, loop = true },
+	["dancar613"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props@", anim = "li_dance_prop_13_v2_female^1", walk = false, loop = true },
+	["dancar614"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_female^6", walk = false, loop = true },
+	["dancar615"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_female^2", walk = false, loop = true },
+	["dancar616"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_male^5", walk = false, loop = true },
+	["dancar617"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_male^3", walk = false, loop = true },
+	["dancar618"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_male^1", walk = false, loop = true },
+	["dancar619"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_female^1", walk = false, loop = true },
+	["dancar620"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_male^3", walk = false, loop = true },
+	["dancar621"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_female^6", walk = false, loop = true },
+	["dancar622"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_male^4", walk = false, loop = true },
+	["dancar623"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_female^5", walk = false, loop = true },
+	["dancar624"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_female^3", walk = false, loop = true },
+	["dancar625"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_female^4", walk = false, loop = true },
+	["dancar626"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_female^6", walk = false, loop = true },
+	["dancar627"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_female^2", walk = false, loop = true },
+	["dancar628"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_female^3", walk = false, loop = true },
+	["dancar629"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_female^2", walk = false, loop = true },
+	["dancar630"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_male^4", walk = false, loop = true },
+	["dancar631"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_male^1", walk = false, loop = true },
+	["dancar632"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_male^5", walk = false, loop = true },
+	["dancar633"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_female^3", walk = false, loop = true },
+	["dancar634"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_female^1", walk = false, loop = true },
+	["dancar635"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_female^4", walk = false, loop = true },
+	["dancar636"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_male^5", walk = false, loop = true },
+	["dancar637"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_male^3", walk = false, loop = true },
+	["dancar638"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_male^5", walk = false, loop = true },
+	["dancar639"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_male^1", walk = false, loop = true },
+	["dancar640"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_female^6", walk = false, loop = true },
+	["dancar641"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_male^2", walk = false, loop = true },
+	["dancar642"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_female^4", walk = false, loop = true },
+	["dancar643"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_male^5", walk = false, loop = true },
+	["dancar644"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_female^5", walk = false, loop = true },
+	["dancar645"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_female^3", walk = false, loop = true },
+	["dancar646"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_male^6", walk = false, loop = true },
+	["dancar647"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_female^6", walk = false, loop = true },
+	["dancar648"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_male^2", walk = false, loop = true },
+	["dancar649"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_female^5", walk = false, loop = true },
+	["dancar650"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_male^4", walk = false, loop = true },
+	["dancar651"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_female^1", walk = false, loop = true },
+	["dancar652"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_female^2", walk = false, loop = true },
+	["dancar653"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_female^2", walk = false, loop = true },
+	["dancar654"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_male^2", walk = false, loop = true },
+	["dancar655"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_female^3", walk = false, loop = true },
+	["dancar656"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_female^2", walk = false, loop = true },
+	["dancar657"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_female^5", walk = false, loop = true },
+	["dancar658"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_female^1", walk = false, loop = true },
+	["dancar659"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_male^2", walk = false, loop = true },
+	["dancar660"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_female^6", walk = false, loop = true },
+	["dancar661"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_male^4", walk = false, loop = true },
+	["dancar662"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_female^4", walk = false, loop = true },
+	["dancar663"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_male^6", walk = false, loop = true },
+	["dancar664"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_male^3", walk = false, loop = true },
+	["dancar665"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_male^1", walk = false, loop = true },
+	["dancar666"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_female^5", walk = false, loop = true },
+	["dancar667"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_male^3", walk = false, loop = true },
+	["dancar668"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_male^4", walk = false, loop = true },
+	["dancar669"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_male^3", walk = false, loop = true },
+	["dancar670"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_female^1", walk = false, loop = true },
+	["dancar671"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_male^6", walk = false, loop = true },
+	["dancar672"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_female^4", walk = false, loop = true },
+	["dancar673"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_male^5", walk = false, loop = true },
+	["dancar674"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_female^1", walk = false, loop = true },
+	["dancar675"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_male^1", walk = false, loop = true },
+	["dancar676"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_male^6", walk = false, loop = true },
+	["dancar677"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_female^4", walk = false, loop = true },
+	["dancar678"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_male^3", walk = false, loop = true },
+	["dancar679"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_male^1", walk = false, loop = true },
+	["dancar680"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_male^2", walk = false, loop = true },
+	["dancar681"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_male^6", walk = false, loop = true },
+	["dancar682"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_male^4", walk = false, loop = true },
+	["dancar683"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_09_v1_female^5", walk = false, loop = true },
+	["dancar684"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_female^3", walk = false, loop = true },
+	["dancar685"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_female^3", walk = false, loop = true },
+	["dancar686"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_male^5", walk = false, loop = true },
+	["dancar687"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_male^4", walk = false, loop = true },
+	["dancar688"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_li_09_v1_male^2", walk = false, loop = true },
+	["dancar689"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_mi_11_v1_female^2", walk = false, loop = true },
+	["dancar690"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_female^5", walk = false, loop = true },
+	["dancar691"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_li_11_v1_male^6", walk = false, loop = true },
+	["dancar692"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_male^6", walk = false, loop = true },
+	["dancar693"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_li_to_hi_07_v1_male^2", walk = false, loop = true },
+	["dancar694"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_female^6", walk = false, loop = true },
+	["dancar695"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_mi_to_hi_11_v1_female^1", walk = false, loop = true },
+	["dancar696"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_single_props_transitions@", anim = "trans_dance_prop_hi_to_mi_11_v1_female^4", walk = false, loop = true },
 	["argue"] = { dict = "misscarsteal4@actor", anim = "actor_berating_loop", walk = true, loop = true },
 	["bird"] = { dict = "random@peyote@bird", anim = "wakeup", walk = true, loop = true },
 	["blowkiss"] = { dict = "anim@mp_player_intcelebrationfemale@blow_kiss", anim = "blow_kiss", walk = true, loop = true },
@@ -1437,16 +939,12 @@ local Anims = {
 	["sentar45"] = { dict = "mp_am_stripper", anim = "lap_dance_player", walk = false, loop = true },
 	["sentar46"] = { dict = "switch@michael@opens_door_for_ama", anim = "001895_02_mics3_17_opens_door_for_ama_idle_ama", walk = false, loop = true },
 	["sentar47"] = { dict = "switch@michael@lounge_chairs", anim = "001523_01_mics3_9_lounge_chairs_idle_mic", walk = false, loop = true },
-	["sentar48"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@engaged@01a@base_big_screen", anim =
-	"base_big_screen", walk = false, loop = true },
+	["sentar48"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@engaged@01a@base_big_screen", anim = "base_big_screen", walk = false, loop = true },
 	["sentar49"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@engaged@01b@base", anim = "base", walk = false, loop = true },
-	["sentar50"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@engaged@01b@base_big_screen", anim =
-	"base_big_screen", walk = false, loop = true },
+	["sentar50"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@engaged@01b@base_big_screen", anim = "base_big_screen", walk = false, loop = true },
 	["sentar51"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@regular@01a@base", anim = "base", walk = false, loop = true },
-	["sentar52"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@regular@01b@base_big_screen", anim =
-	"base_big_screen", walk = false, loop = true },
-	["sentar53"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_male@regular@02a@trans", anim =
-	"base_to_big_screen", walk = false, loop = true },
+	["sentar52"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_female@regular@01b@base_big_screen", anim = "base_big_screen", walk = false, loop = true },
+	["sentar53"] = { dict = "anim_casino_a@amb@casino@games@insidetrack@ped_male@regular@02a@trans", anim = "base_to_big_screen", walk = false, loop = true },
 	["sentar54"] = { dict = "switch@michael@parkbench_smoke_ranger", anim = "parkbench_smoke_ranger_loop", walk = false, loop = true },
 	["sentar55"] = { dict = "missheist_jewelleadinout", anim = "jh_int_outro_loop_d", walk = false, loop = true },
 	["sentar56"] = { dict = "anim@amb@business@cfm@cfm_machine_no_work@", anim = "smokers_cough_v1_operator", walk = false, loop = true },
@@ -1454,8 +952,7 @@ local Anims = {
 	["sentar58"] = { dict = "anim@amb@nightclub@smoking@", anim = "base", walk = false, loop = true },
 	["sentar59"] = { dict = "amb@lo_res_idles@", anim = "world_human_picnic_female_lo_res_base", walk = false, loop = true },
 	["sentar60"] = { dict = "missheistdocks2aleadinoutlsdh_2a_int", anim = "massage_loop_2_trevor", walk = false, loop = true },
-	["sentar61"] = { dict = "anim_casino_b@amb@casino@games@blackjack@ped_female@no_heels@regular@02a@reacts@v01", anim =
-	"reaction_impartial_var03", walk = false, loop = true },
+	["sentar61"] = { dict = "anim_casino_b@amb@casino@games@blackjack@ped_female@no_heels@regular@02a@reacts@v01", anim = "reaction_impartial_var03", walk = false, loop = true },
 	["sentar62"] = { dict = "anim@amb@clubhouse@boss@female@", anim = "base", walk = false, loop = true },
 	["sentar63"] = { dict = "timetable@denice@ig_4", anim = "base", walk = false, loop = true },
 	["sentar64"] = { dict = "sil_int-29", anim = "mp_m_freemode_01^3_dual-29", walk = false, loop = true },
@@ -1469,8 +966,7 @@ local Anims = {
 	["sentar72"] = { dict = "anim@amb@office@seating@female@var_b@base@", anim = "base", walk = false, loop = true },
 	["sentar73"] = { dict = "rcmnigel1a_band_groupies", anim = "bump_f1", walk = false, loop = true },
 	["sentar74"] = { dict = "anim@amb@facility@briefing_room@seating@male@var_a@", anim = "base", walk = false, loop = true },
-	["sentar75"] = { dict = "anim@amb@business@cfid@cfid_desk_no_work_bgen_chair_no_work@", anim =
-	"lookaround_phoneless_lazyworker", walk = false, loop = true },
+	["sentar75"] = { dict = "anim@amb@business@cfid@cfid_desk_no_work_bgen_chair_no_work@", anim = "lookaround_phoneless_lazyworker", walk = false, loop = true },
 	["sentar76"] = { dict = "arm_1_mcs_2_concat-0", anim = "cs_denise_dual-0", walk = false, loop = true },
 	["sentar77"] = { dict = "timetable@reunited@ig_7", anim = "amandabase_amanda", walk = false, loop = true },
 	["sentar78"] = { dict = "anim@amb@yacht@jacuzzi@seated@female@variation_05@", anim = "idle_a", walk = false, loop = true },
@@ -1600,8 +1096,7 @@ local Anims = {
 	["foto52"] = { dict = "rcmjosh2", anim = "stand_lean_back_beckon_b", walk = false, loop = true },
 	["foto53"] = { dict = "pro_mcs_7_concat-1", anim = "cs_priest_dual-1", walk = false, loop = true },
 	["foto54"] = { dict = "clothingshirt", anim = "try_shirt_base", walk = false, loop = true },
-	["foto55"] = { dict = "special_ped@pamela@trevor_1@trevor_1a", anim =
-	"pamela_convo_trevor_im_trying_to_get_noticed_0", walk = false, loop = true },
+	["foto55"] = { dict = "special_ped@pamela@trevor_1@trevor_1a", anim = "pamela_convo_trevor_im_trying_to_get_noticed_0", walk = false, loop = true },
 	["foto56"] = { dict = "special_ped@impotent_rage@intro", anim = "idle_intro", walk = false, loop = true },
 	["foto57"] = { dict = "random@escape_paparazzi@standing@", anim = "idle", walk = false, loop = true },
 	["foto58"] = { dict = "pro_mcs_7_concat-8", anim = "player_two_dual-8", walk = false, loop = true },
@@ -1647,8 +1142,7 @@ local Anims = {
 	["foto98"] = { anim = "_car_a_flirt_girl", dict = "random@street_race", walk = false, loop = true },
 	["foto99"] = { dict = "misshair_shop@barbers", anim = "keeper_base", walk = false, loop = true },
 	["foto100"] = { dict = "cellphone@self@franklin@", anim = "chest_bump", walk = false, loop = true },
-	["foto101"] = { dict = "amb@world_human_leaning@male@wall@back@foot_up@aggro_react", anim =
-	"aggro_react_forward_enter", walk = false, loop = true },
+	["foto101"] = { dict = "amb@world_human_leaning@male@wall@back@foot_up@aggro_react", anim = "aggro_react_forward_enter", walk = false, loop = true },
 	["foto102"] = { dict = "martin_1_int-0", anim = "cs_patricia_dual-0", walk = false, loop = true },
 	["foto103"] = { dict = "mini@strip_club@lap_dance_2g@ld_2g_decline", anim = "ld_2g_decline_h_s2", walk = false, loop = true },
 	["foto104"] = { anim = "stripper_idle_03", dict = "mini@strip_club@idles@stripper", walk = false, loop = true },
@@ -1840,8 +1334,7 @@ local Anims = {
 	["encostar36"] = { dict = "switch@michael@sitting_on_car_bonnet", anim = "sitting_on_car_bonnet_loop", walk = false, loop = true },
 	["encostar37"] = { dict = "amb@world_human_leaning@male@wall@back@foot_up@react_shock", anim = "front", walk = false, loop = true },
 	["encostar38"] = { dict = "anim@amb@world_human_valet@informal@idle_a@", anim = "idle_a_a_m_y_vinewood_01", walk = false, loop = true },
-	["encostar39"] = { dict = "anim@amb@nightclub@dancers@club_ambientpeds@low-med_intensity", anim =
-	"li-mi_amb_club_06_base_female^1", walk = false, loop = true },
+	["encostar39"] = { dict = "anim@amb@nightclub@dancers@club_ambientpeds@low-med_intensity", anim = "li-mi_amb_club_06_base_female^1", walk = false, loop = true },
 	["encostar41"] = { dict = "silj_int-8", anim = "csb_mp_agent14_dual-8", walk = false, loop = true },
 	["encostar42"] = { dict = "anim@veh@btype@side_ds@base", anim = "sit", walk = false, loop = true },
 	["encostar43"] = { dict = "anim@veh@btype@side_ps@base", anim = "sit", walk = false, loop = true },
@@ -1857,8 +1350,7 @@ local Anims = {
 	["encostar55"] = { dict = "anim@amb@business@meth@meth_monitoring_no_work@", anim = "turnaround_idle_v1_lazycook", walk = false, loop = true },
 	["encostar56"] = { dict = "sub_int-42", anim = "a_m_y_busicas_01_dual-42", walk = false, loop = true },
 	["encostar57"] = { dict = "fra_0_int-9", anim = "player_one_dual-9", walk = false, loop = true },
-	["encostar58"] = { dict = "anim@amb@nightclub@dancers@club_ambientpeds@low-med_intensity", anim =
-	"li-mi_amb_club_10_v1_male^3", walk = false, loop = true },
+	["encostar58"] = { dict = "anim@amb@nightclub@dancers@club_ambientpeds@low-med_intensity", anim = "li-mi_amb_club_10_v1_male^3", walk = false, loop = true },
 	["encostar59"] = { dict = "missheistdocks2aleadinoutlsdh_2a_int", anim = "massage_loop_floyd", walk = false, loop = true },
 	["encostar60"] = { dict = "amb@lo_res_idles@", anim = "world_human_lean_female_holding_elbow_lo_res_base", walk = false, loop = true },
 	["encostar61"] = { dict = "anim@amb@yacht@jacuzzi@standing@female@variation_01@", anim = "base", walk = false, loop = true },
@@ -1911,8 +1403,7 @@ local Anims = {
 	["fumar5"] = { dict = "amb@world_human_aa_smoke@male@idle_a", anim = "idle_c", prop = "prop_cs_ciggy_01", flag = 49, mao = 28422 },
 	["fumar6"] = { dict = "amb@world_human_aa_smoke@male@idle_a", anim = "idle_b", prop = "prop_cs_ciggy_01", flag = 49, mao = 28422 },
 	["fumar7"] = { dict = "amb@world_human_smoking@female@idle_a", anim = "idle_b", prop = "prop_cs_ciggy_01", flag = 49, mao = 28422 },
-	["malhar"] = { dict = "amb@world_human_muscle_free_weights@male@barbell@base", anim = "base", prop =
-	"prop_curl_bar_01", flag = 49, mao = 28422 },
+	["malhar"] = { dict = "amb@world_human_muscle_free_weights@male@barbell@base", anim = "base", prop = "prop_curl_bar_01", flag = 49, mao = 28422 },
 	["malhar2"] = { dict = "amb@prop_human_muscle_chin_ups@male@base", anim = "base", walk = false, loop = true },
 	["martelo"] = { dict = "amb@world_human_hammering@male@base", anim = "base", prop = "prop_tool_hammer", flag = 49, mao = 28422 },
 	["pescar"] = { dict = "amb@world_human_stand_fishing@base", anim = "base", prop = "prop_fishing_rod_01", flag = 49, mao = 60309 },
@@ -1920,16 +1411,12 @@ local Anims = {
 	["plantar"] = { dict = "amb@world_human_gardener_plant@female@base", anim = "base_female", walk = false, loop = true },
 	["plantar2"] = { dict = "amb@world_human_gardener_plant@female@idle_a", anim = "idle_a_female", walk = false, loop = true },
 	["procurar"] = { dict = "amb@world_human_bum_wash@male@high@base", anim = "base", walk = false, loop = true },
-	["soprador"] = { dict = "amb@code_human_wander_gardener_leaf_blower@base", anim = "static", prop =
-	"prop_leaf_blower_01", flag = 49, mao = 28422 },
-	["soprador2"] = { dict = "amb@code_human_wander_gardener_leaf_blower@idle_a", anim = "idle_a", prop =
-	"prop_leaf_blower_01", flag = 49, mao = 28422 },
-	["soprador3"] = { dict = "amb@code_human_wander_gardener_leaf_blower@idle_a", anim = "idle_b", prop =
-	"prop_leaf_blower_01", flag = 49, mao = 28422 },
+	["soprador"] = { dict = "amb@code_human_wander_gardener_leaf_blower@base", anim = "static", prop = "prop_leaf_blower_01", flag = 49, mao = 28422 },
+	["soprador2"] = { dict = "amb@code_human_wander_gardener_leaf_blower@idle_a", anim = "idle_a", prop = "prop_leaf_blower_01", flag = 49, mao = 28422 },
+	["soprador3"] = { dict = "amb@code_human_wander_gardener_leaf_blower@idle_a", anim = "idle_b", prop = "prop_leaf_blower_01", flag = 49, mao = 28422 },
 	["tragar"] = { anim = "WORLD_HUMAN_DRUG_DEALER" },
 	["trotar"] = { dict = "amb@world_human_jog_standing@male@fitidle_a", anim = "idle_a", walk = false, loop = true },
-	["tablet"] = { dict = "amb@code_human_in_bus_passenger_idles@female@tablet@base", anim = "base", prop =
-	"prop_cs_tablet", flag = 50, mao = 28422 },
+	["tablet"] = { dict = "amb@code_human_in_bus_passenger_idles@female@tablet@base", anim = "base", prop = "prop_cs_tablet", flag = 50, mao = 28422 },
 	["selfie"] = { dict = "cellphone@self", anim = "selfie_in_from_text", prop = "prop_npc_phone_02", flag = 50, mao = 28422 },
 	["selfie2"] = { dict = "cellphone@", anim = "cellphone_text_read_base_cover_low", prop = "prop_npc_phone_02", flag = 50, mao = 28422 },
 	["xiu"] = { dict = "anim@mp_player_intincarshushbodhi@ds@", anim = "idle_a_fp", walk = true, loop = true },
@@ -2095,8 +1582,7 @@ local Anims = {
 	["checkout"] = { dict = "anim@amb@carmeet@checkout_car@male_a@idles", anim = "idle_b", walk = false, loop = false },
 	["checkout2"] = { dict = "anim@amb@carmeet@checkout_car@male_c@idles", anim = "idle_a", walk = false, loop = true },
 	["dj3"] = { dict = "anim@scripted@nightclub@dj@dj_moodm@", anim = "moodm_cdj_left_a_12", walk = false, loop = true },
-	["dj4"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_facedj_transitions@from_low_intensity", anim =
-	"trans_dance_facedj_li_to_mi_11_v1_male^3", walk = false, loop = true },
+	["dj4"] = { dict = "anim@amb@nightclub_island@dancers@crowddance_facedj_transitions@from_low_intensity", anim = "trans_dance_facedj_li_to_mi_11_v1_male^3", walk = false, loop = true },
 	["noway"] = { dict = "oddjobs@towingpleadingbase", anim = "base", walk = false, loop = false },
 	["noway2"] = { dict = "gestures@m@car@std@casual@ds", anim = "gesture_no_way", walk = false, loop = false },
 	["why"] = { dict = "random@shop_robbery_reactions@", anim = "is_this_it", walk = false, loop = false },
@@ -2109,54 +1595,52 @@ local Anims = {
 	["musculo"] = { dict = "oddjobs@assassinate@multi@", anim = "idle_a", walk = false, loop = false },
 	["lookplan"] = { dict = "missheist_agency2aig_4", anim = "look_plan_c_worker2", walk = false, loop = true },
 	["thanks"] = { dict = "random@arrests", anim = "thanks_male_05", walk = false, loop = false },
-	["parachoque"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "imp_prop_impexp_front_bumper_02a", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.1, pos3 = 0.05, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["porta"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "imp_prop_impexp_car_door_04a", walk = true, loop = true, flag = 49, mao = 28422, pos1 = -0.5, pos2 = -0.15, pos3 = -0.1, pos4 = 0.0, pos5 = 0.0, pos6 = 90.0, propAnim = true },
-	["porta2"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_door_02", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["porta3"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_door_03", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["porta4"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_door_04", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["banco"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_seat", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.2, pos3 = -0.14, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["pneu"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_wheel_tyre", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["pneu2"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_wheel_03", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0, pos6 = 0.0, propAnim = true },
-	["pneu3"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "imp_prop_impexp_tyre_01a", flag = 49, mao = 28422, pos1 = -0.02, pos2 = -0.1, pos3 = 0.2, pos4 = 10.0, pos5 = 0.0, pos6 = 0.0 },
+	["parachoque"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "imp_prop_impexp_front_bumper_02a", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = 0.1, pos3 = 0.05, pos4 = 0.0, pos5 = 0.0 },
+	["porta"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "imp_prop_impexp_car_door_04a", walk = true, loop = true, flag = 49, mao = 28422, pos1 = -0.5, pos2 = -0.15, pos3 = -0.1, pos4 = 0.0, pos5 = 0.0 },
+	["porta2"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_door_02", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0 },
+	["porta3"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_door_03", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0 },
+	["porta4"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_door_04", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0 },
+	["banco"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_seat", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.2, pos3 = -0.14, pos4 = 0.0, pos5 = 0.0 },
+	["pneu"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_wheel_tyre", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0 },
+	["pneu2"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_wheel_03", walk = true, loop = true, flag = 49, mao = 28422, pos1 = 0.0, pos2 = -0.1, pos3 = -0.15, pos4 = 0.0, pos5 = 0.0 },
+	["pneu3"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "imp_prop_impexp_tyre_01a", flag = 49, mao = 28422, pos1 = -0.02, pos2 = -0.1, pos3 = 0.2, pos4 = 10.0, pos5 = 0.0 },
 	["bateria"] = { dict = "anim@heists@box_carry@", anim = "idle", prop = "prop_car_battery_01", flag = 50, mao = 28422 },
 	["mecanico"] = { dict = "amb@world_human_vehicle_mechanic@male@idle_a", anim = "idle_a", walk = false, loop = true },
 	["mecanico2"] = { dict = "mini@repair", anim = "fixing_a_player", walk = false, loop = true },
 	["mecanico3"] = { dict = "mini@repair", anim = "fixing_a_ped", walk = false, loop = true },
 	["mecanico4"] = { dict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", walk = false, loop = true },
 	["mecanico5"] = { dict = "amb@prop_human_movie_bulb@base", anim = "base", walk = true, loop = true },
-	["mecanico6"] = { dict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", walk = true, loop = true }
+	["mecanico6"] = { dict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@", anim = "machinic_loop_mechandplayer", walk = true, loop = true },
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- EMOTES
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("emotes")
-AddEventHandler("emotes", function(Name)
+AddEventHandler("emotes",function(Name)
 	local Ped = PlayerPedId()
-	if Anims[Name] and not IsPedArmed(Ped, 7) and not IsPedSwimming(Ped) and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Cancel"] and not LocalPlayer["state"]["Handcuff"] then
-		vRP.Destroy("one")
-
-		if not IsPedInAnyVehicle(Ped) and not Anims[Name]["cars"] then
-			if Anims[Name]["altura"] and not Anims[Name]["anim"] then
-				vRP.CreateObjects("", "", Anims[Name]["prop"], Anims[Name]["flag"], Anims[Name]["mao"], Anims[Name]["altura"], Anims[Name]["pos1"], Anims[Name]["pos2"], Anims[Name]["pos3"], Anims[Name]["pos4"], Anims[Name]["pos5"])
-			elseif Anims[Name]["altura"] and Anims[Name]["anim"] then
-				vRP.CreateObjects(Anims[Name]["dict"], Anims[Name]["anim"], Anims[Name]["prop"], Anims[Name]["flag"], Anims[Name]["mao"], Anims[Name]["altura"], Anims[Name]["pos1"], Anims[Name]["pos2"], Anims[Name]["pos3"], Anims[Name]["pos4"], Anims[Name]["pos5"])
-			elseif Anims[Name]["prop"] then
-				vRP.CreateObjects(Anims[Name]["dict"], Anims[Name]["anim"], Anims[Name]["prop"], Anims[Name]["flag"], Anims[Name]["mao"])
-			elseif Anims[Name]["dict"] then
-				vRP.PlayAnim(Anims[Name]["walk"], { Anims[Name]["dict"], Anims[Name]["anim"] }, Anims[Name]["loop"])
+	if animacoes[Name] and not IsPedArmed(Ped,7) and not IsPedSwimming(Ped) and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Cancel"] and not LocalPlayer["state"]["Handcuff"] then
+		if not IsPedInAnyVehicle(Ped) and not animacoes[Name]["cars"] then
+			if animacoes[Name]["altura"] and not animacoes[Name]["anim"] then
+				vRP.CreateObjects("","",animacoes[Name]["prop"],animacoes[Name]["flag"],animacoes[Name]["mao"],animacoes[Name]["altura"],animacoes[Name]["pos1"],animacoes[Name]["pos2"],animacoes[Name]["pos3"],animacoes[Name]["pos4"],animacoes[Name]["pos5"])
+			elseif animacoes[Name]["altura"] and animacoes[Name]["anim"] then
+				vRP.CreateObjects(animacoes[Name]["dict"],animacoes[Name]["anim"],animacoes[Name]["prop"],animacoes[Name]["flag"],animacoes[Name]["mao"],animacoes[Name]["altura"],animacoes[Name]["pos1"],animacoes[Name]["pos2"],animacoes[Name]["pos3"],animacoes[Name]["pos4"],animacoes[Name]["pos5"])
+			elseif animacoes[Name]["prop"] then
+				vRP.CreateObjects(animacoes[Name]["dict"],animacoes[Name]["anim"],animacoes[Name]["prop"],animacoes[Name]["flag"],animacoes[Name]["mao"])
+			elseif animacoes[Name]["dict"] then
+				vRP.PlayAnim(animacoes[Name]["walk"],{animacoes[Name]["dict"],animacoes[Name]["anim"]},animacoes[Name]["loop"])
 			else
-				vRP.PlayAnim(false, { task = Anims[Name]["anim"] }, false)
+				vRP.PlayAnim(false,{ task = animacoes[Name]["anim"] },false)
 			end
 		else
-			if IsPedInAnyVehicle(Ped) and Anims[Name]["cars"] then
+			if IsPedInAnyVehicle(Ped) and animacoes[Name]["cars"] then
 				local Vehicle = GetVehiclePedIsUsing(Ped)
 
-				if (GetPedInVehicleSeat(Vehicle, -1) == Ped or GetPedInVehicleSeat(Vehicle, 1) == Ped) and Name == "sexo4" then
-					vRP.PlayAnim(Anims[Name]["walk"], { Anims[Name]["dict"], Anims[Name]["anim"] }, Anims[Name]["loop"])
-				elseif (GetPedInVehicleSeat(Vehicle, 0) == Ped or GetPedInVehicleSeat(Vehicle, 2) == Ped) and (Name == "sexo5" or Name == "sexo6") then
-					vRP.PlayAnim(Anims[Name]["walk"], { Anims[Name]["dict"], Anims[Name]["anim"] }, Anims[Name]["loop"])
+				if (GetPedInVehicleSeat(Vehicle,-1) == Ped or GetPedInVehicleSeat(Vehicle,1) == Ped) and Name == "sexo4" then
+					vRP.PlayAnim(animacoes[Name]["walk"],{animacoes[Name]["dict"],animacoes[Name]["anim"]},animacoes[Name]["loop"])
+				elseif (GetPedInVehicleSeat(Vehicle,0) == Ped or GetPedInVehicleSeat(Vehicle,2) == Ped) and (Name == "sexo5" or Name == "sexo6") then
+					vRP.PlayAnim(animacoes[Name]["walk"],{animacoes[Name]["dict"],animacoes[Name]["anim"]},animacoes[Name]["loop"])
 				elseif Name == "hotwired" then
-					vRP.PlayAnim(Anims[Name]["walk"], { Anims[Name]["dict"], Anims[Name]["anim"] }, Anims[Name]["loop"])
+					vRP.PlayAnim(animacoes[Name]["walk"],{animacoes[Name]["dict"],animacoes[Name]["anim"]},animacoes[Name]["loop"])
 				end
 			end
 		end
