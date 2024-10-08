@@ -85,6 +85,8 @@ function Hensa.Permissions(Name,Mode,Item)
 				}
 
 				return true
+			else
+				TriggerClientEvent("Notify",source,Name,"Você não possui permissões suficientes.","amarelo",5000)
 			end
 		elseif Mode == "Tray" then
 			Open[Passport] = {
@@ -150,6 +152,8 @@ function Hensa.Permissions(Name,Mode,Item)
 				}
 
 				return true
+			else
+				TriggerClientEvent("Notify",source,Name,"Você não possui permissões suficientes.","amarelo",5000)
 			end
 		end
 	end
