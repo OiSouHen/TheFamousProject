@@ -61,28 +61,28 @@ AddEventHandler("admin:Tuning", function()
 	if IsPedInAnyVehicle(Ped) then
 		local Vehicle = GetVehiclePedIsUsing(Ped)
 
-		SetVehicleModKit(Vehicle, 0)
-		SetVehicleMod(Vehicle, 11, GetNumVehicleMods(Vehicle, 11) - 1, false)
-		SetVehicleMod(Vehicle, 12, GetNumVehicleMods(Vehicle, 12) - 1, false)
-		SetVehicleMod(Vehicle, 13, GetNumVehicleMods(Vehicle, 13) - 1, false)
-		SetVehicleMod(Vehicle, 15, GetNumVehicleMods(Vehicle, 15) - 1, false)
-		ToggleVehicleMod(Vehicle, 18, true)
+		SetVehicleModKit(Vehicle,0)
+		ToggleVehicleMod(Vehicle,18,true)
+		SetVehicleMod(Vehicle,11,GetNumVehicleMods(Vehicle,11) - 1,false)
+		SetVehicleMod(Vehicle,12,GetNumVehicleMods(Vehicle,12) - 1,false)
+		SetVehicleMod(Vehicle,13,GetNumVehicleMods(Vehicle,13) - 1,false)
+		SetVehicleMod(Vehicle,15,GetNumVehicleMods(Vehicle,15) - 1,false)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BUTTONCOORDS
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CreateThread(function()
--- while true do
--- if IsControlJustPressed(1,38) then
--- vSERVER.buttonTxt()
--- end
+-- 	while true do
+-- 		if IsControlJustPressed(1,38) then
+-- 			vSERVER.buttonTxt()
+-- 		end
 
--- Wait(1)
--- end
+-- 		Wait(1)
+-- 	end
 -- end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- BUTTONMAKERACE
+-- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- local Markers = {}
 -- local DefaultLeft = 2.0
@@ -91,69 +91,74 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONFIGRACE
 -----------------------------------------------------------------------------------------------------------------------------------------
--- RegisterCommand("configrace",function()
--- if LocalPlayer["state"]["Admin"] then
--- for _,v in pairs(Markers) do
--- if DoesBlipExist(v["Blip"]) then
--- RemoveBlip(v["Blip"])
--- end
--- end
+-- RegisterCommand("configrace",function(source,Message)
+	-- if LocalPlayer["state"]["Admin"] then
+		-- for _,v in pairs(Markers) do
+			-- if DoesBlipExist(v["Blip"]) then
+				-- RemoveBlip(v["Blip"])
+			-- end
+		-- end
 
--- Markers = {}
--- DefaultLeft = 2.0
--- DefaultRight = -2.0
--- ConfigRace = not ConfigRace
+		-- local NameRace = "nulled"
+		-- if not ConfigRace and Message[1] then
+			-- NameRace = Message[1]
+		-- end
 
--- while ConfigRace do
--- Wait(1)
+		-- Markers = {}
+		-- DefaultLeft = 2.0
+		-- DefaultRight = -2.0
+		-- ConfigRace = not ConfigRace
 
--- local Ped = PlayerPedId()
--- local Vehicle = GetVehiclePedIsUsing(Ped)
--- local Left = GetOffsetFromEntityInWorldCoords(Vehicle,DefaultLeft,5.0,0.0)
--- local Right = GetOffsetFromEntityInWorldCoords(Vehicle,DefaultRight,5.0,0.0)
--- local Center = GetOffsetFromEntityInWorldCoords(Vehicle,0.0,5.0,0.0)
+		-- while ConfigRace do
+			-- Wait(1)
 
--- if IsDisabledControlPressed(1,10) then
--- DefaultLeft = DefaultLeft + 0.1
--- DefaultRight = DefaultRight - 0.1
--- end
+			-- local Ped = PlayerPedId()
+			-- local Vehicle = GetVehiclePedIsUsing(Ped)
+			-- local Left = GetOffsetFromEntityInWorldCoords(Vehicle,DefaultLeft,5.0,0.0)
+			-- local Right = GetOffsetFromEntityInWorldCoords(Vehicle,DefaultRight,5.0,0.0)
+			-- local Center = GetOffsetFromEntityInWorldCoords(Vehicle,0.0,5.0,0.0)
 
--- if IsDisabledControlPressed(1,11) then
--- DefaultLeft = DefaultLeft - 0.1
--- DefaultRight = DefaultRight + 0.1
--- end
+			-- if IsDisabledControlPressed(1,10) then
+				-- DefaultLeft = DefaultLeft + 0.1
+				-- DefaultRight = DefaultRight - 0.1
+			-- end
 
--- if DefaultLeft < 2.0 then
--- DefaultLeft = 2.0
--- end
+			-- if IsDisabledControlPressed(1,11) then
+				-- DefaultLeft = DefaultLeft - 0.1
+				-- DefaultRight = DefaultRight + 0.1
+			-- end
 
--- if DefaultRight > -2.0 then
--- DefaultRight = -2.0
--- end
+			-- if DefaultLeft < 2.0 then
+				-- DefaultLeft = 2.0
+			-- end
 
--- if IsControlJustPressed(1,38) then
--- local Number = #Markers + 1
--- vSERVER.RaceConfig(Left,Center,Right,DefaultLeft * 0.80)
--- Markers[Number] = { ["Left"] = Left, ["Right"] = Right, ["Blip"] = nil }
+			-- if DefaultRight > -2.0 then
+				-- DefaultRight = -2.0
+			-- end
 
--- Markers[Number]["Blip"] = AddBlipForCoord(Center["x"],Center["y"],Center["z"])
--- SetBlipSprite(Markers[Number]["Blip"],1)
--- SetBlipColour(Markers[Number]["Blip"],2)
--- SetBlipScale(Markers[Number]["Blip"],0.85)
--- ShowNumberOnBlip(Markers[Number]["Blip"],Number)
--- SetBlipAsShortRange(Markers[Number]["Blip"],true)
--- end
+			-- if IsControlJustPressed(1,38) then
+				-- local Number = #Markers + 1
+				-- vSERVER.RaceConfig(Left,Center,Right,DefaultLeft * 0.80,NameRace)
+				-- Markers[Number] = { ["Left"] = Left, ["Right"] = Right, ["Blip"] = nil }
 
--- DrawMarker(1,Left["x"],Left["y"],Left["z"],0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,100.0,65,130,226,155,0,0,0,0)
--- DrawMarker(1,Right["x"],Right["y"],Right["z"],0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,100.0,65,130,226,155,0,0,0,0)
--- DrawMarker(1,Center["x"],Center["y"],Center["z"],0.0,0.0,0.0,0.0,0.0,0.0,0.75,0.75,100.0,255,255,255,25,0,0,0,0)
+				-- Markers[Number]["Blip"] = AddBlipForCoord(Center["x"],Center["y"],Center["z"])
+				-- SetBlipSprite(Markers[Number]["Blip"],1)
+				-- SetBlipColour(Markers[Number]["Blip"],2)
+				-- SetBlipScale(Markers[Number]["Blip"],0.85)
+				-- ShowNumberOnBlip(Markers[Number]["Blip"],Number)
+				-- SetBlipAsShortRange(Markers[Number]["Blip"],true)
+			-- end
 
--- for _,v in pairs(Markers) do
--- DrawMarker(1,v["Left"]["x"],v["Left"]["y"],v["Left"]["z"],0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,100.0,0,255,0,100,0,0,0,0)
--- DrawMarker(1,v["Right"]["x"],v["Right"]["y"],v["Right"]["z"],0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,100.0,0,255,0,100,0,0,0,0)
--- end
--- end
--- end
+			-- DrawMarker(1,Left["x"],Left["y"],Left["z"] - 100,0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,200.0,19,114,191,175,0,0,0,0)
+			-- DrawMarker(1,Right["x"],Right["y"],Right["z"] - 100,0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,200.0,19,114,191,175,0,0,0,0)
+			-- DrawMarker(1,Center["x"],Center["y"],Center["z"] -100,0.0,0.0,0.0,0.0,0.0,0.0,0.75,0.75,200.0,255,255,255,25,0,0,0,0)
+
+			-- for _,v in pairs(Markers) do
+				-- DrawMarker(1,v["Left"]["x"],v["Left"]["y"],v["Left"]["z"] - 100,0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,200.0,0,255,0,100,0,0,0,0)
+				-- DrawMarker(1,v["Right"]["x"],v["Right"]["y"],v["Right"]["z"] - 100,0.0,0.0,0.0,0.0,0.0,0.0,1.75,1.75,200.0,0,255,0,100,0,0,0,0)
+			-- end
+		-- end
+	-- end
 -- end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADMIN:INITSPECTATE
@@ -188,12 +193,12 @@ end)
 -- LIMPAREA
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Limparea(Coords)
-	ClearAreaOfPeds(Coords["x"], Coords["y"], Coords["z"], 100.0, 0)
-	ClearAreaOfCops(Coords["x"], Coords["y"], Coords["z"], 100.0, 0)
-	ClearAreaOfObjects(Coords["x"], Coords["y"], Coords["z"], 100.0, 0)
-	ClearAreaOfProjectiles(Coords["x"], Coords["y"], Coords["z"], 100.0, 0)
-	ClearAreaOfVehicles(Coords["x"], Coords["y"], Coords["z"], 100.0, false, false, false, false, false)
-	ClearAreaLeaveVehicleHealth(Coords["x"], Coords["y"], Coords["z"], 100.0, false, false, false, false)
+	ClearAreaOfPeds(Coords["x"],Coords["y"],Coords["z"],100.0,0)
+	ClearAreaOfCops(Coords["x"],Coords["y"],Coords["z"],100.0,0)
+	ClearAreaOfObjects(Coords["x"],Coords["y"],Coords["z"],100.0,0)
+	ClearAreaOfProjectiles(Coords["x"],Coords["y"],Coords["z"],100.0,0)
+	ClearAreaOfVehicles(Coords["x"],Coords["y"],Coords["z"],100.0,false,false,false,false,false)
+	ClearAreaLeaveVehicleHealth(Coords["x"],Coords["y"],Coords["z"],100.0,false,false,false,false)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- FLASH
@@ -201,14 +206,14 @@ end
 function Hensa.Flash()
 	local Pid = PlayerId()
 	if not Flash then
-		TriggerEvent("Notify", "verde", "Super velocidade ativada.", "Sucesso", 5000)
+		TriggerEvent("Notify", "Sucesso", "Super velocidade ativada.", "verde", 5000)
 		SetRunSprintMultiplierForPlayer(Pid, 1.49)
 		SetPedMoveRateOverride(Pid, 10.0)
 		Flash = true
 	else
 		Flash = false
 		SetRunSprintMultiplierForPlayer(Pid, 1.0)
-		TriggerEvent("Notify", "amarelo", "Super velocidade desativada.", "Atenção", 5000)
+		TriggerEvent("Notify", "Atenção", "Super velocidade desativada.", "amarelo", 5000)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
