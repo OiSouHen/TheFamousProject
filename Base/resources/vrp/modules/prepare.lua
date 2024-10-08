@@ -74,10 +74,8 @@ vRP.Prepare("vehicles/rentalVehiclesDays","UPDATE vehicles SET Rental = Rental +
 vRP.Prepare("vehicles/arrestVehicles","UPDATE vehicles SET Arrest = UNIX_TIMESTAMP() + 2592000 WHERE Passport = @Passport AND Vehicle = @Vehicle")
 vRP.Prepare("vehicles/updateVehiclesTax","UPDATE vehicles SET Tax = UNIX_TIMESTAMP() + 2592000 WHERE Passport = @Passport AND Vehicle = @Vehicle")
 vRP.Prepare("vehicles/rentalVehiclesUpdate","UPDATE vehicles SET Rental = UNIX_TIMESTAMP() + 2592000 WHERE Passport = @Passport AND Vehicle = @Vehicle")
-vRP.Prepare("vehicles/addVehicles","INSERT IGNORE INTO vehicles(Passport,Vehicle,Plate,Work,Tax) VALUES(@Passport,@Vehicle,@Plate,@Work,UNIX_TIMESTAMP() + 604800)")
-vRP.Prepare("vehicles/rentalVehicles","INSERT IGNORE INTO vehicles(Passport,Vehicle,Plate,Work,Rental,Tax) VALUES(@Passport,@Vehicle,@Plate,@Work,UNIX_TIMESTAMP() + 2592000,UNIX_TIMESTAMP() + 604800)")
-vRP.Prepare("vehicles/initialVehicles","INSERT IGNORE INTO vehicles(Passport,Vehicle,Plate,Work,Rental,Tax) VALUES(@Passport,@Vehicle,@Plate,@Work,UNIX_TIMESTAMP() + 259200,UNIX_TIMESTAMP() + 259200)")
-vRP.Prepare("vehicles/dismantleVehicles","INSERT IGNORE INTO vehicles(Passport,Vehicle,Plate,Work,Mode,Dismantle,Rental,Tax) VALUES(@Passport,@Vehicle,@Plate,@Work,'Dismantle',UNIX_TIMESTAMP() + 86400,UNIX_TIMESTAMP() + 86400,UNIX_TIMESTAMP() + 86400)")
+vRP.Prepare("vehicles/addVehicles","INSERT IGNORE INTO vehicles(Passport,Vehicle,Plate,Weight,Work,Tax) VALUES(@Passport,@Vehicle,@Plate,@Weight,@Work,UNIX_TIMESTAMP() + 604800)")
+vRP.Prepare("vehicles/rentalVehicles","INSERT IGNORE INTO vehicles(Passport,Vehicle,Plate,Weight,Work,Rental,Tax) VALUES(@Passport,@Vehicle,@Plate,@Weight,@Work,UNIX_TIMESTAMP() + 2592000,UNIX_TIMESTAMP() + 604800)")
 vRP.Prepare("vehicles/updateVehicles","UPDATE vehicles SET Engine = @Engine, Body = @Body, Health = @Health, Fuel = @Fuel, Doors = @Doors, Windows = @Windows, Tyres = @Tyres, Brakes = @Brakes, Nitro = @Nitro WHERE Passport = @Passport AND Vehicle = @Vehicle")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BANNEDS
@@ -91,14 +89,8 @@ vRP.Prepare("banneds/InsertBanned","INSERT INTO banneds(License,Token,Time) VALU
 -- CHESTS
 -----------------------------------------------------------------------------------------------------------------------------------------
 vRP.Prepare("chests/GetChests","SELECT * FROM chests WHERE Name = @Name")
-vRP.Prepare("chests/RemBank","UPDATE chests SET Bank = Bank - @Bank WHERE Name = @Name")
-vRP.Prepare("chests/AddBank","UPDATE chests SET Bank = Bank + @Bank WHERE Name = @Name")
-vRP.Prepare("chests/UpdateChests","UPDATE chests SET Weight = Weight + 10 WHERE Name = @Name")
 vRP.Prepare("chests/AddChests","INSERT IGNORE INTO chests(Name,Permission) VALUES(@Name,@Name)")
-vRP.Prepare("chests/DowngradeChests","UPDATE chests SET Weight = Weight / 2 WHERE Name = @Name")
-vRP.Prepare("chests/UpgradeChests","UPDATE chests SET Weight = Weight + Weight WHERE Name = @Name")
-vRP.Prepare("chests/Premium","UPDATE chests SET Premium = UNIX_TIMESTAMP() + 2592000 WHERE Name = @Name")
-vRP.Prepare("chests/UpdateWeight","UPDATE chests SET Weight = Weight + (10 * @Multiplier), Slots = Slots + (5 * @Multiplier) WHERE Name = @Name")
+vRP.Prepare("chests/UpdateWeight","UPDATE chests SET Weight = (Weight + (10 * @Multiplier)), Slots = (Slots + (5 * @Multiplier)) WHERE Name = @Name")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RACES
 -----------------------------------------------------------------------------------------------------------------------------------------
