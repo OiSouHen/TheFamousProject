@@ -3,32 +3,36 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Tunnel = module("vrp","lib/Tunnel")
 local Proxy = module("vrp","lib/Proxy")
+vRPS = Tunnel.getInterface("vRP")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
-Hensa = {}
-Tunnel.bindInterface("trunkchest",Hensa)
 vSERVER = Tunnel.getInterface("trunkchest")
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CLOSE
+-- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Close",function(Data,Callback)
-	SendNUIMessage({ action = "Close" })
-	SetNuiFocus(false,false)
-	vSERVER.Close()
-	vRP.Destroy()
-
-	Callback("Ok")
+local Opened = false
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- INVENTORY:CLOSE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("inventory:Close")
+AddEventHandler("inventory:Close",function()
+	if Opened then
+		vSERVER.Close()
+		Opened = false
+	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TRUNK
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("trunkchest:Open")
 AddEventHandler("trunkchest:Open",function()
-	SetNuiFocus(true,true)
-	SendNUIMessage({ action = "Open" })
-	vRP.PlayAnim(false,{"amb@prop_human_bum_bin@base","base"},true)
+	Opened = true
+	TriggerEvent("inventory:Open",{
+		Type = "Chest",
+		Resource = "trunkchest"
+	})
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TAKE
@@ -61,25 +65,11 @@ RegisterNUICallback("Update",function(Data,Callback)
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- REQUEST
+-- MOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Request",function(Data,Callback)
-	local myInventory,myChest,invPeso,invMaxpeso,chestPeso,chestMaxpeso = vSERVER.Request()
-	if myInventory then
-		Callback({ myInventory = myInventory, myChest = myChest, invPeso = invPeso, invMaxpeso = invMaxpeso, chestPeso = chestPeso, chestMaxpeso = chestMaxpeso })
+RegisterNUICallback("Mount",function(Data,Callback)
+	local Primary,Secondary,PrimaryWeight,SecondaryWeight = vSERVER.Mount()
+	if Primary then
+		Callback({ Primary = Primary, Secondary = Secondary, PrimaryMaxWeight = PrimaryWeight, SecondaryMaxWeight = SecondaryWeight })
 	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- TRUNKCHEST:UPDATE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trunkchest:Update")
-AddEventHandler("trunkchest:Update",function()
-	SendNUIMessage({ action = "Request" })
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- TRUNKCHEST:UPDATEWEIGHT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trunkchest:UpdateWeight")
-AddEventHandler("trunkchest:UpdateWeight",function(invPeso,invMaxpeso,chestPeso,chestMaxpeso)
-	SendNUIMessage({ action = "updateWeight", invPeso = invPeso, invMaxpeso = invMaxpeso, chestPeso = chestPeso, chestMaxpeso = chestMaxpeso })
 end)
