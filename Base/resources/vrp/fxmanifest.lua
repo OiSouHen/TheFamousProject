@@ -45,8 +45,7 @@ server_scripts {
 
 	"modules/vrp.lua",
 	"modules/core.lua",
-	"modules/prepare.lua",
-	"modules/webhooks.lua"
+	"modules/prepare.lua"
 }
 
 files {
