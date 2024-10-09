@@ -722,7 +722,7 @@ RegisterCommand("car", function(source, Message)
 			Entity(Networked)["state"]:set("Drift", true, true)
 
 			if Logs then
-				exports["vrp"]:Embed("Garages","**Passaporte:** "..Passport.."\n**Spawnou:** "..VehicleName.."\n**Coords:** "..Coords,3042892)
+				exports["discord"]:Embed("Garages","**Passaporte:** "..Passport.."\n**Spawnou:** "..VehicleName.."\n**Coords:** "..Coords,0xa3c846)
 			end
 		end
 	end
@@ -739,7 +739,7 @@ RegisterCommand("dv", function(source)
 			local Ped = GetPlayerPed(source)
 			local Coords = GetEntityCoords(Ped)
 
-			exports["vrp"]:Embed("Garages","**Passaporte:** "..Passport.."\n**Deletou:** "..VehicleName.."\n**Coords:** "..Coords,3042892)
+			exports["discord"]:Embed("Garages","**Passaporte:** "..Passport.."\n**Deletou:** "..VehicleName.."\n**Coords:** "..Coords,0xa3c846)
 		end
 	end
 end)
