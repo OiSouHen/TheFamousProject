@@ -31,7 +31,7 @@ function Hensa.Announce(Title, Seconds, Text)
 			if Active[Passport] == nil then
 				Active[Passport] = true
 
-				exports["vrp"]:Embed("Paramedic","**Por:** "..Dotted(Passport).."\nHorário:** "..os.date("%H:%M:%S").."\n**Anúncio:** "..Text,3092790)
+				exports["discord"]:Embed("Paramedic","**Por:** "..Dotted(Passport).."\nHorário:** "..os.date("%H:%M:%S").."\n**Anúncio:** "..Text,0xa3c846)
 				TriggerClientEvent("Notify", -1, "hospital", Text, Title, Seconds * 1000)
 				TriggerClientEvent("paramedic:Update", source, "reloadAnnounce")
 				Announces[Passport] = os.time() + 300
@@ -67,7 +67,7 @@ function Hensa.GivePsico(OtherPassport)
 					vRP.GiveItem(OtherPassport, "medicpass".."-"..OtherPassport, 1, true)
 					local ItemName = ItemName("medicpass")
 					local currentTimeFormatted = os.date("%H:%M:%S")
-					exports["vrp"]:Embed("Paramedic", "**Por:** "..Dotted(Passport).."\nPara:** "..OtherPassport.."\nHorário:** "..currentTimeFormatted, 3092790)
+					exports["discord"]:Embed("Paramedic", "**Por:** "..Dotted(Passport).."\nPara:** "..OtherPassport.."\nHorário:** "..currentTimeFormatted,0xa3c846)
 					TriggerClientEvent("paramedic:Update", source, "reloadPsico")
 					Psico[Passport] = currentTime + 600
 
