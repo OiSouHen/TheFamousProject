@@ -3,6 +3,15 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 GlobalState["Commands"] = false
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- TESTE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("teste",function(source)
+	local Passport = vRP.Passport(source)
+	if Passport then
+		TriggerClientEvent("races:Open", source)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- WL
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("wl",function(source)
@@ -12,7 +21,7 @@ RegisterCommand("wl",function(source)
 			local Keyboard = vKEYBOARD.Secondary(source,"ID da Whitelist:","Status: (0 inativa, 1 ativa)")
 			if Keyboard then
 				TriggerClientEvent("Notify",source,"verde","Whitelist editada.","Sucesso",5000)
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** wl "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** wl "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 
 				vRP.Query("accounts/SetWhitelist",{ Whitelist = Keyboard[2], id = Keyboard[1] })
 			end
@@ -32,7 +41,7 @@ RegisterCommand("rename",function(source)
 			if Keyboard then
 				vRP.UpgradeNames(Keyboard[1],Keyboard[2],Keyboard[3])
 				TriggerClientEvent("Notify",source,"verde","Nome atualizado.","Sucesso",5000)
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** rename "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** rename "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3],0xa3c846)
 			end
 		else
 			TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
@@ -83,7 +92,7 @@ RegisterCommand("clearinv",function(source)
 
 				local FullName = vRP.Identity(Keyboard[1])["Name"].." "..vRP.Identity(Keyboard[1])["Lastname"]
 				if vRP.Request(Passport, "Inventário", "Você realmente deseja limpar o inventário de <b>"..FullName.."</b>?") then
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** clearinv "..Keyboard[1],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** clearinv "..Keyboard[1],0xa3c846)
 					TriggerClientEvent("Notify",source,"verde","Limpeza concluída.","Sucesso",5000)
 					vRP.ClearInventory(Keyboard[1])
 				end
@@ -107,7 +116,7 @@ RegisterCommand("gemas",function(source)
 				local Identity = vRP.Identity(OtherPassport)
 				if Identity then
 					TriggerClientEvent("Notify",source,"verde",""..ItemName(DefaultSpecialMoney).." entregue.","Sucesso",5000)
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** gem "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** gem "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 
 					vRP.UpgradeGemstone(OtherPassport,Amount)
 				end
@@ -152,7 +161,7 @@ RegisterCommand("god",function(source)
 		if vRP.HasGroup(Passport,"Admin",2) then
 			local Keyboard = vKEYBOARD.Primary(source,"ID:")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** god "..Keyboard[1],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** god "..Keyboard[1],0xa3c846)
 
 				local OtherPassport = parseInt(Keyboard[1])
 				local ClosestPed = vRP.Source(OtherPassport)
@@ -180,7 +189,7 @@ RegisterCommand("godall",function(source)
 	local Passport = vRP.Passport(source)
 	if Passport and GlobalState["Commands"] then
 		if vRP.HasGroup(Passport,"Admin",2) then
-			exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** godall",0xa3c846)
+			exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** godall",0xa3c846)
 
 			local UsersList = vRP.Players()
 			for k,v in pairs(UsersList) do
@@ -214,7 +223,7 @@ RegisterCommand("armour",function(source)
 		if vRP.HasGroup(Passport,"Admin",2) then
 			local Keyboard = vKEYBOARD.Primary(source,"ID:")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** armour "..Keyboard[1],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** armour "..Keyboard[1],0xa3c846)
 
 				local OtherPassport = parseInt(Keyboard[1])
 				local ClosestPed = vRP.Source(OtherPassport)
@@ -237,7 +246,7 @@ RegisterCommand("item",function(source)
 			local Keyboard = vKEYBOARD.Secondary(source,"Nome do Item:","Quantidade:")
 			if Keyboard then
 				if ItemIndex(Keyboard[1]) ~= nil then
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** item "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** item "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 					vRP.GenerateItem(Passport,Keyboard[1],parseInt(Keyboard[2]),true)
 				end
 			end
@@ -256,7 +265,7 @@ RegisterCommand("item2",function(source)
 			local Keyboard = vKEYBOARD.Tertiary(source,"ID:","Nome do Item:","Quantidade:")
 			if Keyboard then
 				if ItemIndex(Keyboard[2]) ~= nil then
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** item2 "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** item2 "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3],0xa3c846)
 					vRP.GenerateItem(parseInt(Keyboard[1]),Keyboard[2],parseInt(Keyboard[3]),true)
 				end
 			end
@@ -275,7 +284,7 @@ RegisterCommand("itemall",function(source)
 			local Keyboard = vKEYBOARD.Secondary(source,"Nome do Item:","Quantidade:")
 			if Keyboard then
 				if ItemIndex(Keyboard[1]) ~= nil then
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** itemall "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** itemall "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 
 					local List = vRP.Players()
 					for AllPlayers,_ in pairs(List) do
@@ -301,7 +310,7 @@ RegisterCommand("delete",function(source)
 		if vRP.HasGroup(Passport,"Admin",2) then
 			local Keyboard = vKEYBOARD.Primary(source,"ID:")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** unban "..Keyboard[1],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** unban "..Keyboard[1],0xa3c846)
 
 				TriggerClientEvent("dynamic:Close",source)
 
@@ -329,7 +338,7 @@ RegisterCommand("skin",function(source)
 				if ClosestPed then
 					vRPC.Skin(ClosestPed,Keyboard[2])
 					vRP.SkinCharacter(parseInt(Keyboard[1]),Keyboard[2])
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** skin "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** skin "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 					TriggerClientEvent("Notify",source,"verde","Skin <b>"..Keyboard[2].."</b> setada no ID "..parseInt(Keyboard[1])..".","Sucesso",5000)
 				end
 			end
@@ -360,7 +369,7 @@ RegisterCommand("resetskin",function(source)
 							vRP.SkinCharacter(parseInt(Keyboard[1]),"mp_f_freemode_01")
 						end
 
-						exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** resetskin "..Keyboard[1],0xa3c846)
+						exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** resetskin "..Keyboard[1],0xa3c846)
 						TriggerClientEvent("Notify",source,"verde","Skin do ID "..parseInt(Keyboard[1]).." foi resetada.","Sucesso",5000)
 					end
 				end
@@ -395,7 +404,7 @@ RegisterCommand("kick",function(source)
 				local OtherSource = vRP.Source(Keyboard[1])
 				if OtherSource then
 					TriggerClientEvent("Notify",source,"verde","Passaporte <b>"..Keyboard[1].."</b> expulso.","Sucesso",5000)
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** kick "..Keyboard[1],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** kick "..Keyboard[1],0xa3c846)
 					vRP.Kick(OtherSource,"Expulso da cidade.")
 				end
 			end
@@ -425,7 +434,7 @@ RegisterCommand("ban",function(source)
 							vRP.Query("banneds/InsertBanned",{ License = Identity["License"], Token = v, Time = Days })
 						end
 
-						exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** ban "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+						exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** ban "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 						TriggerClientEvent("Notify",source,"amarelo","Passaporte <b>"..OtherPassport.."</b> banido por <b>"..Days.."</b> dias.","Atenção",5000)
 					end
 				end
@@ -448,7 +457,7 @@ RegisterCommand("unban",function(source)
 				local Identity = vRP.Identity(OtherPassport)
 				if Identity then
 					vRP.Query("banneds/RemoveBanned",{ License = Identity["License"] })
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** unban "..Keyboard[1],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** unban "..Keyboard[1],0xa3c846)
 					TriggerClientEvent("Notify",source,"verde","Passaporte <b>"..OtherPassport.."</b> desbanido.","Sucesso",5000)
 				end
 			end
@@ -566,14 +575,14 @@ RegisterCommand("group",function(source)
 				if tonumber(Level) then
 					if vRP.GroupType(Permission) then
 						if not vRP.GetUserType(OtherPassport, "Work") then
-							exports["vrp"]:Embed("Admin", "**Passaporte:** "..Passport.."\n**Comando:** group "..OtherPassport.." "..Permission.." "..Level, 0xa3c846)
+							exports["discord"]:Embed("Admin", "**Passaporte:** "..Passport.."\n**Comando:** group "..OtherPassport.." "..Permission.." "..Level, 0xa3c846)
 							TriggerClientEvent("Notify", source, "verde", "Adicionado <b>"..Permission.."</b> ao passaporte <b>"..OtherPassport.."</b>.", "Sucesso", 5000)
 							vRP.SetPermission(OtherPassport, Permission, Level)
 						else
 							TriggerClientEvent("Notify", source, "amarelo", "O passaporte já pertence a outro grupo.", "Atenção", 5000)
 						end
 					else
-						exports["vrp"]:Embed("Admin", "**Passaporte:** "..Passport.."\n**Comando:** group "..OtherPassport.." "..Permission.." "..Level, 0xa3c846)
+						exports["discord"]:Embed("Admin", "**Passaporte:** "..Passport.."\n**Comando:** group "..OtherPassport.." "..Permission.." "..Level, 0xa3c846)
 						TriggerClientEvent("Notify", source, "verde", "Adicionado <b>"..Permission.."</b> ao passaporte <b>"..OtherPassport.."</b>.", "Sucesso", 5000)
 						vRP.SetPermission(OtherPassport, Permission, Level)
 					end
@@ -596,7 +605,7 @@ RegisterCommand("ungroup",function(source)
 			local Keyboard = vKEYBOARD.Secondary(source,"ID:","Grupo:")
 			if Keyboard then
 				TriggerClientEvent("Notify",source,"verde","Removido <b>"..Keyboard[2].."</b> ao passaporte <b>"..Keyboard[1].."</b>.","Sucesso",5000)
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** ungroup "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** ungroup "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 				vRP.RemovePermission(Keyboard[1],Keyboard[2])
 			end
 		else
@@ -744,7 +753,7 @@ RegisterCommand("lockpick",function(source)
 
 				TriggerClientEvent("Notify",source,"verde","Você destrancou o veículo.","Sucesso",5000)
 
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** lockpick",0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** lockpick",0xa3c846)
 			else
 				TriggerClientEvent("Notify",source,"amarelo","Sem veículos próximos.","Atenção",5000)
 			end
@@ -862,7 +871,7 @@ RegisterCommand("announce",function(source)
 			local Keyboard = vKEYBOARD.Quaternary(source,"Tema:","Segundos:","Título:","Anúncio:")
 			if Keyboard then
 				TriggerClientEvent("Notify",-1,Keyboard[1],Keyboard[2] * 1000,Keyboard[3],Keyboard[4])
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** announce "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3].." "..Keyboard[4] * 1000,0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** announce "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3].." "..Keyboard[4] * 1000,0xa3c846)
 			end
 		else
 			TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
@@ -880,7 +889,7 @@ RegisterCommand("chatannounce",function(source)
 			if Keyboard then
 				local Messages = Keyboard[1]:gsub("[<>]", "")
 				TriggerClientEvent("chat:ClientMessage", -1, "Prefeitura", Messages, "Anúncio")
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** chatannounce "..Messages,0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** chatannounce "..Messages,0xa3c846)
 			end
 		else
 			TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
@@ -901,7 +910,7 @@ RegisterCommand("setcar",function(source)
 					TriggerClientEvent("Notify",source,"amarelo","O veículo <b>"..Keyboard[2].."</b> já está adicionado.","Atenção",5000)
 					return
 				else
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** setcar "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** setcar "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 					vRP.Query("vehicles/addVehicles",{ Passport = Keyboard[1], Vehicle = Keyboard[2], Plate = vRP.GeneratePlate(), Work = "false" })
 				end
 			end
@@ -919,7 +928,7 @@ RegisterCommand("remcar",function(source)
 		if vRP.HasGroup(Passport,"Admin") then
 			local Keyboard = vKEYBOARD.Secondary(source,"ID:","Veículo:")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** remcar "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** remcar "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 				TriggerClientEvent("Notify",source,"verde","Veículo removido com sucesso.","Sucesso",5000)
 				vRP.Query("vehicles/removeVehicles",{ Passport = Keyboard[1], Vehicle = Keyboard[2] })
 			end
@@ -937,7 +946,7 @@ RegisterCommand("driverlicense",function(source)
 		if vRP.HasGroup(Passport,"Admin") then
 			local Keyboard = vKEYBOARD.Secondary(source,"ID:","(0 Zerada, 1 Liberada, 2 Apreendida)")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** driverlicense "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** driverlicense "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 				TriggerClientEvent("Notify",source,"verde","CNH atualizada.","Sucesso",5000)
 				vRP.UpdateDriverLicense(Keyboard[1],Keyboard[2])
 			end
@@ -957,7 +966,7 @@ RegisterCommand("clearprison",function(source)
 			if Keyboard then
 				local OtherPlayer = vRP.Source(Keyboard[1])
 				if OtherPlayer then
-					exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** clearprison "..Keyboard[1],0xa3c846)
+					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** clearprison "..Keyboard[1],0xa3c846)
 					TriggerClientEvent("Notify",source,"verde","Prisão zerada.","Sucesso",5000)
 					Player(OtherPlayer)["state"]["Prison"] = false
 					vRP.ClearPrison(Keyboard[1])
@@ -977,7 +986,7 @@ RegisterCommand("changemode",function(source)
 		if vRP.HasGroup(Passport,"Admin",2) then
 			local Keyboard = vKEYBOARD.Secondary(source,"ID:","(Legal / Ilegal)")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** changemode "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** changemode "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 				TriggerClientEvent("Notify",source,"verde","Modo de atividade modificado.","Sucesso",5000)
 				vRP.ChangeMode(Keyboard[1], Keyboard[2])
 			end
@@ -995,7 +1004,7 @@ RegisterCommand("changework",function(source)
 		if vRP.HasGroup(Passport,"Admin",2) then
 			local Keyboard = vKEYBOARD.Secondary(source,"ID:","(Nenhum)")
 			if Keyboard then
-				exports["vrp"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** changework "..Keyboard[1].." "..Keyboard[2],0xa3c846)
+				exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** changework "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 				TriggerClientEvent("Notify",source,"verde","Emprego modificado.","Sucesso",5000)
 				vRP.ChangeWork(Keyboard[1], Keyboard[2])
 			end
