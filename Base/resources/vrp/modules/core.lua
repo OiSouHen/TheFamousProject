@@ -263,7 +263,7 @@ function Disconnect(source, Health, Armour, Coords, Reason)
 	local Passport = vRP.Passport(source)
 	local HensaTable = vRP.Datatable(Passport)
 	if Passport then
-		exports["vrp"]:Embed("Disconnect","**Source:** "..source.."\n**Passaporte:** "..vRP.Passport(source).."\n**Health:** "..Health.."\n**Armour:** "..Armour.."\n**Cds:** "..Coords.."\n**Motivo:** "..Reason,3092790)
+		exports["discord"]:Embed("Disconnect","**Source:** "..source.."\n**Passaporte:** "..vRP.Passport(source).."\n**Health:** "..Health.."\n**Armour:** "..Armour.."\n**Cds:** "..Coords.."\n**Motivo:** "..Reason,0xa3c846)
 
 		if HensaTable then
 			if CharactersArena[Passport] then
@@ -415,7 +415,7 @@ function vRP.ChosenCharacter(source, Passport, Model)
 			TriggerClientEvent("hud:AddGemstone",source,Account["Gemstone"])
 		end
 
-		exports["vrp"]:Embed("Connect","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Nome:** "..vRP.FullName(Passport).."\n**Address:** "..GetPlayerEndpoint(source),3092790)
+		exports["discord"]:Embed("Connect","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Nome:** "..vRP.FullName(Passport).."\n**Address:** "..GetPlayerEndpoint(source),0xa3c846)
 	end
 
 	TriggerEvent("ChosenCharacter",Passport,source)
@@ -2239,12 +2239,6 @@ AddEventHandler("CleanVehicle", function(entIndex)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- EMBED
------------------------------------------------------------------------------------------------------------------------------------------
-exports("Embed", function(Webhook, Message, Color)
-	PerformHttpRequest(Discords[Webhook], function(err, text, headers) end, "POST", json.encode({ avatar_url = "https://raw.githubusercontent.com/OiSouHen/OiSouHen/main/images/Hensa-rainbow.png", username = ServerName, embeds = { { color = Color, description = Message } } }), { ["Content-Type"] = "application/json" })
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- CREATE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.Create(source, Passport, Message)
@@ -2715,7 +2709,7 @@ RegisterCommand("gg", function(source)
 		SURVIVAL.Respawn(source)
 
 		TriggerClientEvent("dynamic:animalFunctions", source, "destroy")
-		exports["vrp"]:Embed("Airport","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Address:** "..GetPlayerEndpoint(source),3092790)
+		exports["discord"]:Embed("Airport","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Address:** "..GetPlayerEndpoint(source),0xa3c846)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -3243,7 +3237,7 @@ function vRP.ServiceEnter(Source, Passport, Permission, Silenced)
 
 		Groups[Permission]["Service"][tostring(Passport)] = Source
 
-		exports["vrp"]:Embed("Services","**Passaporte:** "..Passport.."\n**Entrou na permissão:** "..Permission,3042892)
+		exports["discord"]:Embed("Services","**Passaporte:** "..Passport.."\n**Entrou na permissão:** "..Permission,0xa3c846)
 
 		if not Silenced then
 			TriggerClientEvent("Notify", Source, "verde", "Entrou em serviço.", false, 5000)
@@ -3274,7 +3268,7 @@ function vRP.ServiceLeave(Source, Passport, Permission, Silenced)
 		end
 
 		
-		exports["vrp"]:Embed("Services","**Passaporte:** "..Passport.."\n**Saiu da permissão:** "..Permission,3042892)
+		exports["discord"]:Embed("Services","**Passaporte:** "..Passport.."\n**Saiu da permissão:** "..Permission,0xa3c846)
 
 		if not Silenced then
 			TriggerClientEvent("Notify", Source, "verde", "Saiu de serviço.", false, 5000)
@@ -3445,7 +3439,7 @@ AddEventHandler("Salary:Receive", function()
                     local confirmation = vRP.Request(source, "Banco Central", string.format("Você realmente deseja sacar <b>$%s</b> %s?", Dotted(salaryAmount), ItemName(DefaultDollars1)))
                     
                     if confirmation then
-                        exports["vrp"]:Embed("Salary", string.format("**Passaporte:** %s\n**Sacou de salário:** %s", passport, Dotted(salaryAmount)), 0xa3c846)
+                        exports["discord"]:Embed("Salary", string.format("**Passaporte:** %s\n**Sacou de salário:** %s", passport, Dotted(salaryAmount)), 0xa3c846, source)
                         
                         TriggerClientEvent("Notify", source, "verde", string.format("Você efetuou o saque de <b>$%s</b> %s.", Dotted(salaryAmount), ItemName(DefaultDollars1)), "Sucesso", 5000)
                         
