@@ -26,7 +26,7 @@ AddEventHandler("farmer:Minerman",function(Number)
 		Active[Passport] = true
 
 		if not Number or type(Number) ~= "number" then
-			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846,source)
+			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846)
 		end
 
 		if GlobalState["Farmer:"..Number] and GlobalState["Work"] >= GlobalState["Farmer:"..Number] then
@@ -113,7 +113,7 @@ AddEventHandler("farmer:Lumberman",function(Number)
 		Active[Passport] = true
 
 		if not Number or type(Number) ~= "number" then
-			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846,source)
+			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846)
 		end
 
 		if GlobalState["Farmer:"..Number] and GlobalState["Work"] >= GlobalState["Farmer:"..Number] then
@@ -175,7 +175,7 @@ AddEventHandler("farmer:Transporter",function(Number)
 		Active[Passport] = true
 
 		if not Number or type(Number) ~= "number" then
-			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846,source)
+			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846)
 		end
 
 		if GlobalState["Farmer:"..Number] and GlobalState["Work"] >= GlobalState["Farmer:"..Number] then
@@ -224,7 +224,7 @@ AddEventHandler("farmer:Sandman",function(Number)
 		Active[Passport] = true
 
 		if not Number or type(Number) ~= "number" then
-			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846,source)
+			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Payment do Farmer",0xa3c846)
 		end
 
 		if GlobalState["Farmer:"..Number] and GlobalState["Work"] >= GlobalState["Farmer:"..Number] then
