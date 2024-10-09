@@ -31,11 +31,60 @@ local List = {
 		["Coords"] = vec4(1210.2,352.09,81.99,235.28),
 		["Model"] = "a_c_cow",
 		["Collision"] = true
+	},{ -- Garagem 1
+		["Distance"] = 100,
+		["Coords"] = vec4(76.99,-194.58,54.49,249.45),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 2
+		["Distance"] = 100,
+		["Coords"] = vec4(-1686.58,26.39,64.38,314.65),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 3
+		["Distance"] = 100,
+		["Coords"] = vec4(-616.03,-1209.16,14.2,320.32),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 4
+		["Distance"] = 100,
+		["Coords"] = vec4(964.11,-1035.85,40.83,277.8),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 5
+		["Distance"] = 100,
+		["Coords"] = vec4(453.0,-1917.46,24.7,209.77),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 6
+		["Distance"] = 100,
+		["Coords"] = vec4(1700.43,3766.2,34.42,314.65),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 7
+		["Distance"] = 100,
+		["Coords"] = vec4(-197.57,6233.16,31.49,229.61),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Garagem 8
+		["Distance"] = 100,
+		["Coords"] = vec4(1109.02,2660.88,37.98,0.0),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
 	},{ -- Desmanche
 		["Distance"] = 100,
 		["Coords"] = vec4(778.49,-395.89,33.43,99.22),
 		["Model"] = "g_m_y_salvagoon_01",
-		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
 	},{ -- Towed
 		["Distance"] = 50,
 		["Coords"] = vec4(408.91,-1622.75,29.28,232.45),
@@ -80,11 +129,6 @@ local List = {
 		["Distance"] = 50,
 		["Coords"] = vec4(901.97,-167.97,74.07,238.12),
 		["Model"] = "ig_dale",
-		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
-	},{ -- Helicopters
-		["Distance"] = 100,
-		["Coords"] = vec4(-1896.42,-3032.01,13.93,243.78),
-		["Model"] = "g_m_y_korlieut_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Caminhoneiro
 		["Distance"] = 100,
