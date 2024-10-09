@@ -1379,7 +1379,7 @@ AddEventHandler("inventory:Products",function(Service)
 	local Passport = vRP.Passport(source)
 	if Passport and not Active[Passport] and Products[Service] then
 		if Products[Service]["PolyZone"] and not vFARMER.PolyZone(source,Service) then
-			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Farmer do "..Service,0xa3c846,source)
+			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Farmer do "..Service,0xa3c846)
 		end
 
 		if Products[Service]["Item"] and not vRP.ConsultItem(Passport,Products[Service]["Item"]) then
