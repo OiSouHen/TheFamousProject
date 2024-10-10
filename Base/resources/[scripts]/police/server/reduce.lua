@@ -33,6 +33,8 @@ AddEventHandler("police:Escape",function()
 					Player(source)["state"]["Cancel"] = false
 					vRP.UpdatePrison(Passport,Amount)
 					vRPC.Destroy(source)
+				else
+					TriggerClientEvent("Notify", source, "Aviso", "<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.", "vermelho", 5000)
 				end
 			end
 		else
