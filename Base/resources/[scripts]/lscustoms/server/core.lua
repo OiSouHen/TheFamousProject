@@ -27,7 +27,7 @@ function Hensa.CheckPermission(Permission)
 			if vRP.HasPermission(Passport, Permission) then
 				return true
 			else
-				TriggerClientEvent("Notify", source, "amarelo", "Você não tem permissões.", "Atenção", 5000)
+				TriggerClientEvent("Notify", source, "Aviso", "Você não tem permissões.", "vermelho", 5000)
 			end
 		end
 	end
