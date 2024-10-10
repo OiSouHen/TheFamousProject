@@ -338,9 +338,7 @@ CreateThread(function()
 			DisableControlAction(0,345,true)
 		end
 
-		if not DisableTargetMode then
-			SetPlayerLockonRangeOverride(Pid, 0.0)
-		end
+		-- SetPlayerLockonRangeOverride(Pid, 0.0)
 
 		if LocalPlayer["state"]["Active"] then
 			NetworkOverrideClockTime(GlobalState["Hours"], GlobalState["Minutes"], 00)
