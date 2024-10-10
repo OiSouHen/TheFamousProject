@@ -95,7 +95,7 @@ function Hensa.Take(Item,Amount,Target,Name)
 						vRP.GenerateItem(Passport,"WEAPON_PETROLCAN_AMMO",4500)
 					end
 				else
-					TriggerClientEvent("Notify",source,"Aviso","<b>Dólares</b> insuficientes.","amarelo",5000)
+					TriggerClientEvent("Notify",source,"Aviso","<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.","vermelho",5000)
 				end
 			elseif List[Name]["Type"] == "Consume" and List[Name]["Item"] then
 				if vRP.TakeItem(Passport,List[Name]["Item"],List[Name]["List"][Item] * Amount) then
