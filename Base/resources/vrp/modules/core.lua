@@ -402,7 +402,7 @@ function vRP.ChosenCharacter(source, Passport, Model)
 				vRP.GenerateItem(Passport,k,v,false)
 			end
 
-			if NewItemIdentity then
+			if GiveIdentity then
 				vRP.GenerateItem(Passport,"identity-"..Passport,1,false)
 			end
 
@@ -1241,7 +1241,7 @@ function vRP.UpdatePrison(Passport, Amount)
 				Characters[Source]["Prison"] = 0
 				exports["markers"]:Exit(Source, Passport)
 				TriggerClientEvent("police:Prisioner", Source, false)
-				vRP.Teleport(Source, BackPrison["x"], BackPrison["y"], BackPrison["z"])
+				vRP.Teleport(Source, UnprisonCoords["x"], UnprisonCoords["y"], UnprisonCoords["z"])
 				TriggerClientEvent("Notify", Source, "verde", "Serviços finalizados.", "Sucesso", 5000)
 			else
 				TriggerClientEvent("Notify", Source, "azul", "Restam <b>" .. prisonRemaining .. " serviços</b>.", "Sistema Penitenciário", 5000)
@@ -1258,7 +1258,7 @@ function vRP.ClearPrison(OtherPassport)
 
 	if Characters[Source] then
 		Characters[Source]["Prison"] = 0
-		TriggerClientEvent("Notify", Source, "verde", CleanPrisonNotify, "Sucesso", 5000)
+		TriggerClientEvent("Notify", Source, "Sucesso", UnprisonText, "verde", 10000)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1464,7 +1464,7 @@ function vRP.GetWeight(Passport)
 	local Datatable = vRP.Datatable(Passport)
 	if Source and Datatable then
 		if not Datatable["Weight"] then
-			Datatable["Weight"] = BackpackWeightDefault
+			Datatable["Weight"] = DefaultBackpackNormal
 		end
 
 		return Datatable["Weight"]
@@ -1480,7 +1480,7 @@ function vRP.SetWeight(Passport, Amount)
 	local Datatable = vRP.Datatable(Passport)
 	if Source and Datatable then
 		if not Datatable["Weight"] then
-			Datatable["Weight"] = BackpackWeightDefault
+			Datatable["Weight"] = DefaultBackpackNormal
 		end
 
 		Datatable["Weight"] = Datatable["Weight"] + Amount
@@ -1494,7 +1494,7 @@ function vRP.RemoveWeight(Passport, Amount)
 	local Datatable = vRP.Datatable(Passport)
 	if Source and Datatable then
 		if not Datatable["Weight"] then
-			Datatable["Weight"] = BackpackWeightDefault
+			Datatable["Weight"] = DefaultBackpackNormal
 		end
 
 		Datatable["Weight"] = Datatable["Weight"] - Amount
@@ -2037,13 +2037,13 @@ function vRP.DirectChest(Chest, Slot, Amount)
 	local Amount = parseInt(Amount)
 
 	if Datatable[Slot] then
-		if Datatable[Slot].item == DefaultDollars1 then
+		if Datatable[Slot].item == DefaultMoneyOne then
 			Datatable[Slot].amount = Datatable[Slot].amount + Amount
 		else
-			Datatable[Slot] = { item = DefaultDollars1, amount = Amount }
+			Datatable[Slot] = { item = DefaultMoneyOne, amount = Amount }
 		end
 	else
-		Datatable[Slot] = { item = DefaultDollars1, amount = Amount }
+		Datatable[Slot] = { item = DefaultMoneyOne, amount = Amount }
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2135,7 +2135,7 @@ function vRP.SetPremium(source)
 	if Characters[source] then
 		vRP.Query("accounts/SetPremium",{ Premium = os.time() + 2592000, License = Characters[source]["License"] })
 		Characters[source]["Premium"] = parseInt(os.time() + 2592000)
-		vRP.SetWeight(vRP.Passport(source),BackpackWeightPremiumDefault)
+		vRP.SetWeight(vRP.Passport(source),DefaultBackpackPremium)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2145,7 +2145,7 @@ function vRP.UpgradePremium(source)
 	if Characters[source] then
 		vRP.Query("accounts/UpgradePremium",{ License = Characters[source]["License"] })
 		Characters[source]["Premium"] = Characters[source]["Premium"] + 2592000
-		vRP.SetWeight(vRP.Passport(source),BackpackWeightPremiumDefault)
+		vRP.SetWeight(vRP.Passport(source),DefaultBackpackPremium)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2163,7 +2163,7 @@ function vRP.UserPremium(Passport)
 				vRP.RemovePermission(Passport, "Premium")
 			end
 		elseif not Permission then
-			vRP.SetWeight(Passport, BackpackWeightPremiumDefault)
+			vRP.SetWeight(Passport, DefaultBackpackPremium)
 			vRP.SetPermission(Passport, "Premium")
 		end
 	end
@@ -2348,7 +2348,7 @@ function vRP.GiveBank(Passport, Amount)
 
 		if Characters[source] then
 			Characters[source]["Bank"] = (Characters[source]["Bank"] or 0) + intValue
-			TriggerClientEvent("NotifyItem", source, { "+", DefaultDollars1, intValue, ItemName(DefaultDollars1) })
+			TriggerClientEvent("NotifyItem", source, { "+", DefaultMoneyOne, intValue, ItemName(DefaultMoneyOne) })
 		end
 	end
 end
@@ -2395,28 +2395,6 @@ function vRP.ChangeMode(Passport, Mode)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- PAYMENTSERVICE
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.PaymentService(Passport, Amount, Mode, Silenced)
-	local source = vRP.Source(Passport)
-	if parseInt(Amount) > 0 then
-		if GiveVotesInServices then
-			local Item = "vote"
-			if vRP.UserPremium(Passport) then
-				vRP.GenerateItem(Passport, Item, 2, Silenced)
-			else
-				vRP.GenerateItem(Passport, Item, 1, Silenced)
-			end
-		end
-
-		if Mode == "Legal" then
-			vRP.GenerateItem(Passport, DefaultDollars1, Amount, Silenced)
-		elseif Mode == "Ilegal" then
-			vRP.GenerateItem(Passport, DefaultDollars2, Amount, Silenced)
-		end
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- PAYMENTGEMS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.PaymentGems(Passport,Amount)
@@ -2439,7 +2417,7 @@ function vRP.PaymentBank(Passport, Amount)
 
     if Amount > 0 and Characters[Source] and Amount <= Characters[Source]["Bank"] then
         vRP.RemoveBank(Passport, Amount)
-        TriggerClientEvent("NotifyItem", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
+        TriggerClientEvent("NotifyItem", Source, { "-", DefaultMoneyOne, Amount, ItemName(DefaultMoneyOne) })
         return true
     end
 
@@ -2453,11 +2431,11 @@ function vRP.PaymentFull(Passport, Amount)
 	local Source = vRP.Source(Passport)
 
 	if Amount and Amount > 0 then
-		if vRP.TakeItem(Passport, DefaultDollars1, Amount, true) then
+		if vRP.TakeItem(Passport, DefaultMoneyOne, Amount, true) then
 			return true
 		elseif Characters[Source] and Amount <= (Characters[Source]["Bank"] or 0) then
 			vRP.RemoveBank(Passport, Amount)
-			TriggerClientEvent("NotifyItem", Source, { "-", DefaultDollars1, Amount, ItemName(DefaultDollars1) })
+			TriggerClientEvent("NotifyItem", Source, { "-", DefaultMoneyOne, Amount, ItemName(DefaultMoneyOne) })
 			return true
 		end
 	end
@@ -2475,7 +2453,7 @@ function vRP.WithdrawCash(Passport, Amount)
 		local bankBalance = Characters[Source]["Bank"] or 0
 
 		if intValue <= bankBalance then
-			vRP.GenerateItem(Passport, DefaultDollars1, intValue, true)
+			vRP.GenerateItem(Passport, DefaultMoneyOne, intValue, true)
 			vRP.RemoveBank(Passport, intValue)
 			return true
 		end
@@ -2535,7 +2513,7 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 			end
 
 			if not HensaTable["Weight"] then
-				HensaTable["Weight"] = BackpackWeightDefault
+				HensaTable["Weight"] = DefaultBackpackNormal
 			end
 
 			vRPC.Skin(source, HensaTable["Skin"])
@@ -2684,16 +2662,16 @@ RegisterCommand("gg", function(source)
 	local Passport = vRP.Passport(source)
 	if Passport and GetPlayerRoutingBucket(source) < 900000 and SURVIVAL.CheckDeath(source) then
 		if vRP.UserPremium(Passport) then
-			if ClearInventoryPremium then
+			if ClearPremiumInventory then
 				vRP.ClearInventory(Passport)
 			end
-		elseif CleanDeathInventory then
+		elseif CleanNormalInventory then
 			vRP.ClearInventory(Passport)
 		end
 
 		local HensaTable = vRP.Datatable(Passport)
 		if WipeBackpackDeath and HensaTable and HensaTable["Weight"] then
-			HensaTable["Weight"] = BackpackWeightDefault
+			HensaTable["Weight"] = DefaultBackpackNormal
 
 			local Consult = vRP.GetServerData("Backpacks:"..Passport)
 			if Consult["Comum"] then
@@ -3391,7 +3369,7 @@ AddEventHandler("Salary:Update",function(Passport, Amount)
 			HensaTable["Salary"] = parseInt(Amount)
 		end
 
-		TriggerClientEvent("Notify", Source, "amarelo", "Você recebeu <b>$"..Dotted(Amount).."</b> "..ItemName(DefaultDollars1)..".", "Atenção", 5000)
+		TriggerClientEvent("Notify", Source, "amarelo", "Você recebeu <b>$"..Dotted(Amount).."</b> "..ItemName(DefaultMoneyOne)..".", "Atenção", 5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -3406,16 +3384,16 @@ AddEventHandler("Salary:Verify", function(Mode)
 			local HensaTable = vRP.Datatable(Passport)
 			if HensaTable then
 				local Salary = HensaTable["Salary"] or 0
-				TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>$"..Dotted(Salary).."</b> "..ItemName(DefaultDollars1)..".", "Conta Salário", 10000)
+				TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>$"..Dotted(Salary).."</b> "..ItemName(DefaultMoneyOne)..".", "Conta Salário", 10000)
 			end
 		elseif Mode == "Special" then
 			local Identities = vRP.Identities(source)
 			local Account = vRP.Account(Identities)
 			if Identities and Account then
 				if Account["Gemstone"] > 0 then
-					TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>"..Dotted(Account["Gemstone"]).."</b> "..ItemName(DefaultSpecialMoney)..".", "Conta Especial", 10000)
+					TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>"..Dotted(Account["Gemstone"]).."</b> "..ItemName(DefaultMoneySpecial)..".", "Conta Especial", 10000)
 				else
-					TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>0</b> "..ItemName(DefaultSpecialMoney)..".", "Conta Especial", 5000)
+					TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>0</b> "..ItemName(DefaultMoneySpecial)..".", "Conta Especial", 5000)
 				end
 			end
 		end
@@ -3436,12 +3414,12 @@ AddEventHandler("Salary:Receive", function()
             if not (SalaryCooldown[passport] and os.time() <= SalaryCooldown[passport]) then
                 if hensaTable["Salary"] then
                     local salaryAmount = hensaTable["Salary"]
-                    local confirmation = vRP.Request(source, "Banco Central", string.format("Você realmente deseja sacar <b>$%s</b> %s?", Dotted(salaryAmount), ItemName(DefaultDollars1)))
+                    local confirmation = vRP.Request(source, "Banco Central", string.format("Você realmente deseja sacar <b>$%s</b> %s?", Dotted(salaryAmount), ItemName(DefaultMoneyOne)))
                     
                     if confirmation then
                         exports["discord"]:Embed("Salary", string.format("**Passaporte:** %s\n**Sacou de salário:** %s", passport, Dotted(salaryAmount)), 0xa3c846, source)
                         
-                        TriggerClientEvent("Notify", source, "verde", string.format("Você efetuou o saque de <b>$%s</b> %s.", Dotted(salaryAmount), ItemName(DefaultDollars1)), "Sucesso", 5000)
+                        TriggerClientEvent("Notify", source, "verde", string.format("Você efetuou o saque de <b>$%s</b> %s.", Dotted(salaryAmount), ItemName(DefaultMoneyOne)), "Sucesso", 5000)
                         
                         vRP.GiveBank(passport, salaryAmount)
                         SalaryCooldown[passport] = os.time() + 60
@@ -3524,17 +3502,6 @@ CreateThread(function()
 		end
 	end
 end)
------------------------------------------------------------------------------------------------------------------------------------------
--- BLACKOUT
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.Blackout()
-	if GlobalState["Blackout"] then
-		SetTimeout(BlackoutTime, function()
-			GlobalState["Blackout"] = false
-			TriggerClientEvent("Notify", -1, "azul", BlackoutText, "Central de Eletricidade", 10000)
-		end)
-	end
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECT
 -----------------------------------------------------------------------------------------------------------------------------------------
