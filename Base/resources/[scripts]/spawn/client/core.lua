@@ -33,35 +33,43 @@ local Anims = {
 -- SPAWN:OPENED
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("spawn:Opened", function()
+	local Pid = PlayerId()
 	local Ped = PlayerPedId()
-	SetEntityCoords(Ped, 233.85, -1387.59, 29.55, false, false, false, false)
-	LocalPlayer["state"]:set("Blastoise", true, false)
-	LocalPlayer["state"]:set("Invisible", true, false)
-	SetEntityVisible(Ped, false, 0)
-	FreezeEntityPosition(Ped, true)
-	SetEntityInvincible(Ped, true)
-	SetEntityHeading(Ped, 136.07)
-	SetEntityHealth(Ped, 100)
-	SetPedArmour(Ped, 0)
+	if Ped and Ped ~= -1 and Pid and NetworkIsPlayerActive(Pid) and not Opened then
+		Opened = true
 
-	Camera = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-	SetCamCoord(Camera, 232.0, -1388.64, 30.45)
-	RenderScriptCams(true, true, 0, true, true)
-	SetCamRot(Camera, 0.0, 0.0, 320.0, 2)
-	SetCamActive(Camera, true)
+		Wait(5000)
 
-	Characters = vSERVER.Characters()
-	if parseInt(#Characters) > 0 then
-		Customization(Characters[1])
-	end
+		SetEntityCoords(Ped,233.85,-1387.59,29.55,false,false,false,false)
+		LocalPlayer["state"]:set("Blastoise", true, false)
+		FreezeEntityPosition(Ped,true)
+		SetEntityInvincible(Ped,true)
+		SetEntityHeading(Ped,136.07)
+		SetEntityHealth(Ped,100)
+		SetPedArmour(Ped,0)
 
-	Wait(5000)
+		Camera = CreateCam("DEFAULT_SCRIPTED_CAMERA",true)
+		RenderScriptCams(true,false,0,false,false)
+		SetCamCoord(Camera,232.0,-1388.64,30.45)
+		SetCamRot(Camera,0.0,0.0,320.0,2)
+		SetCamActive(Camera,true)
 
-	SendNUIMessage({ Action = "Spawn", Payload = Characters })
-	SetNuiFocus(true, true)
+		Characters = vSERVER.Characters()
+		if parseInt(#Characters) > 0 then
+			Customization(Characters[1])
+		else
+			LocalPlayer["state"]:set("Invisible",true,false)
+			SetEntityVisible(Ped,false,0)
+		end
 
-	if IsScreenFadedOut() then
-		DoScreenFadeIn(2500)
+		SetTimeout(5000,function()
+			SendNUIMessage({ Action = "Spawn", Payload = Characters })
+			SetNuiFocus(true,true)
+
+			if IsScreenFadedOut() then
+				DoScreenFadeIn(2500)
+			end
+		end)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
