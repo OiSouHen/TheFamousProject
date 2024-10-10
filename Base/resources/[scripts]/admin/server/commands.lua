@@ -115,7 +115,7 @@ RegisterCommand("gemas",function(source)
 				local OtherPassport = parseInt(Keyboard[1])
 				local Identity = vRP.Identity(OtherPassport)
 				if Identity then
-					TriggerClientEvent("Notify",source,"verde",""..ItemName(DefaultSpecialMoney).." entregue.","Sucesso",5000)
+					TriggerClientEvent("Notify",source,"verde",""..ItemName(DefaultMoneySpecial).." entregue.","Sucesso",5000)
 					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** gem "..Keyboard[1].." "..Keyboard[2],0xa3c846)
 
 					vRP.UpgradeGemstone(OtherPassport,Amount)
@@ -500,25 +500,6 @@ RegisterCommand("temperatureset",function(source)
 					GlobalState["TemperatureN"] = parseInt(Keyboard[2])
 					TriggerClientEvent("Notify",source,"amarelo","Você mudou a temperatura do <b>Norte</b>.","Atenção",5000)
 				end
-			end
-		else
-			TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- BLACKOUTSET
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("blackoutset",function(source)
-	local Passport = vRP.Passport(source)
-	if Passport and GlobalState["Commands"] then
-		if vRP.HasGroup(Passport,"Admin",1) then
-			if GlobalState["Blackout"] then
-				GlobalState["Blackout"] = false
-				TriggerClientEvent("Notify",source,"amarelo","Modo blackout desativado.","Atenção",5000)
-			else
-				GlobalState["Blackout"] = true
-				TriggerClientEvent("Notify",source,"verde","Modo blackout ativado.","Sucesso",5000)
 			end
 		else
 			TriggerClientEvent("Notify",source,"amarelo","Você não tem permissões para isso.","Atenção",5000)
