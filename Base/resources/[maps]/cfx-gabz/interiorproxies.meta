@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+	<startFrom value="2500" />
+	<proxies>
+		<!-- HOSPITAL -->
+		<Item>gabz_pillbox_milo_</Item>
+		<Item>gabz_pillbox_dlc_milo_</Item>
+
+		<!-- DELEGACIA -->
+		<Item>gabz_mrpd_milo_</Item>
+
+		<!-- MECANICA -->
+		<Item>gabz_imp_impexp_interior_placement_interior_1_impexp_intwaremed_milo_</Item>
+	</proxies>
+</SInteriorOrderData>
