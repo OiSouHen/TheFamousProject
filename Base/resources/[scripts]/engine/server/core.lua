@@ -24,6 +24,8 @@ function Hensa.RechargeFuel(Price)
 		exports["bank"]:AddTaxs(Passport,source,"Posto de Gasolina",Price,"Gastos com combustível.")
 
 		return false
+	else
+		TriggerClientEvent("Notify",source,"Aviso","<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.","amarelo",5000)
 	end
 
 	return true
