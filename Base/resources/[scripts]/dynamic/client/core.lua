@@ -296,7 +296,6 @@ RegisterCommand("AdminFunctions", function()
 				exports["dynamic"]:AddMenu("Clima", "Clique para mais informações.", "weather")
 				exports["dynamic"]:AddButton("Timeset", "Mudar a Hora do jogo.", "admin:Dynamic", "timeset", "weather", true)
 				exports["dynamic"]:AddButton("Temperatureset", "Mudar a Temperatura do jogo.", "admin:Dynamic", "temperatureset", "weather", true)
-				exports["dynamic"]:AddButton("Blackoutset", "Ativar/Desativar o Blackout.", "admin:Dynamic", "blackoutset", "weather", true)
 
 				exports["dynamic"]:AddMenu("Grupos", "Clique para mais informações.", "groups")
 				exports["dynamic"]:AddButton("Ugroups", "Veja quais grupos do ID.", "admin:Dynamic", "ugroups", "groups", true)
