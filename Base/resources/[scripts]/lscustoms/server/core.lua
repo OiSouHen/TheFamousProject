@@ -59,6 +59,7 @@ AddEventHandler("lscustoms:Purchase",function(Mode,Number)
 				vRP.UpgradeStress(Passport, math.random(2, 4))
 			else
 				TriggerClientEvent("lscustoms:purchaseFailed", source)
+				TriggerClientEvent("Notify", source, "Aviso", "<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.", "vermelho", 5000)
 			end
 		else
 			if vRP.PaymentFull(Passport, Payments[Mode]) then
@@ -66,6 +67,7 @@ AddEventHandler("lscustoms:Purchase",function(Mode,Number)
 				vRP.UpgradeStress(Passport, math.random(2, 4))
 			else
 				TriggerClientEvent("lscustoms:purchaseFailed", source)
+				TriggerClientEvent("Notify", source, "Aviso", "<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.", "vermelho", 5000)
 			end
 		end
 	end
