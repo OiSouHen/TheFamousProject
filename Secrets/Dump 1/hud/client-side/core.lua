@@ -302,7 +302,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDSTATEBAGCHANGEHANDLER
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddStateBagChangeHandler("Passport",("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
+AddStateBagChangeHandler("Passport",("player:%s"):format(LocalPlayer["state"]["Source"]),function(Name,Key,Value)
 	SendNUIMessage({ name = "Passport", payload = Dotted(Value) })
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -342,7 +342,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDSTATEBAGCHANGEHANDLER
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddStateBagChangeHandler("Safezone",("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
+AddStateBagChangeHandler("Safezone",("player:%s"):format(LocalPlayer["state"]["Source"]),function(Name,Key,Value)
 	SendNUIMessage({ name = "Safezone", payload = Value })
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
