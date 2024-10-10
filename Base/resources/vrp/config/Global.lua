@@ -1,93 +1,63 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
--- BASE
+-- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-BaseMode = "license" -- license ou steam
------------------------------------------------------------------------------------------------------------------------------------------
--- PHONE
------------------------------------------------------------------------------------------------------------------------------------------
-UsingLbPhone = false
+CombatLogMinutes = 3 -- segundos para entrar em combatlog
+SalarySeconds = 1800 -- tempo do salário
+SpawnCoords = vec3(-1039.47,-2739.57,12.85) -- coordenada padrão de spawn ao criar um personagem
+UnprisonCoords = vec3(1896.15,2604.44,45.75) -- coordenada padrão de saida da prisão
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SETTINGS
 -----------------------------------------------------------------------------------------------------------------------------------------
-UsableF7 = true                                                         -- mostrar id encima das cabeças
-Whitelisted = true                                                      -- whitelist no servidor
-CombatLogMinutes = 3                                                    -- segundos para entrar em combatlog
-SalarySeconds = 1800                                                    -- tempo do salário
-BannedText = "Banido"                                                   -- texto de banimento
-CleanDeathInventory = true                                              -- limpar inventário ao dar /gg
-ClearInventoryPremium = true                                            -- limpar inventário de premiums ao dar /gg
-ServerName = "Hensa"                                                    -- nome do servidor
+BaseMode = "license" -- license ou steam
+ServerName = "Hensa" -- nome do servidor
+UsingLbPhone = false -- se você usa ou não o LB-Phone
+UsableF7 = true -- mostrar id encima das cabeças
+Whitelisted = true -- whitelist no servidor
+ServerLink = "https://hensa.store" -- link de sua preferência
+GiveIdentity = true -- dar o item identidade ao criar um personagem
+ShakeVehicleCamera = true -- balançar a câmera do personagem quando bater o veículo
+EntityLockdown = "inactive" -- strict / relaxed / inactive (use inactive para o LBPhone funcionar)
+CanPushCars = false -- se você pode empurrar veículos presisonando a letra Q
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- MAINTENANCE
+-----------------------------------------------------------------------------------------------------------------------------------------
+Maintenance = false -- true para ativar a manutenção
+MaintenanceLicenses = { -- licenses que podem entrar no servidor durante a manutenção
+	["8d0038693c8d128014fb22709c06f122822d5bf1"] = true
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- TEXTS
+-----------------------------------------------------------------------------------------------------------------------------------------
+BannedText = "Banido" -- texto de banimento
 ReleaseText = "Efetue sua liberação enviando o seu número de whitelist" -- texto de liberação da whitelist
-SpawnCoords = vec3(-28.08, -145.96, 56.99)                              -- coordenada padrão de spawn ao criar um personagem
-SpawnPrison = vec3(1679.94, 2513.07, 45.56)                             -- coordenada padrão da prisão
-BackPrison = vec3(1896.15, 2604.44, 45.75)                              -- coordenada padrão de saida da prisão
-BikesBackpack = true                                                    -- receber peso na mochila andando de bicicleta
-BackpackWeightPremiumDefault = 25                                       -- peso padrão do inventário Premium
-BackpackWeightDefault = 30                                              -- peso padrão do inventário
-WipeBackpackDeath = false                                               -- limpar inventário ao morrer
-NewItemIdentity = true                                                  -- dar o item identidade ao criar um personagem
-BurstTyresBySpeed = true                                                -- estourar pneus quando atingir grandes velocidades forçando o veículo
-ShakeVehicleCamera = true                                               -- balançar a câmera do personagem quando bater o veículo
-BlackoutTime = 600000                                                   -- tempo para o blackout acabar (600000 = 10 minutos)
-BlackoutText = "Os serviços em nossa central foram reestabelecidos."    -- texto da notificação padrão para blackout desativado
-EntityLockdown = "inactive"                                             -- strict / relaxed / inactive (use inactive para o LBPhone funcionar)
-CanPushCars = false                                                     -- se você pode empurrar veículos presisonando a letra Q
-FixedNpcsHasNoCollision = false                                         -- se os npcs fixos não possuem colisão
-EnableManeuvers = true                                                  -- se é permitido manobras encima de motos pressionando as setas do teclado
-SurvivalUsingAnim = true                                                -- se quando morre o ped fica com animação de morto
-CleanPrisonNotify = "Você ganhou a liberdade da <b>Prisão</b>."         -- texto de quando a prisão de alguém é limpa
-GiveVotesInServices = true                                              -- da o item voto impresso junto no pagamento em todos os empregos
-Currency = "R$"
------------------------------------------------------------------------------------------------------------------------------------------
--- HITMARKER
------------------------------------------------------------------------------------------------------------------------------------------
-HitMarker = true        -- mostrar danos em pessoas
-ShowNPCDamages = true   -- mostrar danos em npcs
+UnprisonText = "Você ganhou a liberdade da <b>Prisão</b>." -- texto de quando a prisão de alguém é limpa
+MaintenanceText = "Servidor em manutenção" -- texto de quando o servidor está em manutenção
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- MONEY
 -----------------------------------------------------------------------------------------------------------------------------------------
-DefaultDollars1 = "dollar"   -- nome do item de dinheiro padrão da base
-DefaultDollars2 = "dirtydollar"  -- nome do item de dinheiro sujo padrão da base
-DefaultDollars3 = "wetdollar"  -- nome do item de dinheiro falso padrão da base
-DefaultSpecialMoney = "gemstone"   -- nome do item de dinheiro vip padrão da base
+Currency = "R$"
+DefaultMoneyOne = "dollar"
+DefaultMoneyTwo = "dirtydollar"
+DefaultMoneyThree = "wetdollar"
+DefaultMoneySpecial = "gemstone"
 -----------------------------------------------------------------------------------------------------------------------------------------
--- MIRA
+-- BACKPACK
 -----------------------------------------------------------------------------------------------------------------------------------------
-DisableTargetMode = true                                                -- desativar mira com armamentos brancos
-DefaultTargetMode = 0                                                   -- 0 = Full, 1 = Partial, 2 = Free Aim - Assisted, 3 = Free Aim
------------------------------------------------------------------------------------------------------------------------------------------
--- OBJETOS
------------------------------------------------------------------------------------------------------------------------------------------
-ObjectsBlips = true                                                    -- ativar blips das caixas de loot
-ObjectsBlipAlpha = 200                                                  -- opacidade do blip das caixas de loot
-ObjectsBlipColour = 85                                                  -- cor do blip das caixas de loot
------------------------------------------------------------------------------------------------------------------------------------------
--- TEMPERATURA
------------------------------------------------------------------------------------------------------------------------------------------
-TemperatureHot = 22                                                     -- temperatura minima para ativar o efeito de calor
-TemperatureCold = 18                                                    -- temperatura minima para ativar o efeito de frio
-TemperatureEffect = true                                                -- efeitos causados por baixas ou altas temperaturas do clima
------------------------------------------------------------------------------------------------------------------------------------------
--- F7
------------------------------------------------------------------------------------------------------------------------------------------
-UseF7 = { -- ids que podem usar o f7
-	[1] = true
-}
------------------------------------------------------------------------------------------------------------------------------------------
--- RESOURCES
------------------------------------------------------------------------------------------------------------------------------------------
-NewHensa = true        -- true se usa nossa barbershop, skinshop e tattooshop
-NewInitial = true      -- true se você tiver o initial
+WipeBackpackDeath = false -- limpar inventário ao morrer
+CleanNormalInventory = true -- limpar inventário ao dar /gg
+ClearPremiumInventory = true -- limpar inventário de premiums ao dar /gg
+DefaultBackpackPremium = 30 -- peso padrão do inventário Premium
+DefaultBackpackNormal = 15 -- peso padrão do inventário
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- HUNGER / THIRST
 -----------------------------------------------------------------------------------------------------------------------------------------
-ConsumeHunger = 1            -- quantos % vai consumir da fome
-ConsumeThirst = 1            -- quantos % vai consumir da sede
+ConsumeHunger = 1 -- quantos % vai consumir da fome
+ConsumeThirst = 1 -- quantos % vai consumir da sede
 CooldownHungerThrist = 60000 -- tempo de desgaste
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THEME
 -----------------------------------------------------------------------------------------------------------------------------------------
-Theme = {
+Theme = { -- configuração das cores do tema
 	["currency"] = Currency,
 	["main"] = "#5DA1F8",
 	["common"] = "#6fc66a",
@@ -150,14 +120,6 @@ Theme = {
 	}
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
--- MAINTENANCE
------------------------------------------------------------------------------------------------------------------------------------------
-Maintenance = false     -- true para ativar a manutenção
-MaintenanceText = "Servidor em manutenção"
-MaintenanceLicenses = { -- licenses que podem entrar na manutenção
-	["8d0038693c8d128014fb22709c06f122822d5bf1"] = true
-}
------------------------------------------------------------------------------------------------------------------------------------------
 -- CHARACTERITENS
 -----------------------------------------------------------------------------------------------------------------------------------------
 CharacterItens = { -- itens que são dados ao criar um personagem
@@ -209,6 +171,12 @@ Queue = { -- configuração da fila
 	["Connecting"] = {},
 	["Threads"] = 0,
 	["Max"] = 2048
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- F7
+-----------------------------------------------------------------------------------------------------------------------------------------
+UseF7 = { -- ids que podem usar o f7
+	[1] = true
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SKINSHOPINIT
