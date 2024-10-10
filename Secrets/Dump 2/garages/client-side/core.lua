@@ -422,26 +422,19 @@ AddEventHandler("garages:Delete",function(Vehicle)
 	end
 
 	if IsEntityAVehicle(Vehicle) and (not Entity(Vehicle)["state"]["Tow"] or LocalPlayer["state"]["Admin"]) then
-		local Tyres = {}
 		local Doors = {}
+		for Number = 0,5 do
+			Doors[Number] = IsVehicleDoorDamaged(Vehicle,Number)
+		end
+
+		local Tyres = {}
+		for Number = 0,7 do
+			Tyres[Number] = (GetTyreHealth(Vehicle,i) ~= 1000.0 and true or false)
+		end
+
 		local Windows = {}
-
-		for i = 0,5 do
-			Doors[i] = IsVehicleDoorDamaged(Vehicle,i)
-		end
-
-		for i = 0,5 do
-			Windows[i] = IsVehicleWindowIntact(Vehicle,i)
-		end
-
-		for i = 0,7 do
-			local Status = false
-
-			if GetTyreHealth(Vehicle,i) ~= 1000.0 then
-				Status = true
-			end
-
-			Tyres[i] = Status
+		for Number = 0,5 do
+			Windows[Number] = IsVehicleWindowIntact(Vehicle,Number)
 		end
 
 		vSERVER.Delete(VehToNet(Vehicle),GetEntityHealth(Vehicle),GetVehicleEngineHealth(Vehicle),GetVehicleBodyHealth(Vehicle),Doors,Windows,Tyres,GetVehicleNumberPlateText(Vehicle),Opened)
