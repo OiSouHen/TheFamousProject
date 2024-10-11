@@ -141,37 +141,37 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CREATEVEHICLE
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.CreateVehicle(Model, Network, Engine, Health, Customize, Windows, Tyres, Brakes, Owner)
+function Hensa.CreateVehicle(Model, Network, Engine, Health, Customize, Windows, Tyres, Brakes, Admin)
 	local Count = 0
 
-	if Owner then
-		while not NetworkDoesNetworkIdExist(Network) do
-			Count = Count + 1
+	while not NetworkDoesNetworkIdExist(Network) do
+		Count = Count + 1
 
-			if Count >= 1000 then
-				Count = 0
-				break
-			end
-
-			Wait(10)
+		if Count >= 1000 then
+			Count = 0
+			break
 		end
 
-		local Vehicle = NetToEnt(Network)
-		while not DoesEntityExist(Vehicle) do
-			Count = Count + 1
+		Wait(10)
+	end
 
-			if Count >= 1000 then
-				Count = 0
-				break
-			end
+	local Vehicle = NetToEnt(Network)
+	while not DoesEntityExist(Vehicle) do
+		Count = Count + 1
 
-			Wait(10)
+		if Count >= 1000 then
+			Count = 0
+			break
 		end
+
+		Wait(10)
 	end
 
 	if NetworkDoesNetworkIdExist(Network) then
 		local Vehicle = NetToEnt(Network)
 		if DoesEntityExist(Vehicle) then
+			-- TriggerEvent("lscustoms:Apply",Vehicle,json.decode(Customize))
+
 			if Customize ~= nil then
 				local Mods = json.decode(Customize)
 				VehicleMods(Vehicle, Mods)
@@ -206,6 +206,11 @@ function Hensa.CreateVehicle(Model, Network, Engine, Health, Customize, Windows,
 			SetVehicleOnGroundProperly(Vehicle)
 			SetVehRadioStation(Vehicle, "OFF")
 			SetEntityHealth(Vehicle, Health)
+
+			if Admin then
+				SetVehicleCustomSecondaryColour(Vehicle, 88, 101, 242)
+				SetVehicleCustomPrimaryColour(Vehicle, 88, 101, 242)
+			end
 
 			if Windows then
 				local Windows = json.decode(Windows)
