@@ -585,10 +585,10 @@ function Hensa.Send(Slot,Amount)
 					Wait(100)
 				until not Active[Passport]
 			else
-				TriggerClientEvent("Notify",source,"Aviso","Mochila cheia.","amarelo",5000)
+				TriggerClientEvent("Notify",source,"Aviso","Mochila cheia.","vermelho",5000)
 			end
 		else
-			TriggerClientEvent("Notify",source,"Aviso","Limite atingido.","amarelo",5000)
+			TriggerClientEvent("Notify",source,"Aviso","Limite atingido.","vermelho",5000)
 		end
 
 		Active[Passport] = nil
@@ -762,7 +762,7 @@ function Hensa.Use(Slot,Amount)
 		end
 
 		if ItemDurability(Full) and vRP.CheckDamaged(Full) then
-			TriggerClientEvent("Notify",source,"Aviso","<b>"..ItemName(Item).."</b> danificado.","amarelo",5000)
+			TriggerClientEvent("Notify",source,"Aviso","<b>"..ItemName(Item).."</b> danificado.","vermelho",5000)
 
 			return
 		end
@@ -888,10 +888,10 @@ function Hensa.Use(Slot,Amount)
 							vCLIENT.GiveComponent(source,Component)
 						end
 					else
-						TriggerClientEvent("Notify",source,"Aviso","O armamento já possui um componente equipado.","amarelo",5000)
+						TriggerClientEvent("Notify",source,"Aviso","O armamento já possui um componente equipado.","vermelho",5000)
 					end
 				else
-					TriggerClientEvent("Notify",source,"Aviso","O armamento não possui suporte ao componente.","amarelo",5000)
+					TriggerClientEvent("Notify",source,"Aviso","O armamento não possui suporte ao componente.","vermelho",5000)
 				end
 			end
 		elseif Use[Item] and ItemTypeCheck(Full,"Consumível") then
@@ -1253,7 +1253,7 @@ AddEventHandler("inventory:StealTrunk",function(Entity)
 	local Passport = vRP.Passport(source)
 	if Passport and not Active[Passport] then
 		if not vCLIENT.CheckWeapon(source,"WEAPON_CROWBAR") then
-			TriggerClientEvent("Notify",source,"Aviso","<b>Pé de Cabra</b> não encontrado.","amarelo",5000)
+			TriggerClientEvent("Notify",source,"Aviso","<b>Pé de Cabra</b> não encontrado.","vermelho",5000)
 
 			return false
 		end
@@ -1319,7 +1319,7 @@ AddEventHandler("inventory:StealTrunk",function(Entity)
 				end
 			end
 		else
-			TriggerClientEvent("Notify",source,"Aviso","Veículo protegido pela seguradora.","amarelo",1000)
+			TriggerClientEvent("Notify",source,"Aviso","Veículo protegido pela seguradora.","vermelho",1000)
 		end
 	end
 end)
@@ -1360,7 +1360,7 @@ AddEventHandler("inventory:Animals",function(Entity)
 						Wait(100)
 					until not Active[Passport]
 				else
-					TriggerClientEvent("Notify",source,"Aviso","Mochila cheia.","amarelo",5000)
+					TriggerClientEvent("Notify",source,"Aviso","Mochila cheia.","vermelho",5000)
 				end
 			else
 				TriggerClientEvent("Notify",source,"Atenção","Você precisa colocar o <b>Canivete</b> em mãos.","amarelo",5000)
@@ -1442,7 +1442,7 @@ AddEventHandler("inventory:RemoveTyres",function(Entity)
 	local Passport = vRP.Passport(source)
 	if Passport and not Active[Passport] and Entity[2] ~= "veto" and Entity[2] ~= "veto2" then
 		if not vCLIENT.CheckWeapon(source,"WEAPON_WRENCH") then
-			TriggerClientEvent("Notify",source,"Aviso","<b>Chave Inglesa</b> não encontrada.","amarelo",5000)
+			TriggerClientEvent("Notify",source,"Aviso","<b>Chave Inglesa</b> não encontrada.","vermelho",5000)
 
 			return false
 		end
@@ -1451,7 +1451,7 @@ AddEventHandler("inventory:RemoveTyres",function(Entity)
 		if DoesEntityExist(Networked) and not IsPedAPlayer(Networked) and GetEntityType(Networked) == 2 then
 			if vCLIENT.tyreHealth(source,Entity[4],Entity[6]) == 1000.0 then
 				if vRP.MaxItens(Passport,"tyres",1) then
-					TriggerClientEvent("Notify",source,"Aviso","Limite atingido.","amarelo",5000)
+					TriggerClientEvent("Notify",source,"Aviso","Limite atingido.","vermelho",5000)
 
 					return false
 				end
