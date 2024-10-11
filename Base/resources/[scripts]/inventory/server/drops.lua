@@ -26,9 +26,15 @@ function Hensa.Drops(Item,Slot,Amount)
 	local source = source
 	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
-	if Passport and not Active[Passport] and Amount >= 1 and not Player(source)["state"]["Handcuff"] and not exports["hud"]:Wanted(Passport) and not vRPC.InsideVehicle(source) and vRP.TakeItem(Passport,Item,Amount,false) then
-		exports["inventory"]:Drops(Passport,source,Item,Amount,true)
-		TriggerClientEvent("inventory:Update",source,"Backpack")
+	if Passport and not Active[Passport] and Amount >= 1 and not Player(source)["state"]["Handcuff"] and not exports["hud"]:Wanted(Passport) and not vRPC.InsideVehicle(source) then
+		if not vRP.CheckDamaged(Item) then
+			if vRP.TakeItem(Passport,Item,Amount,false) then
+				exports["inventory"]:Drops(Passport,source,Item,Amount,true)
+				TriggerClientEvent("inventory:Update",source,"Backpack")
+			end
+		else
+			TriggerClientEvent("inventory:Notify",source,"Aviso","Utilize as lixeiras para jogar itens danificados.","vermelho")
+		end
 	else
 		TriggerClientEvent("inventory:Update",source,"Backpack")
 	end
