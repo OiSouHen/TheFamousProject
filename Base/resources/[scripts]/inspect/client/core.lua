@@ -2,27 +2,34 @@
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Tunnel = module("vrp","lib/Tunnel")
+local Proxy = module("vrp","lib/Proxy")
+vRPS = Tunnel.getInterface("vRP")
+vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 vSERVER = Tunnel.getInterface("inspect")
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHESTCLOSE
+-- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Close",function(Data,Callback)
-	SendNUIMessage({ action = "Close" })
-	SetNuiFocus(false,false)
-	vSERVER.Reset()
-
-	Callback("Ok")
+local Opened = false
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- INVENTORY:CLOSE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("inventory:Close")
+AddEventHandler("inventory:Close",function()
+	if Opened then
+		vSERVER.Reset()
+		Opened = false
+	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- REQUEST
+-- MOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Request",function(Data,Callback)
-	local myInventory,myChest,invPeso,invMaxpeso,chestPeso,chestMaxpeso = vSERVER.Request()
-	if myInventory then
-		Callback({ myInventory = myInventory, myChest = myChest, invPeso = invPeso, invMaxpeso = invMaxpeso, chestPeso = chestPeso, chestMaxpeso = chestMaxpeso })
+RegisterNUICallback("Mount",function(Data,Callback)
+	local Primary,Secondary,PrimaryWeight,SecondaryWeight = vSERVER.Mount()
+	if Primary then
+		Callback({ Primary = Primary, Secondary = Secondary, PrimaryMaxWeight = PrimaryWeight, SecondaryMaxWeight = SecondaryWeight })
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -30,7 +37,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Take",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Take(Data["item"],Data["target"],Data["amount"])
+		vSERVER.Take(Data["item"],Data["slot"],Data["target"],Data["amount"])
 	end
 
 	Callback("Ok")
@@ -40,7 +47,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Store",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Store(Data["item"],Data["amount"],Data["target"])
+		vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"])
 	end
 
 	Callback("Ok")
@@ -50,6 +57,9 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("inspect:Open")
 AddEventHandler("inspect:Open",function()
-	SetNuiFocus(true,true)
-	SendNUIMessage({ action = "Open" })
+	Opened = true
+	TriggerEvent("inventory:Open",{
+		Type = "Inspect",
+		Resource = "inspect"
+	})
 end)
