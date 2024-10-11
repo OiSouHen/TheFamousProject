@@ -593,7 +593,7 @@ function Hensa.Spawn(Name, Number)
 								if Exist then
 									local Networked = NetworkGetEntityFromNetworkId(Network)
 
-									vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
+									vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"], false)
 									TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 									Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 									TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
@@ -615,7 +615,7 @@ function Hensa.Spawn(Name, Number)
 									if Exist then
 										local Networked = NetworkGetEntityFromNetworkId(Network)
 
-										vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
+										vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"], false)
 										TriggerClientEvent("Notify", source, "Vencimento", CompleteTimers(vehicle[1]["Dismantle"] - os.time()), "azul", 5000)
 										Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 										TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
@@ -640,7 +640,7 @@ function Hensa.Spawn(Name, Number)
 										if Exist then
 											local Networked = NetworkGetEntityFromNetworkId(Network)
 
-											vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
+											vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"], false)
 											TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 											Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 											TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
@@ -662,7 +662,7 @@ function Hensa.Spawn(Name, Number)
 												if Exist then
 													local Networked = NetworkGetEntityFromNetworkId(Network)
 
-													vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
+													vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"], false)
 													TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 													Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 													TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
@@ -689,7 +689,7 @@ function Hensa.Spawn(Name, Number)
 							if Exist then
 								local Networked = NetworkGetEntityFromNetworkId(Network)
 
-								vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"])
+								vCLIENT.CreateVehicle(-1, Name, Network, vehicle[1]["Engine"], vehicle[1]["Health"], Mods, vehicle[1]["Windows"], vehicle[1]["Tyres"], vehicle[1]["Brakes"], false)
 								TriggerClientEvent("Notify", source, "Próximo pagamento", CompleteTimers(vehicle[1]["Tax"] - os.time()), "azul", 5000)
 								Entity(Networked)["state"]:set("Fuel", vehicle[1]["Fuel"], true)
 								TriggerEvent("engine:InsertBrakes", Network, vehicle[1]["Brakes"])
@@ -729,7 +729,7 @@ RegisterCommand("car", function(source, Message)
 
 			local Networked = NetworkGetEntityFromNetworkId(Network)
 
-			vCLIENT.CreateVehicle(-1, VehicleName, Network, 1000, 1000, nil, false, false, { 1.25, 0.75, 0.95 })
+			vCLIENT.CreateVehicle(-1, VehicleName, Network, 1000, 1000, nil, false, false, { 1.25, 0.75, 0.95 }, true)
 			Spawn[Plate] = { Passport, VehicleName, Network }
 			TriggerEvent("engine:InsertBrakes", Network, "")
 			Entity(Networked)["state"]:set("Fuel", 100, true)
@@ -1042,7 +1042,7 @@ function SpawnVeh(data, network)
 		Mods = Datatable[1]["Information"]
 	end
 
-	vCLIENT.CreateVehicle(-1, data["model"], network, data["engine"], data["health"], Mods, data["windows"], data["tyres"], data["brakes"])
+	vCLIENT.CreateVehicle(-1, data["model"], network, data["engine"], data["health"], Mods, data["windows"], data["tyres"], data["brakes"], false)
 	TriggerEvent("engine:tryFuel", data["plate"], data["fuel"])
 	TriggerEvent("engine:insertBrakes", network, data["brakes"])
 	Spawn[data["plate"]] = { data["passport"], data["model"], network }
