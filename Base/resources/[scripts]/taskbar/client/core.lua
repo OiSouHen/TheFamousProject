@@ -1,66 +1,63 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Tunnel = module("vrp", "lib/Tunnel")
+local Tunnel = module("vrp","lib/Tunnel")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 Hensa = {}
-Tunnel.bindInterface("taskbar", Hensa)
+Tunnel.bindInterface("taskbar",Hensa)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Status = ""
+local Results = false
 local Progress = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- FAILURE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("failure", function(Data, Callback)
-	SetNuiFocus(false, false)
-	Status = "failure"
+RegisterNUICallback("Failure",function(Data,Callback)
+	Results = false
 	Progress = false
+	SetNuiFocus(false,false)
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SUCESS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("success", function(Data, Callback)
-	SetNuiFocus(false, false)
-	Status = "success"
+RegisterNUICallback("Success",function(Data,Callback)
+	Results = true
 	Progress = false
+	SetNuiFocus(false,false)
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- TASKBAR:TASKBAR
+-- MINIGAME
 -----------------------------------------------------------------------------------------------------------------------------------------
-function taskBar(Timer)
+function Minigame(Timer)
 	if Progress then return end
 
 	Progress = true
-	SetNuiFocus(true, false)
-	SendNUIMessage({ name = "Open", payload = Timer })
+	SetNuiFocus(true,false)
+	SendNUIMessage({ Action = "Open", Payload = Timer })
 
 	while Progress do
 		Wait(0)
 	end
 
-	if Status == "success" then
-		return true
-	end
-
-	return false
+	return Results
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TASK
 -----------------------------------------------------------------------------------------------------------------------------------------
-exports("Task", function(Amount, Speed)
+exports("Task",function(Amount,Speed)
 	local Return = true
 
-	for Number = 1, Amount do
-		if not taskBar(Speed) then
+	for Number = 1,Amount do
+		if not Minigame(Speed) then
 			Return = false
+
 			break
 		end
 	end
@@ -70,12 +67,13 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TASK
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.Task(Amount, Speed)
+function Hensa.Task(Amount,Speed)
 	local Return = true
 
-	for Number = 1, Amount do
-		if not taskBar(Speed) then
+	for Number = 1,Amount do
+		if not Minigame(Speed) then
 			Return = false
+
 			break
 		end
 	end
