@@ -187,6 +187,13 @@ local Fuels = {
 -- THREADSERVERSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
+
+	RequestStreamedTextureDict("Targets",true)
+	while not HasStreamedTextureDictLoaded("Targets") do
+		RequestStreamedTextureDict("Targets",true)
+		Wait(1)
+	end
+
 	RegisterCommand("+entityTarget",TargetEnable)
 	RegisterCommand("-entityTarget",TargetDisable)
 	RegisterKeyMapping("+entityTarget","Interação auricular.","keyboard","LMENU")
@@ -426,7 +433,7 @@ function TargetEnable()
 		for Index,v in pairs(Zones) do
 			if #(Coords - Zones[Index]["center"]) <= 5 then
 				SetDrawOrigin(Zones[Index]["center"]["x"],Zones[Index]["center"]["y"],Zones[Index]["center"]["z"])
-				DrawSprite("Textures","Normal",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+				DrawSprite("Targets","Normal",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
 				ClearDrawOrigin()
 			end
 
@@ -440,7 +447,7 @@ function TargetEnable()
 				Sucess = true
 				while Sucess do
 					SetDrawOrigin(Zones[Index]["center"]["x"],Zones[Index]["center"]["y"],Zones[Index]["center"]["z"])
-					DrawSprite("Textures","Selected",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+					DrawSprite("Targets","Selected",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
 					ClearDrawOrigin()
 					DisableActions()
 
@@ -649,7 +656,7 @@ function TargetEnable()
 						local OtherCoords = GetEntityCoords(Entitys)
 						if #(Coords - OtherCoords) <= 5 then
 							SetDrawOrigin(OtherCoords["x"],OtherCoords["y"],OtherCoords["z"] + 1)
-							DrawSprite("Textures","Normal",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+							DrawSprite("Targets","Normal",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
 							ClearDrawOrigin()
 						end
 
@@ -676,7 +683,7 @@ function TargetEnable()
 								local EntityCoords = GetEntityCoords(Entitys)
 
 								SetDrawOrigin(EntityCoords["x"],EntityCoords["y"],EntityCoords["z"] + 1)
-								DrawSprite("Textures","Selected",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
+								DrawSprite("Targets","Selected",0.0,0.0,0.02,0.02 * GetAspectRatio(false),0.0,255,255,255,255)
 								ClearDrawOrigin()
 								DisableActions()
 
