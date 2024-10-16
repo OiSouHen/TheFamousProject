@@ -54,15 +54,14 @@ Groups = {
 		["Client"] = true,
 		["Chat"] = true
 	},
-	["Burgershot"] = {
+	["Restaurante"] = {
 		["Parent"] = {
-			["Burgershot"] = true
+			["Restaurante"] = true
 		},
-		["Hierarchy"] = { "Líder", "Sub-Líder", "Membro", "Recruta" },
+		["Hierarchy"] = { "Chefe", "Supervisor", "Funcionário" },
 		["Service"] = {},
 		["Type"] = "Work",
-		["Client"] = true,
-		["Chat"] = true
+		["Client"] = true
 	},
 	["Ballas"] = {
 		["Parent"] = {
@@ -118,13 +117,6 @@ Groups = {
 		["Parent"] = {
 			["Policia"] = true,
 			["Paramedico"] = true
-		},
-		["Hierarchy"] = { "Chefe" },
-		["Service"] = {}
-	},
-	["Restaurantes"] = {
-		["Parent"] = {
-			["BurgerShot"] = true
 		},
 		["Hierarchy"] = { "Chefe" },
 		["Service"] = {}
