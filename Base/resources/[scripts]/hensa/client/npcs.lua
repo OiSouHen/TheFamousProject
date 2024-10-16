@@ -31,6 +31,24 @@ local List = {
 		["Coords"] = vec4(1210.2,352.09,81.99,235.28),
 		["Model"] = "a_c_cow",
 		["Collision"] = true
+	},{ -- HENSA
+		["Distance"] = 100,
+		["Coords"] = vec4(960.27,-1045.08,41.03,0.0),
+		["Model"] = "s_m_y_airworker",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- PawnShop
+		["Distance"] = 15,
+		["Coords"] = vec4(174.88,-1323.7,29.35,331.66),
+		["Model"] = "s_f_y_shop_mid",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
+	},{ -- Mechanic
+		["Distance"] = 15,
+		["Coords"] = vec4(949.93,-957.36,39.5,93.55),
+		["Model"] = "mp_m_waremech_01",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" },
+		["Collision"] = true
 	},{ -- Garagem 1
 		["Distance"] = 100,
 		["Coords"] = vec4(76.99,-194.58,54.49,249.45),
@@ -240,60 +258,115 @@ local List = {
 		["Coords"] = vec4(-1221.48,-907.93,12.32,31.19),
 		["Model"] = "mp_m_shopkeep_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(1693.89,3754.45,34.69,323.15),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(249.64,-45.08,69.94,155.91),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(846.1,-1029.52,28.19,90.71),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(-330.13,6078.26,31.46,314.65),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(-665.97,-939.37,21.82,272.13),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(-1308.83,-389.64,36.7,164.41),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(-1117.89,2693.02,18.55,314.65),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(2571.63,298.38,108.73,93.55),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(-3169.68,1082.68,20.84,343.0),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(17.13,-1109.64,29.79,249.45),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
+	},{ -- Ammu-Nation Craft
+		["Distance"] = 15,
+		["Coords"] = vec4(813.9,-2153.2,29.62,90.71),
+		["Model"] = "s_m_m_ammucountry",
+		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(1692.27,3760.91,34.69,226.78),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(253.8,-50.47,69.94,65.2),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(842.54,-1035.25,28.19,0.0),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(-331.67,6084.86,31.46,223.94),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(-662.37,-933.58,21.82,181.42),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(-1304.12,-394.56,36.7,73.71),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(-1118.98,2699.73,18.55,221.11),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(2567.98,292.62,108.73,0.0),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(-3173.51,1088.35,20.84,246.62),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(22.53,-1105.52,29.79,155.91),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Ammu-Nation Store
 		["Distance"] = 15,
 		["Coords"] = vec4(810.22,-2158.99,29.62,0.0),
-		["Model"] = "ig_dale",
+		["Model"] = "s_m_y_ammucity_01",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Pharmacy Store
 		["Distance"] = 30,
