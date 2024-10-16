@@ -614,12 +614,12 @@ function Hensa.Deliver(Work)
 			if vRP.TakeItem(Passport,"woodlog",3,false,Slot) then
 				local GainExperience = 3
 				local Amount = math.random(125,175)
-				local Experience,Level = vRP.GetExperience(Passport,"Lumberman")
-				local Valuation = Amount + Amount * (0.05 * Level)
+				local Experience = vRP.GetExperience(Passport,"Lumberman")
+				local Valuation = Amount + Amount * (0.05 * Experience)
 
-				if exports["party"]:DoesExist(Passport,2) then
-					Valuation = Valuation + (Valuation * 0.1)
-				end
+				-- if exports["party"]:DoesExist(Passport,2) then
+					-- Valuation = Valuation + (Valuation * 0.1)
+				-- end
 
 				if exports["inventory"]:Buffs("Dexterity",Passport) then
 					Valuation = Valuation + (Valuation * 0.1)
@@ -657,12 +657,12 @@ function Hensa.Deliver(Work)
 			if vRP.TakeItem(Passport,"milkbottle",3,false,Slot) then
 				local GainExperience = 3
 				local Amount = math.random(125,175)
-				local Experience,Level = vRP.GetExperience(Passport,"Milkman")
-				local Valuation = Amount + Amount * (0.05 * Level)
+				local Experience = vRP.GetExperience(Passport,"Milkman")
+				local Valuation = Amount + Amount * (0.05 * Experience)
 
-				if exports["party"]:DoesExist(Passport,2) then
-					Valuation = Valuation + (Valuation * 0.1)
-				end
+				-- if exports["party"]:DoesExist(Passport,2) then
+					-- Valuation = Valuation + (Valuation * 0.1)
+				-- end
 
 				if exports["inventory"]:Buffs("Dexterity",Passport) then
 					Valuation = Valuation + (Valuation * 0.1)
@@ -700,12 +700,12 @@ function Hensa.Deliver(Work)
 			if vRP.TakeItem(Passport,"pouch",1,false,Slot) then
 				local GainExperience = 1
 				local Amount = math.random(75,85)
-				local Experience,Level = vRP.GetExperience(Passport,"Transporter")
-				local Valuation = Amount + Amount * (0.05 * Level)
+				local Experience = vRP.GetExperience(Passport,"Transporter")
+				local Valuation = Amount + Amount * (0.05 * Experience)
 
-				if exports["party"]:DoesExist(Passport,2) then
-					Valuation = Valuation + (Valuation * 0.1)
-				end
+				-- if exports["party"]:DoesExist(Passport,2) then
+					-- Valuation = Valuation + (Valuation * 0.1)
+				-- end
 
 				if exports["inventory"]:Buffs("Dexterity",Passport) then
 					Valuation = Valuation + (Valuation * 0.1)
