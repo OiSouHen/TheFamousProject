@@ -68,7 +68,7 @@ function Hensa.Deposit(Valuation)
 	if Passport and not Active[Passport] and parseInt(Valuation) > 0 then
 		Active[Passport] = true
 
-		if vRP.ConsultItem(Passport,"dollars",Valuation) and vRP.TakeItem(Passport,"dollars",Valuation) then
+		if vRP.ConsultItem(Passport,DefaultMoneyOne,Valuation) and vRP.TakeItem(Passport,DefaultMoneyOne,Valuation) then
 			vRP.GiveBank(Passport,Valuation)
 		end
 
@@ -261,30 +261,23 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TAXPAYMENT
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.TaxPayment(idNumber)
-	local playerSource = source
-	local passport = vRP.Passport(playerSource)
-	if passport and not Active[passport] then
-		Active[passport] = true
+function Hensa.TaxPayment(Number)
+	local source = source
+	local Passport = vRP.Passport(source)
+	if Passport and not Active[Passport] then
+		Active[Passport] = true
 
-		if idNumber == nil or type(idNumber) ~= "number" then
-			Active[passport] = nil
-			return false
-		end
-
-		local tax = vRP.Query("taxs/Check", { Passport = passport, id = idNumber })
-		if tax and tax[1] then
-			local taxPrice = tonumber(tax[1]["Price"])
-
-			if vRP.PaymentBank(passport, taxPrice) then
-				vRP.Query("taxs/Remove", { Passport = passport, id = idNumber })
-				Active[passport] = nil
+		local Tax = vRP.Query("taxs/Check",{ Passport = Passport, id = Number })
+		if Tax[1] then
+			if vRP.PaymentBank(Passport,Tax[1]["Price"]) then
+				vRP.Query("taxs/Remove",{ Passport = Passport, id = Number })
+				Active[Passport] = nil
 
 				return true
 			end
 		end
 
-		Active[passport] = nil
+		Active[Passport] = nil
 	end
 
 	return false
