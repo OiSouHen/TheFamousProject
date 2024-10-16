@@ -409,7 +409,7 @@ CreateThread(function()
 
 			for Number,v in pairs(GaragesCoords) do
 				local Distance = #(Coords - vec3(v["x"],v["y"],v["z"]))
-				if Distance <= 25 then
+				if Distance <= 3.25 then
 					TimeDistance = 1
 
 					SetDrawOrigin(v["x"],v["y"],v["z"])
