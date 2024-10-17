@@ -2179,10 +2179,6 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 				HensaTable["Thirst"] = 100
 			end
 
-			if not HensaTable["Oxigen"] then
-				HensaTable["Oxigen"] = 100
-			end
-
 			if not HensaTable["Weight"] then
 				HensaTable["Weight"] = DefaultBackpackNormal
 			end
@@ -2199,7 +2195,6 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 			TriggerClientEvent("hud:Thirst", source, HensaTable["Thirst"])
 			TriggerClientEvent("hud:Hunger", source, HensaTable["Hunger"])
 			TriggerClientEvent("hud:Stress", source, HensaTable["Stress"])
-			TriggerClientEvent("hud:Oxigen", source, HensaTable["Oxigen"])
 
 			TriggerClientEvent("vRP:Active", source, Passport, vRP.FullName(Passport))
 
@@ -2391,26 +2386,6 @@ function vRP.UpgradeStress(Passport, Amount)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- UPGRADEOXIGEN
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.UpgradeOxigen(Passport, Amount)
-	local source = vRP.Source(Passport)
-	local HensaTable = vRP.Datatable(Passport)
-	if HensaTable and source then
-		if not HensaTable["Oxigen"] then
-			HensaTable["Oxigen"] = 0
-		end
-
-		HensaTable["Oxigen"] = HensaTable["Oxigen"] + parseInt(Amount)
-
-		if HensaTable["Oxigen"] > 100 then
-			HensaTable["Oxigen"] = 100
-		end
-
-		TriggerClientEvent("hud:Oxigen", source, HensaTable["Oxigen"])
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- DOWNGRADETHIRST
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.DowngradeThirst(Passport, Amount)
@@ -2468,26 +2443,6 @@ function vRP.DowngradeStress(Passport, Amount)
 		end
 
 		TriggerClientEvent("hud:Stress", source, HensaTable["Stress"])
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- DOWNGRADEOXIGEN
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.DowngradeOxigen(Passport, Amount)
-	local source = vRP.Source(Passport)
-	local HensaTable = vRP.Datatable(Passport)
-	if HensaTable and source then
-		if not HensaTable["Oxigen"] then
-			HensaTable["Oxigen"] = 0
-		end
-
-		HensaTable["Oxigen"] = HensaTable["Oxigen"] - parseInt(Amount)
-
-		if HensaTable["Oxigen"] < 0 then
-			HensaTable["Oxigen"] = 0
-		end
-
-		TriggerClientEvent("hud:Oxigen", source, HensaTable["Oxigen"])
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
