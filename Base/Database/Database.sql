@@ -5,8 +5,6 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `Characters` int(10) NOT NULL DEFAULT 1,
   `Gemstone` int(20) NOT NULL DEFAULT 0,
   `Premium` int(20) NOT NULL DEFAULT 0,
-  `Medic` int(20) NOT NULL DEFAULT 0,
-  `Rolepass` int(20) NOT NULL DEFAULT 0,
   `Discord` varchar(50) NOT NULL DEFAULT '0',
   `License` varchar(50) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
@@ -37,29 +35,14 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `Bank` int(20) NOT NULL DEFAULT 5000,
   `Blood` int(1) NOT NULL DEFAULT 1,
   `Prison` int(10) NOT NULL DEFAULT 0,
-  `Gun` int(1) NOT NULL DEFAULT 0,
   `Avatar` varchar(254) NOT NULL DEFAULT 'https://source.unsplash.com/random/',
   `Likes` int(20) NOT NULL DEFAULT 0,
   `Unlikes` int(20) NOT NULL DEFAULT 0,
   `Badge` int(3) NOT NULL DEFAULT 0,
-  `Driver` int(20) NOT NULL DEFAULT 0,
-  `Mode` varchar(50) NOT NULL DEFAULT 'Legal',
-  `Work` varchar(50) NOT NULL DEFAULT 'Nenhum',
   `Created` int(20) NOT NULL DEFAULT 0,
   `Deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `license` (`License`),
-  KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-DROP TABLE IF EXISTS `fidentity`;
-CREATE TABLE IF NOT EXISTS `fidentity` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL DEFAULT '',
-  `Lastname` varchar(50) NOT NULL DEFAULT '',
-  `Gun` int(1) NOT NULL DEFAULT 1,
-  `Blood` int(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -82,24 +65,6 @@ CREATE TABLE IF NOT EXISTS `playerdata` (
   KEY `Passport` (`Passport`),
   KEY `Information` (`Name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-DROP TABLE IF EXISTS `banks`;
-CREATE TABLE IF NOT EXISTS `banks` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
-  `Bank` int(20) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `Name` (`Name`),
-  KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-INSERT INTO `banks` (`id`, `Name`, `Bank`) VALUES
-	(1, 'City', 0),
-	(2, 'Ballas', 0),
-	(3, 'Vagos', 0),
-	(4, 'Families', 0),
-	(5, 'Aztecas', 0),
-	(6, 'Bloods', 0);
 
 DROP TABLE IF EXISTS `chests`;
 CREATE TABLE IF NOT EXISTS `chests` (
