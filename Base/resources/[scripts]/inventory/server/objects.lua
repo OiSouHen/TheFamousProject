@@ -246,7 +246,7 @@ AddEventHandler("inventory:StoreObjects",function(Number)
 		end
 
 		if Objects[Number] and Objects[Number]["Item"] and Objects[Number]["Item"] ~= "spikestrips" then
-			if not vRP.MaxItens(Passport,Objects[Number]["Item"]) and vRP.CheckWeight(Passport,Objects[Number]["Item"]) then
+			if not vRP.MaxItens(Passport,Objects[Number]["Item"],1) and vRP.CheckWeight(Passport,Objects[Number]["Item"],1) then
 				vRP.GiveItem(Passport,Objects[Number]["Item"],1,true)
 			else
 				TriggerClientEvent("Notify",source,"Mochila Sobrecarregada","Sua recompensa caiu no chão.","roxo",5000)
