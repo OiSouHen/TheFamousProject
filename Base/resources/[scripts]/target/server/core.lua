@@ -158,25 +158,3 @@ AddEventHandler("target:Call", function(Service)
 		end
 	end
 end)
------------------------------------------------------------------------------------------------------------------------------------------
--- TARGET:MEDICPLAN
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("target:Medicplan")
-AddEventHandler("target:Medicplan",function()
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport then
-		if not vRP.Medicplan(source) then
-			local Price = 10000
-			if vRP.Request(source, "Hospital", "Assinar o plano de saúde por <b>$"..Dotted(Price).."</b>? Lembrando que a duração do mesmo é de <b>7 Dias</b>.") then
-				if vRP.PaymentFull(Passport, Price) then
-					TriggerClientEvent("Notify", source, "verde", "Compra efetuada.", "Sucesso", 5000)
-					vRP.SetMedicplan(source, Passport)
-					vRP.DowngradeCough(Passport, 100)
-				end
-			end
-		else
-			TriggerClientEvent("Notify", source, "amarelo", "Já possui um plano ativo.", "Atenção", 5000)
-		end
-	end
-end)
