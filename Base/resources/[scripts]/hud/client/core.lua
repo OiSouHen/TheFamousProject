@@ -107,7 +107,7 @@ RegisterCommand("escondercupom",function()
 		SendNUIMessage({ name = "Coupon", payload = false })
 	elseif GlobalState["Cupom"] then
 		Cupom = true
-		SendNUIMessage({ name = "Coupon", payload = { true,GlobalState["Cupom"][1],GlobalState["Cupom"][2],GlobalState["Cupom"][3] } })
+		SendNUIMessage({ name = "Coupon", payload = { true,GlobalState["Cupom"][1],GlobalState["Cupom"][2] } })
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ end)
 RegisterNetEvent("vRP:Active")
 AddEventHandler("vRP:Active",function()
 	if GlobalState["Cupom"] then
-		SendNUIMessage({ name = "Coupon", payload = { true,GlobalState["Cupom"][1],GlobalState["Cupom"][2],GlobalState["Cupom"][3] } })
+		SendNUIMessage({ name = "Coupon", payload = { true,GlobalState["Cupom"][1],GlobalState["Cupom"][2] } })
 		Cupom = true
 	end
 
