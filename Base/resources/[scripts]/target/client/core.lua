@@ -618,7 +618,6 @@ function TargetEnable()
 						Menu[#Menu + 1] = { event = "paramedic:presetBurn", label = "Roupa de Queimadura", tunnel = "paramedic" }
 						Menu[#Menu + 1] = { event = "paramedic:presetPlaster", label = "Colocar Gesso", tunnel = "paramedic" }
 						Menu[#Menu + 1] = { event = "paramedic:extractBlood", label = "Extrair Sangue", tunnel = "paramedic" }
-						Menu[#Menu + 1] = { event = "target:Medicplan", label = "Plano de Saúde", tunnel = "paramedic" }
 						Menu[#Menu + 1] = { event = "target:Repose", label = "Repouso", tunnel = "paramedic" }
 					end
 				end
