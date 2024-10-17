@@ -51,17 +51,6 @@ function Hensa.Verify(Number)
 		end
 	end
 
-	if Garages[Number]["license"] then
-		local driverLicense = vRP.GetDriverLicense(Passport)
-		if driverLicense == 0 then
-			TriggerClientEvent("Notify", source, "Atenção", "Você não possui <b>Carteira de Habilitação</b>.", "amarelo", 5000)
-			return false
-		elseif driverLicense == 2 then
-			TriggerClientEvent("Notify", source, "Atenção", "Sua <b>Carteira de Habilitação</b> está <b>apreendida</b>.", "amarelo", 5000)
-			return false
-		end
-	end
-
 	return true
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -480,7 +469,7 @@ function Hensa.Spawn(Name, Number)
 				TriggerClientEvent("garages:Close", source)
 
 				if vRP.Request(source, "Garagem", "Alugar o veículo <b>" .. VehicleName(Name) .. "</b> por <b>" .. Gemstone .. "</b> "..ItemName(DefaultMoneySpecial).."?") then
-					if vRP.PaymentGems(Passport, Gemstone) then
+					if vRP.PaymentGemstone(Passport, Gemstone) then
 						vRP.Query("vehicles/rentalVehicles", { Passport = Passport, Vehicle = Name, Plate = vRP.GeneratePlate(), Work = "true" })
 						TriggerClientEvent("Notify", source, "Sucesso", "Aluguel do veículo <b>" .. VehicleName(Name) .. "</b> concluído.", "verde", 5000)
 						vehicle = vRP.Query("vehicles/selectVehicles", { Passport = Passport, Vehicle = Name })
@@ -563,7 +552,7 @@ function Hensa.Spawn(Name, Number)
 							TriggerClientEvent("garages:Close", source)
 
 							if vRP.Request(source, "Garagem", "Atualizar o aluguel do veículo <b>" .. VehicleName(Name) .. "</b> por <b>" .. Dotted( Gemstone ) .. " "..ItemName(DefaultMoneySpecial).."</b>?") then
-								if vRP.PaymentGems(Passport, Gemstone) then
+								if vRP.PaymentGemstone(Passport, Gemstone) then
 									vRP.Query("vehicles/rentalVehiclesUpdate", { Passport = Passport, Vehicle = Name })
 									TriggerClientEvent("Notify", source, "Sucesso", "Aluguel do veículo <b>" .. VehicleName(Name) .. "</b> atualizado.", "verde", 5000)
 								else
