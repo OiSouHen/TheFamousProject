@@ -184,9 +184,12 @@ local Fuels = {
 	vec3(-61.03,-1760.85,28.31)
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
--- THREADSERVERSTART
+-- ONCLIENTRESOURCESTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
+AddEventHandler("onClientResourceStart",function(Resource)
+	if (GetCurrentResourceName() ~= Resource) then
+		return
+	end
 
 	RequestStreamedTextureDict("Targets",true)
 	while not HasStreamedTextureDictLoaded("Targets") do
@@ -197,6 +200,222 @@ CreateThread(function()
 	RegisterCommand("+entityTarget",TargetEnable)
 	RegisterCommand("-entityTarget",TargetDisable)
 	RegisterKeyMapping("+entityTarget","Interação auricular.","keyboard","LMENU")
+
+	AddCircleZone("Salary01", vec3(241.59,226.01,106.79), 0.5, {
+		name = "Salary01",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary02", vec3(243.38,225.36,106.79), 0.5, {
+		name = "Salary02",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary03", vec3(246.78,224.12,106.82), 0.5, {
+		name = "Salary03",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary04", vec3(248.56,223.47,106.83), 0.5, {
+		name = "Salary04",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary05", vec3(251.93,222.25,106.84), 0.5, {
+		name = "Salary05",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary06", vec3(253.72,221.6,106.86), 0.5, {
+		name = "Salary06",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary07", vec3(-112.8,6470.5,32.16), 0.5, {
+		name = "Salary07",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary08", vec3(-111.76,6469.45,32.17), 0.5, {
+		name = "Salary08",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
+
+	AddCircleZone("Salary09", vec3(-110.64,6468.34,32.15), 0.5, {
+		name = "Salary09",
+		heading = 0.0
+	}, {
+		Distance = 1.25,
+		options = {
+			{
+				event = "Salary:Receive",
+				label = "Receber Salário",
+				tunnel = "server"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Salário",
+				tunnel = "proserver",
+				service = "Normal"
+			}, {
+				event = "Salary:Verify",
+				label = "Verificar Conta Especial",
+				tunnel = "proserver",
+				service = "Special"
+			}
+		}
+	})
 
 	AddTargetModel({ -832573324,-1430839454,1457690978,1682622302,402729631,-664053099,1794449327,307287994,-1323586730,111281960,-541762431,-745300483,-417505688 },{
 		options = {
