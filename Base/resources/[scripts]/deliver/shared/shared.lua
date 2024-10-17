@@ -9,7 +9,7 @@ List = {
 		["Locate"] = 1
 	},
 	["Milkman"] = {
-		["Coords"] = vec3(1212.36,336.08,81.99),
+		["Coords"] = vec3(963.13,-2215.33,30.55),
 		["Label"] = "ENTREGAR",
 		["Route"] = false,
 		["Locate"] = 1
