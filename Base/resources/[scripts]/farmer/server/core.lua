@@ -31,8 +31,8 @@ AddEventHandler("farmer:Minerman",function(Number)
 
 		if GlobalState["Farmer:"..Number] and GlobalState["Work"] >= GlobalState["Farmer:"..Number] then
 			local Item = "pickaxe"
-			local Pickaxe = vRP.ConsultItem(Passport,Item)
-			local PickaxePlus = vRP.ConsultItem(Passport,Item.."plus")
+			local Pickaxe = vRP.ConsultItem(Passport,Item,1)
+			local PickaxePlus = vRP.ConsultItem(Passport,Item.."plus",1)
 
 			if not Pickaxe and not PickaxePlus then
 				TriggerClientEvent("Notify",source,"Atenção","Precisa de <b>1x "..ItemName(Item).."</b>.","amarelo",5000)
@@ -118,8 +118,8 @@ AddEventHandler("farmer:Lumberman",function(Number)
 
 		if GlobalState["Farmer:"..Number] and GlobalState["Work"] >= GlobalState["Farmer:"..Number] then
 			local Item = "axe"
-			local Axe = vRP.ConsultItem(Passport,Item)
-			local AxePlus = vRP.ConsultItem(Passport,Item.."plus")
+			local Axe = vRP.ConsultItem(Passport,Item,1)
+			local AxePlus = vRP.ConsultItem(Passport,Item.."plus",1)
 
 			if not Axe and not AxePlus then
 				TriggerClientEvent("Notify",source,"Atenção","Precisa de <b>1x "..ItemName(Item).."</b>.","amarelo",5000)
