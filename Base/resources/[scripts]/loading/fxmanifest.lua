@@ -3,6 +3,7 @@ game "gta5"
 lua54 "yes"
 
 loadscreen "web/index.html"
+loadscreen_cursor "yes"
 loadscreen_manual_shutdown "yes"
 
 client_scripts {
@@ -10,5 +11,11 @@ client_scripts {
 }
 
 files {
-	"web/*"
+	"web/*",
+	"web/**/*"
+}
+
+shared_scripts {
+	"@vrp/config/Global.lua",
+	"shared/*"
 }
