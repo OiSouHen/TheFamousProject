@@ -103,7 +103,7 @@ function Hensa.Take(Item,Amount,Target,Name)
 
 			for Index,Value in pairs(List[Name]["List"][Item]["Required"]) do
 				local Consult = vRP.InventoryItemAmount(Passport,Index)
-				vRP.RemoveItem(Passport,Consult[2],Value * Amount)
+				vRP.RemoveItem(Passport,Consult[2],Value * Amount,false)
 			end
 
 			vRP.GenerateItem(Passport,Item,Multiplier,false,Target)
