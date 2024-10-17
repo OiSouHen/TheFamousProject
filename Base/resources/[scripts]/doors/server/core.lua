@@ -14,9 +14,9 @@ Tunnel.bindInterface("doors", Hensa)
 -- GLOBALSTATE
 -----------------------------------------------------------------------------------------------------------------------------------------
 GlobalState["Doors"] = {
-	["1"] = { Coords = vec3(431.41, -999.59, 28.68), Hash = 2130672747, Disabled = false, Lock = true, Distance = 7, Perm = "Policia" },
-	["2"] = { Coords = vec3(452.30, -1000.80, 28.68), Hash = 2130672747, Disabled = false, Lock = true, Distance = 7, Perm = "Policia" },
-	["3"] = { Coords = vec3(488.89, -1016.89, 27.14), Hash = -1603817716, Disabled = false, Lock = true, Distance = 7, Perm = "Policia" },
+	["1"] = { Coords = vec3(431.41, -999.59, 28.68), Hash = 2130672747, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia" },
+	["2"] = { Coords = vec3(452.30, -1000.80, 28.68), Hash = 2130672747, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia" },
+	["3"] = { Coords = vec3(488.89, -1016.89, 27.14), Hash = -1603817716, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia" },
 	["4"] = { Coords = vec3(476.61, -1008.87, 26.48), Hash = -53345114, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["5"] = { Coords = vec3(481.00, -1004.11, 26.48), Hash = -53345114, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["6"] = { Coords = vec3(477.91, -1012.18, 26.48), Hash = -53345114, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
@@ -35,8 +35,8 @@ GlobalState["Doors"] = {
 	["19"] = { Coords = vec3(458.20, -972.25, 30.81), Hash = -1547307588, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia", Other = "20" },
 	["20"] = { Coords = vec3(455.88, -972.25, 30.81), Hash = -1547307588, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia", Other = "19" },
 
-	["21"] = { Coords = vec3(1844.99, 2604.81, 44.63), Hash = 741314661, Disabled = false, Lock = true, Distance = 7, Perm = "Emergencia" },
-	["22"] = { Coords = vec3(1818.54, 2604.40, 44.61), Hash = 741314661, Disabled = false, Lock = true, Distance = 7, Perm = "Emergencia" },
+	["21"] = { Coords = vec3(1844.99, 2604.81, 44.63), Hash = 741314661, Disabled = false, Lock = true, Distance = 7.0, Perm = "Emergencia" },
+	["22"] = { Coords = vec3(1818.54, 2604.40, 44.61), Hash = 741314661, Disabled = false, Lock = true, Distance = 7.0, Perm = "Emergencia" },
 
 	["23"] = { Coords = vec3(1837.91, 2590.25, 46.19), Hash = 539686410, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["24"] = { Coords = vec3(1768.54, 2498.41, 45.88), Hash = 913760512, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
@@ -55,10 +55,10 @@ GlobalState["Doors"] = {
 	["37"] = { Coords = vec3(383.40, 798.29, 187.61), Hash = 517369125, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["38"] = { Coords = vec3(382.96, 796.82, 187.61), Hash = 517369125, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["39"] = { Coords = vec3(378.75, 796.83, 187.61), Hash = 517369125, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
-	["40"] = { Coords = vec3(398.15, -1607.52, 28.34), Hash = 1286535678, Disabled = false, Lock = true, Distance = 7, Perm = "Policia" },
-	-- [41"] = { Coords = vec3(413.09,-1619.81,28.34), Hash = -1483471451, Disabled = false, Lock = true, Distance = 7, Perm = "Policia", Disabled = true }, -- Impound
-	-- [42"] = { Coords = vec3(418.54,-1651.08,28.29), Hash = -1483471451, Disabled = false, Lock = true, Distance = 7, Perm = "Policia", Disabled = true }, -- Impound
-	["43"] = { Coords = vec3(1861.75, 3687.30, 33.01), Hash = 1286535678, Disabled = false, Lock = true, Distance = 7, Perm = "Policia" },
+	["40"] = { Coords = vec3(398.15, -1607.52, 28.34), Hash = 1286535678, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia" },
+	-- [41"] = { Coords = vec3(413.09,-1619.81,28.34), Hash = -1483471451, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia", Disabled = true }, -- Impound
+	-- [42"] = { Coords = vec3(418.54,-1651.08,28.29), Hash = -1483471451, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia", Disabled = true }, -- Impound
+	["43"] = { Coords = vec3(1861.75, 3687.30, 33.01), Hash = 1286535678, Disabled = false, Lock = true, Distance = 7.0, Perm = "Policia" },
 	["44"] = { Coords = vec3(-443.64, 6006.97, 27.73), Hash = -594854737, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["45"] = { Coords = vec3(-442.24, 6012.61, 27.73), Hash = -594854737, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
 	["46"] = { Coords = vec3(-445.94, 6012.88, 27.73), Hash = -594854737, Disabled = false, Lock = true, Distance = 1.5, Perm = "Policia" },
