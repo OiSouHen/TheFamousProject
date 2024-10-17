@@ -611,8 +611,10 @@ function Hensa.Deliver(Work)
 				return false
 			end
 
-			if vRP.TakeItem(Passport,"woodlog",3,false,Slot) then
-				local GainExperience = 3
+			local LumbermanItem = "woodlog"
+			local LumbermanItemAmount = 3
+			if vRP.TakeItem(Passport,LumbermanItem,LumbermanItemAmount,false,Slot) then
+				local GainExperience = LumbermanItemAmount
 				local Amount = math.random(125,175)
 				local Experience = vRP.GetExperience(Passport,"Lumberman")
 				local Valuation = Amount + Amount * (0.05 * Experience)
@@ -645,6 +647,8 @@ function Hensa.Deliver(Work)
 				Active[Passport] = nil
 
 				return true
+			else
+				TriggerClientEvent("Notify",source,"Aviso","Você precisa de <b>"..LumbermanItemAmount.."x "..ItemName(LumbermanItem).."</b>.","vermelho",5000)
 			end
 		elseif Work == "Milkman" then
 			if not vRPC.LastVehicle(source,"youga2") then
@@ -654,8 +658,10 @@ function Hensa.Deliver(Work)
 				return false
 			end
 
-			if vRP.TakeItem(Passport,"milkbottle",3,false,Slot) then
-				local GainExperience = 3
+			local MilkmanItem = "milkbottle"
+			local MilkmanItemAmount = 3
+			if vRP.TakeItem(Passport,MilkmanItem,MilkmanItemAmount,false,Slot) then
+				local GainExperience = MilkmanItemAmount
 				local Amount = math.random(125,175)
 				local Experience = vRP.GetExperience(Passport,"Milkman")
 				local Valuation = Amount + Amount * (0.05 * Experience)
@@ -688,6 +694,8 @@ function Hensa.Deliver(Work)
 				Active[Passport] = nil
 
 				return true
+			else
+				TriggerClientEvent("Notify",source,"Aviso","Você precisa de <b>"..MilkmanItemAmount.."x "..ItemName(MilkmanItem).."</b>.","vermelho",5000)
 			end
 		elseif Work == "Transporter" then
 			if not vRPC.LastVehicle(source,"stockade") then
@@ -697,8 +705,10 @@ function Hensa.Deliver(Work)
 				return false
 			end
 
-			if vRP.TakeItem(Passport,"pouch",1,false,Slot) then
-				local GainExperience = 1
+			local TransporterItem = "milkbottle"
+			local TransporterItemAmount = 1
+			if vRP.TakeItem(Passport,TransporterItem,TransporterItemAmount,false,Slot) then
+				local GainExperience = TransporterItemAmount
 				local Amount = math.random(75,85)
 				local Experience = vRP.GetExperience(Passport,"Transporter")
 				local Valuation = Amount + Amount * (0.05 * Experience)
@@ -731,6 +741,8 @@ function Hensa.Deliver(Work)
 				Active[Passport] = nil
 
 				return true
+			else
+				TriggerClientEvent("Notify",source,"Aviso","Você precisa de <b>"..TransporterItemAmount.."x "..ItemName(TransporterItem).."</b>.","vermelho",5000)
 			end
 		end
 
@@ -1382,7 +1394,7 @@ AddEventHandler("inventory:Products",function(Service)
 			exports["discord"]:Embed("Hackers","**Passaporte:** "..Passport.."\n**Função:** Farmer do "..Service,0xa3c846)
 		end
 
-		if Products[Service]["Item"] and not vRP.ConsultItem(Passport,Products[Service]["Item"]) then
+		if Products[Service]["Item"] and not vRP.ConsultItem(Passport,Products[Service]["Item"],1) then
 			TriggerClientEvent("Notify",source,"Atenção","Precisa de <b>1x "..ItemName(Products[Service]["Item"]).."</b>.","amarelo",5000)
 
 			return false
@@ -1414,10 +1426,13 @@ AddEventHandler("inventory:Products",function(Service)
 				Active[Passport] = nil
 				vRPC.Destroy(source)
 
-				if not Products[Service]["Item"] or (Products[Service]["Item"] and vRP.TakeItem(Passport,Products[Service]["Item"])) then
+				if not Products[Service]["Item"] or Products[Service]["Item"] then
 					local Result = RandPercentage(Products[Service]["Itens"])
 					if not vRP.MaxItens(Passport,Result["Item"],Result["Valuation"]) and vRP.CheckWeight(Passport,Result["Item"],Result["Valuation"]) then
-						vRP.GenerateItem(Passport,Result["Item"],Result["Valuation"],true)
+						if vRP.TakeItem(Passport,Products[Service]["Item"],Result["Valuation"],true) then
+							vRP.GenerateItem(Passport,Result["Item"],Result["Valuation"],true)
+							vRP.UpgradeStress(Passport,1)
+						end
 					else
 						TriggerClientEvent("Notify",source,"Mochila Sobrecarregada","Sua recompensa caiu no chão.","roxo",5000)
 						exports["inventory"]:Drops(Passport,source,Result["Item"],Result["Valuation"])
