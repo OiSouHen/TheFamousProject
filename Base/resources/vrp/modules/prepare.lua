@@ -9,10 +9,6 @@ vRP.Prepare("characters/SetBadge","UPDATE characters SET Badge = @Badge WHERE id
 vRP.Prepare("characters/UpdatePhone","UPDATE characters SET Phone = @Phone WHERE id = @Passport")
 vRP.Prepare("characters/AddBank","UPDATE characters SET Bank = Bank + @Bank WHERE id = @Passport")
 vRP.Prepare("characters/RemBank","UPDATE characters SET Bank = Bank - @Bank WHERE id = @Passport")
-vRP.Prepare("characters/UpdateWork","UPDATE characters SET Work = @Work WHERE id = @Passport")
-vRP.Prepare("characters/UpdateGun","UPDATE characters SET Gun = @Gun WHERE id = @Passport")
-vRP.Prepare("characters/UpdateBadge","UPDATE characters SET Badge = @Badge WHERE id = @Passport")
-vRP.Prepare("characters/UpdateDriver","UPDATE characters SET Driver = @Driver WHERE id = @Passport")
 vRP.Prepare("characters/UpdateAvatar","UPDATE characters SET Avatar = @Avatar WHERE id = @Passport")
 vRP.Prepare("characters/AddLikes","UPDATE characters SET Likes = Likes + @Likes WHERE id = @Passport")
 vRP.Prepare("characters/RemLikes","UPDATE characters SET Likes = Likes - @Likes WHERE id = @Passport")
@@ -20,7 +16,6 @@ vRP.Prepare("characters/AddUnlikes","UPDATE characters SET Unlikes = Unlikes + @
 vRP.Prepare("characters/RemUnlikes","UPDATE characters SET Unlikes = Unlikes - @Unlikes WHERE id = @Passport")
 vRP.Prepare("characters/UserLicense","SELECT * FROM characters WHERE id = @id and License = @License")
 vRP.Prepare("characters/Characters","SELECT * FROM characters WHERE License = @License and Deleted = 0")
-vRP.Prepare("characters/ChangeMode","UPDATE characters SET Mode = @Mode WHERE id = @Passport")
 vRP.Prepare("characters/InsertPrison","UPDATE characters SET Prison = Prison + @Prison WHERE id = @Passport")
 vRP.Prepare("characters/ReducePrison","UPDATE characters SET Prison = Prison - @Prison WHERE id = @Passport")
 vRP.Prepare("characters/CleanPrison","UPDATE characters SET Prison = 0 WHERE id = @Passport")
@@ -36,17 +31,11 @@ vRP.Prepare("accounts/Account","SELECT * FROM accounts WHERE License = @License"
 vRP.Prepare("accounts/NewAccount","INSERT INTO accounts(License) VALUES(@License)")
 vRP.Prepare("accounts/Clean","UPDATE accounts SET Whitelist = 0 WHERE License = @License")
 vRP.Prepare("accounts/SetWhitelist","UPDATE accounts SET Whitelist = @Whitelist WHERE id = @id")
-vRP.Prepare("accounts/Rolepass","UPDATE accounts SET Rolepass = @Rolepass WHERE License = @License")
 vRP.Prepare("accounts/SetPremium","UPDATE accounts SET Premium = @Premium WHERE License = @License")
 vRP.Prepare("accounts/UpgradePremium","UPDATE accounts SET Premium = Premium + 2592000 WHERE License = @License")
 vRP.Prepare("accounts/AddGemstone","UPDATE accounts SET Gemstone = Gemstone + @Gemstone WHERE License = @License")
 vRP.Prepare("accounts/UpdateCharacters","UPDATE accounts SET Characters = Characters + 1 WHERE License = @License")
 vRP.Prepare("accounts/RemoveGemstone","UPDATE accounts SET Gemstone = Gemstone - @Gemstone WHERE License = @License")
------------------------------------------------------------------------------------------------------------------------------------------
--- MEDICPLAN
------------------------------------------------------------------------------------------------------------------------------------------
-vRP.Prepare("medicplan/Set","UPDATE accounts SET Medic = @Medic WHERE License = @License")
-vRP.Prepare("medicplan/Upgrade","UPDATE accounts SET Medic = Medic + 604800 WHERE License = @License")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLAYERDATA
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -180,12 +169,6 @@ vRP.Prepare("panel/GetTransactions","SELECT * FROM paneltransactions WHERE name 
 vRP.Prepare("panel/InsertTransaction","INSERT INTO paneltransactions (name, Type, Value) VALUES (@name, @Type, @Value)")
 vRP.Prepare("panel/UpdateBuff","UPDATE panel SET buff = @buff WHERE name = @name")
 vRP.Prepare("panel/SetPremium","UPDATE panel SET premium = @premium WHERE name = @name")
------------------------------------------------------------------------------------------------------------------------------------------
--- BANKS
------------------------------------------------------------------------------------------------------------------------------------------
-vRP.Prepare("banks/GetInformations","SELECT * FROM banks WHERE Name = @Name")
-vRP.Prepare("banks/AddValue","UPDATE banks SET Bank = Bank + @Value WHERE Name = @Name")
-vRP.Prepare("banks/RemValue","UPDATE banks SET Bank = Bank - @Value WHERE Name = @Name")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LB-PHONE
 -----------------------------------------------------------------------------------------------------------------------------------------
