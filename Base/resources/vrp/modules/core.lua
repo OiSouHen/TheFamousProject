@@ -142,66 +142,6 @@ function vRP.Inventory(Passport)
 	return {}
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- SAVETEMPORARY
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.SaveTemporary(Passport, source, Route)
-	local HensaTable = vRP.Datatable(Passport)
-	if not CharactersArena[Passport] and HensaTable then
-		CharactersArena[Passport] = {}
-		CharactersArena[Passport]["Inventory"] = HensaTable["Inventory"]
-		CharactersArena[Passport]["Health"] = GetEntityHealth(GetPlayerPed(source))
-		CharactersArena[Passport]["Armour"] = GetPedArmour(GetPlayerPed(source))
-		CharactersArena[Passport]["Stress"] = HensaTable["Stress"]
-		CharactersArena[Passport]["Hunger"] = HensaTable["Hunger"]
-		CharactersArena[Passport]["Thirst"] = HensaTable["Thirst"]
-		CharactersArena[Passport]["route"] = Route
-
-		SetPedArmour(GetPlayerPed(source), 100)
-
-		vRPC.SetHealth(source, 200)
-
-		vRP.UpgradeHunger(Passport, 100)
-		vRP.UpgradeThirst(Passport, 100)
-		vRP.DowngradeStress(Passport, 100)
-
-		TriggerEvent("inventory:saveTemporary", Passport)
-
-		HensaTable["Inventory"] = {}
-
-		for Number,v in pairs(ArenaItens) do
-			vRP.GenerateItem(Passport, Number, v, false)
-		end
-
-		TriggerEvent("vRP:BucketServer", source, "Enter", Route)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- APPLYTEMPORARY
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.ApplyTemporary(Passport, source)
-	local HensaTable = vRP.Datatable(Passport)
-	if CharactersArena[Passport] and HensaTable then
-		HensaTable["Inventory"] = {}
-		HensaTable["Inventory"] = CharactersArena[Passport]["Inventory"]
-		HensaTable["Stress"] = CharactersArena[Passport]["Stress"]
-		HensaTable["Hunger"] = CharactersArena[Passport]["Hunger"]
-		HensaTable["Thirst"] = CharactersArena[Passport]["Thirst"]
-
-		TriggerClientEvent("hud:Cough", source, HensaTable["Cough"])
-		TriggerClientEvent("hud:Thirst", source, HensaTable["Thirst"])
-		TriggerClientEvent("hud:Hunger", source, HensaTable["Hunger"])
-		TriggerClientEvent("hud:Stress", source, HensaTable["Stress"])
-		TriggerClientEvent("hud:Oxigen", source, HensaTable["Oxigen"])
-
-		SetPedArmour(GetPlayerPed(source), CharactersArena[Passport]["Armour"])
-		vRPC.SetHealth(source, CharactersArena[Passport]["Health"])
-		TriggerEvent("inventory:applyTemporary", Passport)
-		TriggerEvent("vRP:BucketServer", source, "Exit")
-
-		CharactersArena[Passport] = nil
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- SKINCHARACTER
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.SkinCharacter(Passport, Hash)
@@ -371,20 +311,14 @@ function vRP.ChosenCharacter(source, Passport, Model)
 			Characters[source]["Bank"] = Consult[1]["Bank"]
 			Characters[source]["Blood"] = Consult[1]["Blood"]
 			Characters[source]["Prison"] = Consult[1]["Prison"]
-			Characters[source]["Gun"] = Consult[1]["Gun"]
 			Characters[source]["Avatar"] = Consult[1]["Avatar"]
 			Characters[source]["Likes"] = Consult[1]["Likes"]
 			Characters[source]["Unlikes"] = Consult[1]["Unlikes"]
 			Characters[source]["Badge"] = Consult[1]["Badge"]
-			Characters[source]["Driver"] = Consult[1]["Driver"]
-			Characters[source]["Mode"] = Consult[1]["Mode"]
-			Characters[source]["Work"] = Consult[1]["Work"]
 			Characters[source]["Created"] = Consult[1]["Created"]
 			Characters[source]["Deleted"] = Consult[1]["Deleted"]
 
-			Characters[source]["Rolepass"] = Account["Rolepass"]
 			Characters[source]["Premium"] = Account["Premium"]
-			Characters[source]["Medic"] = Account["Medic"]
 			Characters[source]["Discord"] = Account["Discord"]
 			Characters[source]["Characters"] = Account["Characters"]
 
@@ -402,9 +336,9 @@ function vRP.ChosenCharacter(source, Passport, Model)
 				vRP.GenerateItem(Passport,k,v,false)
 			end
 
-			if GiveIdentity then
-				vRP.GenerateItem(Passport,"identity-"..Passport,1,false)
-			end
+			-- if GiveIdentity then
+			-- 	vRP.GenerateItem(Passport,"identity-"..Passport,1,false)
+			-- end
 
 			vRP.Query("playerdata/SetData",{ Passport = Passport, Name = "Barbershop", Information = json.encode(BarbershopInit[Model]) })
 			vRP.Query("playerdata/SetData",{ Passport = Passport, Name = "Clothings", Information = json.encode(SkinshopInit[Model]) })
@@ -427,51 +361,6 @@ CreateThread(function()
 	SetMapName(ServerName)
 	SetGameType(ServerName)
 	SetRoutingBucketEntityLockdownMode(0, EntityLockdown)
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- REWARDS
------------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("vRP:Rewards", function(source)
-	local character = Characters[source]
-	if character and character["Rolepass"] > 0 then
-		local currentDay = tonumber(os.date("%d"))
-		local rolepassDay = tonumber(character["Rolepass"])
-		if currentDay > rolepassDay then
-			local reward = Rewards[currentDay]
-			if reward then
-				vRP.GenerateItem(character["id"], reward["item"], reward["amount"], false)
-				TriggerClientEvent("inventory:Update", source, "Backpack")
-
-				if currentDay >= 30 then
-					vRP.UpdateRolepass(source, 0)
-				else
-					vRP.UpdateRolepass(source, currentDay)
-				end
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- ACTIVEPASS
------------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("vRP:ActivePass", function(source)
-	local character = Characters[source]
-	if character then
-		local currentDay = tonumber(os.date("%d"))
-		for i = 1, currentDay do
-			local reward = Rewards[i]
-			if reward then
-				vRP.GenerateItem(character["id"], reward["item"], reward["amount"], false)
-				TriggerClientEvent("inventory:Update", source, "Backpack")
-			end
-		end
-
-		if currentDay >= 30 then
-			vRP.UpdateRolepass(source, 0)
-		else
-			vRP.UpdateRolepass(source, currentDay)
-		end
-	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETQUEUE
@@ -956,7 +845,7 @@ AddEventHandler("playerConnecting", function()
 	end
 
 	if rockstarLicense ~= "" then
-		exports["oxmysql"]:execute("UPDATE accounts SET Discord = ? WHERE License LIKE ?", {discordID, "%" .. rockstarLicense})
+		exports["oxmysql"]:execute("UPDATE accounts SET Discord = ? WHERE License LIKE ?", { discordID, "%" .. rockstarLicense })
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1051,12 +940,6 @@ function vRP.AlcoholTimer(Passport, Time)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- FALSEIDENTITY
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.FalseIdentity(Passport)
-	return vRP.Query("fidentity/Result",{ id = Passport })[1] or false
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- IDENTITY
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.Identity(Passport)
@@ -1075,7 +958,7 @@ function vRP.FullName(Passport)
 	if Characters[Source] then
 		return Characters[Source]["Name"].." "..Characters[Source]["Lastname"]
 	else
-		return "Hensa"
+		return "Hensa.store"
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1095,36 +978,6 @@ function tvRP.UpdateAvatar(Passport, Avatar)
 
 		if Characters[Source] then
 			Characters[Source]["Avatar"] = Avatar
-		end
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- GETWORK
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.GetWork(Passport)
-	local Source = vRP.Source(Passport)
-	if Characters[Source] then
-		return Characters[Source]["Work"]
-	else
-		return "Nenhum"
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- CHANGEWORK
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.ChangeWork(Passport, Work)
-	local Source = vRP.Source(Passport)
-	vRP.Query("characters/UpdateWork",{ Work = Work, Passport = Passport })
-
-	if Characters[Source] then
-		Characters[Source]["Work"] = Work
-
-		if Work == "Nenhum" then
-			Player(Source)["state"]["Work"] = false
-			TriggerClientEvent("Notify", Source, "verde", "Você se demitiu do seu emprego atual.", "Sucesso", 5000)
-		else
-			Player(Source)["state"]["Work"] = true
-			TriggerClientEvent("Notify", Source, "amarelo", "Você se registrou em um novo emprego.", ClassWork(Work), 5000)
 		end
 	end
 end
@@ -1267,43 +1120,10 @@ end
 function vRP.SetBadge(Passport, Badge)
 	local Source = vRP.Source(Passport)
 
-	vRP.Query("characters/UpdateBadge", { Badge = parseInt(Badge), Passport = Passport })
+	vRP.Query("characters/SetBadge", { Badge = parseInt(Badge), Passport = Passport })
 
 	if Characters[Source] then
 		Characters[Source]["Badge"] = parseInt(Badge)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- UPDATEGUNLICENSE
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.UpdateGunlicense(Passport, Gun)
-	local Source = vRP.Source(Passport)
-
-	vRP.Query("characters/UpdateGun",{ Gun = parseInt(Gun), Passport = Passport })
-
-	if Characters[Source] then
-		Characters[Source]["Gun"] = parseInt(Gun)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- GETDRIVERLICENSE
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.GetDriverLicense(Passport)
-	local Source = vRP.Source(Passport)
-	if Characters[Source] then
-		return Characters[Source]["Driver"]
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- UPDATEDRIVERLICENSE
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.UpdateDriverLicense(Passport, Driver)
-	local Source = vRP.Source(Passport)
-
-	vRP.Query("characters/UpdateDriver",{ Driver = parseInt(Driver), Passport = Passport })
-
-	if Characters[Source] then
-		Characters[Source]["Driver"] = parseInt(Driver)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -1501,18 +1321,6 @@ function vRP.RemoveWeight(Passport, Amount)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- SWAPSLOT
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.SwapSlot(Passport, Slot, Target)
-	local Source = vRP.Source(Passport)
-	local Inventory = vRP.Inventory(Passport)
-	local Slot = tostring(Slot)
-	local Target = tostring(Target)
-	if Source and Inventory then
-		Inventory[Target], Inventory[Slot] = Inventory[Slot], Inventory[Target]
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- INVENTORYWEIGHT
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.InventoryWeight(Passport)
@@ -1605,7 +1413,7 @@ function vRP.InventoryFull(Passport, Item)
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ITEMAMOUNT
+-- ITEMAMOUNT -- HENSA FUNCTION
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.ItemAmount(Passport, Item)
 	if vRP.Source(Passport) then
@@ -1781,10 +1589,6 @@ function vRP.TakeItem(Passport, Item, Amount, Notify, Slot)
 			end
 
 			SelfReturn[Passport] = true
-		end
-
-		if ItemType(splitName[1]) == "Animal" then
-			TriggerClientEvent("dynamic:animalFunctions", Source, "destroy")
 		end
 	end
 
@@ -2023,24 +1827,6 @@ function vRP.UpdateChest(Passport, Data, Slot, Target, Amount)
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- DIRECTCHEST
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.DirectChest(Chest, Slot, Amount)
-	local Datatable = vRP.GetServerData("Chest:" .. Chest)
-	local Slot = tostring(Slot)
-	local Amount = parseInt(Amount)
-
-	if Datatable[Slot] then
-		if Datatable[Slot].item == DefaultMoneyOne then
-			Datatable[Slot].amount = Datatable[Slot].amount + Amount
-		else
-			Datatable[Slot] = { item = DefaultMoneyOne, amount = Amount }
-		end
-	else
-		Datatable[Slot] = { item = DefaultMoneyOne, amount = Amount }
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- UPDATEINVENTORY
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.UpdateInventory(Slot,Target,Amount)
@@ -2112,17 +1898,6 @@ function tvRP.UpdateInventory(Slot,Target,Amount)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHESTPREMIUM
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.ChestPremium(Chest)
-	local Consult = vRP.Query("chests/GetChests",{ Name = Chest })
-	if Consult[1]["Premium"] > 0 then
-		return true
-	end
-
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- SETPREMIUM
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.SetPremium(source)
@@ -2175,63 +1950,6 @@ function vRP.LicensePremium(License)
 
 	return false
 end
------------------------------------------------------------------------------------------------------------------------------------------
--- MEDICPLAN
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.Medicplan(source)
-	local Account = vRP.Account(Characters[source]["License"])
-	if Account and Account["Medic"] >= os.time() then
-		return true
-	end
-
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- SETMEDICPLAN
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.SetMedicplan(source)
-	if Characters[source] then
-		vRP.Query("medicplan/Set",{ Medic = os.time() + 604800, License = Characters[source]["License"] })
-		Characters[source]["Medic"] = parseInt(os.time() + 604800)
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- UPGRADEMEDICPLAN
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.UpgradeMedicplan(source)
-	if Characters[source] then
-		vRP.Query("medicplan/Upgrade",{ License = Characters[source]["License"] })
-		Characters[source]["Medic"] = Characters[source]["Medic"] + 604800
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- UPDATEROLEPASS
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.UpdateRolepass(source, Day)
-	if Characters[source] then
-		vRP.Query("accounts/Rolepass",{ Rolepass = Day, License = Characters[source]["License"] })
-		Characters[source]["Rolepass"] = Day
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- CHECKROLEPASS
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.CheckRolepass(source)
-	if Characters[source] and Characters[source]["Rolepass"] > 0 then
-		return true
-	end
-
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- CLEANVEHICLE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("CleanVehicle")
-AddEventHandler("CleanVehicle", function(entIndex)
-	if DoesEntityExist(NetworkGetEntityFromNetworkId(entIndex)) and not IsPedAPlayer(NetworkGetEntityFromNetworkId(entIndex)) and 2 == GetEntityType(NetworkGetEntityFromNetworkId(entIndex)) then
-		SetVehicleDirtLevel(NetworkGetEntityFromNetworkId(entIndex), 0)
-	end
-end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CREATE
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2303,32 +2021,6 @@ exports("Party", function(Passport, source, Distance)
 	return Partys
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- BANKS
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.Banks(Mode, Value, Name)
-	if not Value then
-		if Mode == "See" then
-			local Infos = vRP.Query("banks/GetInformations", { Name = Name })
-			if Infos then
-				return Infos[1]["Bank"]
-			end
-		end
-
-		return
-	end
-
-	local intValue = tonumber(Value)
-	if intValue <= 0 then
-		return
-	end
-
-	if Mode == "Add" then
-		vRP.Query("banks/AddValue", { Value = intValue, Name = Name })
-	elseif Mode == "Rem" then
-		vRP.Query("banks/RemValue", { Value = intValue, Name = Name })
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
 -- GIVEBANK
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.GiveBank(Passport, Amount)
@@ -2378,20 +2070,9 @@ function vRP.GetBank(source)
 	return 0
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CHANGEMODE
+-- PAYMENTGEMSTONE
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.ChangeMode(Passport, Mode)
-	local Source = vRP.Source(Passport)
-	vRP.Query("characters/ChangeMode",{ Mode = Mode, Passport = Passport })
-
-	if Characters[Source] then
-		Characters[Source]["Mode"] = Mode
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- PAYMENTGEMS
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.PaymentGems(Passport,Amount)
+function vRP.PaymentGemstone(Passport,Amount)
 	local Source = vRP.Source(Passport)
 	if parseInt(Amount) > 0 and Characters[Source] and parseInt(Amount) <= vRP.UserGemstone(Characters[Source]["License"]) then
 		vRP.Query("accounts/RemoveGemstone",{ Gemstone = parseInt(Amount), License = Characters[Source]["License"] })
@@ -2490,10 +2171,6 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 				HensaTable["Stress"] = 0
 			end
 
-			if not HensaTable["Cough"] then
-				HensaTable["Cough"] = 0
-			end
-
 			if not HensaTable["Hunger"] then
 				HensaTable["Hunger"] = 100
 			end
@@ -2519,7 +2196,6 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 			TriggerClientEvent("skinshop:Apply", source, vRP.UserData(Passport, "Clothings"))
 			TriggerClientEvent("tattooshop:Apply", source, vRP.UserData(Passport, "Tatuagens"))
 
-			TriggerClientEvent("hud:Cough", source, HensaTable["Cough"])
 			TriggerClientEvent("hud:Thirst", source, HensaTable["Thirst"])
 			TriggerClientEvent("hud:Hunger", source, HensaTable["Hunger"])
 			TriggerClientEvent("hud:Stress", source, HensaTable["Stress"])
@@ -2528,12 +2204,6 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 			TriggerClientEvent("vRP:Active", source, Passport, vRP.FullName(Passport))
 
 			Player(source)["state"]["Passport"] = Passport
-
-			if vRP.Identity(Passport)["Work"] == "Nenhum" then
-				Player(source)["state"]["Work"] = false
-			else
-				Player(source)["state"]["Work"] = true
-			end
 
 			local Position = vec3(HensaTable["Pos"]["x"], HensaTable["Pos"]["y"], HensaTable["Pos"]["z"])
 			if GetResourceMetadata("vrp", "creator") == "yes" then
@@ -2551,43 +2221,6 @@ AddEventHandler("ChosenCharacter", function(Passport, source)
 		end
 	else
 		print("Seu vRP foi modificado. Por favor, entre em contato com a equipe Hensa.")
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- VRP:ONLYOBJECTS
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("vRP:OnlyObjects")
-AddEventHandler("vRP:OnlyObjects", function()
-	local source = source
-	local Passport = vRP.Passport(source)
-
-	if Passport then
-		local Inventory = vRP.Inventory(Passport)
-
-		for i = 1, 5 do
-			local slot = tostring(i)
-			local itemData = Inventory[slot]
-
-			if itemData and itemData["item"] then
-				local ItemType = ItemType(itemData["item"])
-			end
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- VRP:BACKPACKWEIGHT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("vRP:BackpackWeight")
-AddEventHandler("vRP:BackpackWeight", function(Value)
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport then
-		if Value then
-			if not Global[Passport] then
-				vRP.Datatable(Passport)["Weight"] = vRP.Datatable(Passport)["Weight"] + Value
-				Global[Passport] = true
-			end
-		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2675,12 +2308,10 @@ RegisterCommand("gg", function(source)
 
 		vRP.UpgradeThirst(Passport, 100)
 		vRP.UpgradeHunger(Passport, 100)
-		vRP.DowngradeCough(Passport, 100)
 		vRP.DowngradeStress(Passport, 100)
 
 		SURVIVAL.Respawn(source)
 
-		TriggerClientEvent("dynamic:animalFunctions", source, "destroy")
 		exports["discord"]:Embed("Airport","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Address:** "..GetPlayerEndpoint(source),0xa3c846)
 	end
 end)
@@ -2757,26 +2388,6 @@ function vRP.UpgradeStress(Passport, Amount)
 		end
 
 		TriggerClientEvent("hud:Stress", source, HensaTable["Stress"])
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- UPGRADECOUGH
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.UpgradeCough(Passport, Amount)
-	local source = vRP.Source(Passport)
-	local HensaTable = vRP.Datatable(Passport)
-	if HensaTable and source then
-		if not HensaTable["Cough"] then
-			HensaTable["Cough"] = 0
-		end
-
-		HensaTable["Cough"] = HensaTable["Cough"] + parseInt(Amount)
-
-		if HensaTable["Cough"] > 100 then
-			HensaTable["Cough"] = 100
-		end
-
-		TriggerClientEvent("hud:Cough", source, HensaTable["Cough"])
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2857,26 +2468,6 @@ function vRP.DowngradeStress(Passport, Amount)
 		end
 
 		TriggerClientEvent("hud:Stress", source, HensaTable["Stress"])
-	end
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- DOWNGRADECOUGH
------------------------------------------------------------------------------------------------------------------------------------------
-function vRP.DowngradeCough(Passport, Amount)
-	local source = vRP.Source(Passport)
-	local HensaTable = vRP.Datatable(Passport)
-	if HensaTable and source then
-		if not HensaTable["Cough"] then
-			HensaTable["Cough"] = 0
-		end
-
-		HensaTable["Cough"] = HensaTable["Cough"] - parseInt(Amount)
-
-		if HensaTable["Cough"] < 0 then
-			HensaTable["Cough"] = 0
-		end
-
-		TriggerClientEvent("hud:Cough", source, HensaTable["Cough"])
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -3363,7 +2954,7 @@ AddEventHandler("Salary:Update",function(Passport, Amount)
 			HensaTable["Salary"] = parseInt(Amount)
 		end
 
-		TriggerClientEvent("Notify", Source, "amarelo", "Você recebeu <b>$"..Dotted(Amount).."</b> "..ItemName(DefaultMoneyOne)..".", "Atenção", 5000)
+		TriggerClientEvent("Notify", Source, "Banco Central", "Você recebeu <b>$"..Dotted(Amount).."</b> "..ItemName(DefaultMoneyOne)..".", "money", 5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -3378,16 +2969,16 @@ AddEventHandler("Salary:Verify", function(Mode)
 			local HensaTable = vRP.Datatable(Passport)
 			if HensaTable then
 				local Salary = HensaTable["Salary"] or 0
-				TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>$"..Dotted(Salary).."</b> "..ItemName(DefaultMoneyOne)..".", "Conta Salário", 10000)
+				TriggerClientEvent("Notify", source, "Conta Salário", "Seu saldo é de: <b>$"..Dotted(Salary).."</b> "..ItemName(DefaultMoneyOne)..".", "money", 10000)
 			end
 		elseif Mode == "Special" then
 			local Identities = vRP.Identities(source)
 			local Account = vRP.Account(Identities)
 			if Identities and Account then
 				if Account["Gemstone"] > 0 then
-					TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>"..Dotted(Account["Gemstone"]).."</b> "..ItemName(DefaultMoneySpecial)..".", "Conta Especial", 10000)
+					TriggerClientEvent("Notify", source, "Conta Especial", "Seu saldo é de: <b>"..Dotted(Account["Gemstone"]).."</b> "..ItemName(DefaultMoneySpecial)..".", "money", 10000)
 				else
-					TriggerClientEvent("Notify", source, "default", "Seu saldo é de: <b>0</b> "..ItemName(DefaultMoneySpecial)..".", "Conta Especial", 5000)
+					TriggerClientEvent("Notify", source, "Conta Especial", "Seu saldo é de: <b>0</b> "..ItemName(DefaultMoneySpecial)..".", "money", 5000)
 				end
 			end
 		end
@@ -3413,18 +3004,18 @@ AddEventHandler("Salary:Receive", function()
                     if confirmation then
                         exports["discord"]:Embed("Salary", string.format("**Passaporte:** %s\n**Sacou de salário:** %s", passport, Dotted(salaryAmount)), 0xa3c846, source)
                         
-                        TriggerClientEvent("Notify", source, "verde", string.format("Você efetuou o saque de <b>$%s</b> %s.", Dotted(salaryAmount), ItemName(DefaultMoneyOne)), "Sucesso", 5000)
+                        TriggerClientEvent("Notify", source, "Banco Central", string.format("Você efetuou o saque de <b>$%s</b> %s.", Dotted(salaryAmount), ItemName(DefaultMoneyOne)), "money", 5000)
                         
                         vRP.GiveBank(passport, salaryAmount)
                         SalaryCooldown[passport] = os.time() + 60
                         hensaTable["Salary"] = nil
                     end
                 else
-                    TriggerClientEvent("Notify", source, "vermelho", "Você não possui valores para sacar.", "Aviso", 5000)
+                    TriggerClientEvent("Notify", source, "Aviso", "Você não possui valores para sacar.", "vermelho", 5000)
                 end
             else
                 local cooldown = CompleteTimers(SalaryCooldown[passport] - os.time())
-                TriggerClientEvent("Notify", source, "azul", string.format("Aguarde <b>%s</b>.", cooldown), false, 5000)
+                TriggerClientEvent("Notify", source, "Banco Central", string.format("Aguarde <b>%s</b>.", cooldown), "azul", 5000)
             end
         end
     end
