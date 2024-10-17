@@ -202,8 +202,8 @@ RegisterCommand("EmergencyFunctions",function()
 		local Ped = PlayerPedId()
 		local Health = GetEntityHealth(Ped)
 
-		if LocalPlayer["state"]["Policia"] then
-			exports["dynamic"]:AddButton("Serviço", "Finalizar expediente de trabalho.", "dynamic:Service", "Policia", false, true)
+		if CheckPolice() then
+			exports["dynamic"]:AddButton("Serviço", "Finalizar expediente de trabalho.", "dynamic:ExitService", "Policia", false, true)
 
 			exports["dynamic"]:AddButton("Companheiros", "Verifique seus companheiros em serviço.", "admin:Dynamic", "statsPolicia", false, true)
 
@@ -223,10 +223,7 @@ RegisterCommand("EmergencyFunctions",function()
 				exports["dynamic"]:AddButton("Remover Óculos", "Remover da pessoa mais próxima.", "skinshop:Remove", "Glasses", "player", true)
 
 				exports["dynamic"]:AddMenu("Fardamentos", "Todos os fardamentos policiais.", "prePolice")
-				exports["dynamic"]:AddButton("Sheriff", "Fardamento de oficial.", "player:Preset", "1", "prePolice", true)
-				exports["dynamic"]:AddButton("Los Santos Police", "Fardamento de oficial.", "player:Preset", "2", "prePolice", true)
-				exports["dynamic"]:AddButton("State Police", "Fardamento de oficial.", "player:Preset", "3", "prePolice", true)
-				exports["dynamic"]:AddButton("Park Ranger", "Fardamento de oficial.", "player:Preset", "4", "prePolice", true)
+				exports["dynamic"]:AddButton("Principal", "Fardamento de oficial.", "player:Preset", "1", "prePolice",true)
 
 				exports["dynamic"]:AddButton("Computador", "Computador de bordo policial.", "police:Open", "", false, false)
 			end
