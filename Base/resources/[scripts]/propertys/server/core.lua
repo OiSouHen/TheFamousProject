@@ -186,7 +186,7 @@ AddEventHandler("propertys:Buy",function(Name)
 						TriggerClientEvent("Notify",source,"Propriedades","<b>Dólares</b> insuficientes.","amarelo",5000)
 					end
 				elseif Mode == "Gemstone" then
-					if vRP.PaymentGems(Passport,Informations[Interior]["Gemstone"]) then
+					if vRP.PaymentGemstone(Passport,Informations[Interior]["Gemstone"]) then
 						local Markers = GlobalState["Markers"]
 						Markers[Name] = true
 						GlobalState:set("Markers",Markers,true)
@@ -353,7 +353,7 @@ AddEventHandler("propertys:Clothes",function(Mode)
 
 				if not Consult[Check] then
 					Consult[Check] = vSKINSHOP.Customization(source)
-					vRP.SetServerData("Wardrobe:"..Passport,Consult,true)
+					vRP.SetServerData("Wardrobe:"..Passport,Consult)
 					TriggerClientEvent("propertys:ClothesReset",source)
 					TriggerClientEvent("Notify",source,"Propriedades","<b>"..Check.."</b> adicionado.","verde",5000)
 				else
@@ -363,7 +363,7 @@ AddEventHandler("propertys:Clothes",function(Mode)
 		elseif Split[1] == "delete" then
 			if Consult[Name] then
 				Consult[Name] = nil
-				vRP.SetServerData("Wardrobe:"..Passport,Consult,true)
+				vRP.SetServerData("Wardrobe:"..Passport,Consult)
 				TriggerClientEvent("propertys:ClothesReset",source)
 				TriggerClientEvent("Notify",source,"Propriedades","<b>"..Name.."</b> removido.","verde",5000)
 			else
@@ -514,7 +514,7 @@ function Hensa.Store(Item,Slot,Amount,Target,Name,Mode)
 		end
 
 		if Name == "Hotel" then
-			if vRP.StoreChest(Passport,Mode..":Hotel:"..Passport,Amount,25,Slot,Target,true) then
+			if vRP.StoreChest(Passport,Mode..":Hotel:"..Passport,Amount,25,Slot,Target) then
 				TriggerClientEvent("inventory:Update",source)
 			end
 		else
@@ -526,7 +526,7 @@ function Hensa.Store(Item,Slot,Amount,Target,Name,Mode)
 						TriggerClientEvent("inventory:Update",source)
 					end
 				else
-					if vRP.StoreChest(Passport,Mode..":"..Name,Amount,Consult[1][Mode],Slot,Target,true) then
+					if vRP.StoreChest(Passport,Mode..":"..Name,Amount,Consult[1][Mode],Slot,Target) then
 						TriggerClientEvent("inventory:Update",source)
 					end
 				end
@@ -543,11 +543,11 @@ function Hensa.Take(Slot,Amount,Target,Name,Mode)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		if Name == "Hotel" then
-			if vRP.TakeChest(Passport,Mode..":Hotel:"..Passport,Amount,Slot,Target,true) then
+			if vRP.TakeChest(Passport,Mode..":Hotel:"..Passport,Amount,Slot,Target) then
 				TriggerClientEvent("inventory:Update",source)
 			end
 		else
-			if vRP.TakeChest(Passport,Mode..":"..Name,Amount,Slot,Target,true) then
+			if vRP.TakeChest(Passport,Mode..":"..Name,Amount,Slot,Target) then
 				TriggerClientEvent("inventory:Update",source)
 			end
 		end
@@ -565,7 +565,7 @@ function Hensa.Update(Slot,Target,Amount,Name,Mode)
 			Name = "Hotel:"..Passport
 		end
 
-		if vRP.UpdateChest(Passport,Mode..":"..Name,Slot,Target,Amount,true) then
+		if vRP.UpdateChest(Passport,Mode..":"..Name,Slot,Target,Amount) then
 			TriggerClientEvent("inventory:Update",source)
 		end
 	end
