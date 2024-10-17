@@ -108,7 +108,6 @@ AddEventHandler("admin:Dynamic", function(Mode)
 					if ClosestPed then
 						vRP.UpgradeThirst(OtherPassport,100)
 						vRP.UpgradeHunger(OtherPassport,100)
-						vRP.DowngradeCough(OtherPassport,100)
 						vRP.DowngradeStress(OtherPassport,100)
 						vRP.Revive(ClosestPed,200)
 
@@ -131,7 +130,6 @@ AddEventHandler("admin:Dynamic", function(Mode)
 					if ClosestPed then
 						vRP.UpgradeThirst(OtherPassport,100)
 						vRP.UpgradeHunger(OtherPassport,100)
-						vRP.DowngradeCough(OtherPassport,100)
 						vRP.DowngradeStress(OtherPassport,100)
 						vRP.Revive(ClosestPed,200)
 
@@ -596,17 +594,6 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			else
 				TriggerClientEvent("Notify",source,"Atenção","Você não tem permissões para isso.","amarelo",5000)
 			end
-		elseif Mode == "driverlicense" then
-			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","(0 Zerada, 1 Liberada, 2 Apreendida)")
-				if Keyboard then
-					vRP.UpdateDriverLicense(Keyboard[1],Keyboard[2])
-					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** driverlicense "..Keyboard[1].." "..Keyboard[2],0xa3c846)
-					TriggerClientEvent("Notify",source,"Sucesso","CNH atualizada.","verde",5000)
-				end
-			else
-				TriggerClientEvent("Notify",source,"Atenção","Você não tem permissões para isso.","amarelo",5000)
-			end
 		elseif Mode == "clearprison" then
 			if vRP.HasGroup(Passport,"Admin",2) then
 				local Keyboard = vKEYBOARD.Primary(source,"ID:")
@@ -633,17 +620,6 @@ AddEventHandler("admin:Dynamic", function(Mode)
 		elseif Mode == "statsParamedico" then
 			local Service,TotalParamedico = vRP.NumPermission("Paramedico")
 			TriggerClientEvent("Notify",source,"Paramédico","Existem <b>"..parseInt(TotalParamedico).."</b> companheiros com você.","hospital",5000)
-		elseif Mode == "changework" then
-			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","(Nenhum)")
-				if Keyboard then
-					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** changework "..Keyboard[1].." "..Keyboard[2],0xa3c846)
-					TriggerClientEvent("Notify",source,"Sucesso","Emprego modificado.","verde",5000)
-					vRP.ChangeWork(Keyboard[1], Keyboard[2])
-				end
-			else
-				TriggerClientEvent("Notify",source,"Atenção","Você não tem permissões para isso.","amarelo",5000)
-			end
 		elseif Mode == "debug" then
 			if vRP.HasGroup(Passport,"Admin",2) then
 				TriggerClientEvent("admin:ToggleDebug", source)
