@@ -71,7 +71,9 @@ AddEventHandler("farmer:Minerman",function(Number)
 					end
 
 					local Consult = RandPercentage(Result)
-					if exports["party"]:DoesExist(Passport,2) then
+
+					local Members = exports["vrp"]:Party(Passport,source,20)
+					if parseInt(#Members) >= 2 then
 						Consult["Valuation"] = Consult["Valuation"] + (Consult["Valuation"] * 0.5)
 					end
 
@@ -132,7 +134,9 @@ AddEventHandler("farmer:Lumberman",function(Number)
 					GlobalState["Farmer:"..Number] = GlobalState["Work"] + 30
 
 					local Valuation = 3
-					if exports["party"]:DoesExist(Passport,2) then
+
+					local Members = exports["vrp"]:Party(Passport,source,20)
+					if parseInt(#Members) >= 2 then
 						Valuation = Valuation + (Valuation * 0.25)
 					end
 
