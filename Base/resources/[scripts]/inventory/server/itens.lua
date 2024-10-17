@@ -1420,7 +1420,7 @@ Use = {
 
 					vRP.UpgradeStress(Passport,1)
 
-					if vRP.CheckWeight(Passport,Result["Item"]) then
+					if vRP.CheckWeight(Passport,Result["Item"],1) then
 						vRP.PutExperience(Passport,"Fisherman",1)
 						vRP.GenerateItem(Passport,Result["Item"],Result["Amount"],true)
 					else
@@ -1463,7 +1463,7 @@ Use = {
 						{ ["Item"] = "treasurebox", ["Chance"] = 5, ["Amount"] = 1 }
 					})
 
-					if vRP.CheckWeight(Passport,Result["Item"]) then
+					if vRP.CheckWeight(Passport,Result["Item"],1) then
 						vRP.PutExperience(Passport,"Fisherman",1)
 						vRP.GenerateItem(Passport,Result["Item"],Result["Amount"],true)
 					else
