@@ -8,27 +8,22 @@ local Spawned = {}
 local List = {
 	{ -- Cow
 		["Distance"] = 50,
-		["Coords"] = vec4(1200.49,336.41,81.99,235.28),
+		["Coords"] = vec4(957.99,-2207.26,30.6,266.46),
 		["Model"] = "a_c_cow",
 		["Collision"] = true
 	},{ -- Cow
 		["Distance"] = 50,
-		["Coords"] = vec4(1202.85,340.41,81.99,238.12),
+		["Coords"] = vec4(956.66,-2220.51,30.58,266.46),
 		["Model"] = "a_c_cow",
 		["Collision"] = true
 	},{ -- Cow
 		["Distance"] = 50,
-		["Coords"] = vec4(1205.44,344.35,81.99,240.95),
+		["Coords"] = vec4(955.6,-2233.52,30.58,266.46),
 		["Model"] = "a_c_cow",
 		["Collision"] = true
 	},{ -- Cow
 		["Distance"] = 50,
-		["Coords"] = vec4(1207.71,348.16,81.99,238.12),
-		["Model"] = "a_c_cow",
-		["Collision"] = true
-	},{ -- Cow
-		["Distance"] = 50,
-		["Coords"] = vec4(1210.2,352.09,81.99,235.28),
+		["Coords"] = vec4(954.49,-2247.07,30.58,266.46),
 		["Model"] = "a_c_cow",
 		["Collision"] = true
 	},{ -- HENSA
@@ -388,11 +383,6 @@ local List = {
 		["Coords"] = vec4(-628.79,-238.7,38.05,311.82),
 		["Model"] = "cs_gurk",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
-	},{ -- Lumberman
-		["Distance"] = 50,
-		["Coords"] = vec4(1694.92,4920.44,42.23,144.57),
-		["Model"] = "cs_gurk",
-		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Transporter
 		["Distance"] = 20,
 		["Coords"] = vec4(264.74,219.99,101.67,343.0),
@@ -400,7 +390,7 @@ local List = {
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Leiteiro
 		["Distance"] = 50,
-		["Coords"] = vec4(1212.36,336.08,81.99,144.57),
+		["Coords"] = vec4(963.13,-2215.33,30.55,272.13),
 		["Model"] = "cs_manuel",
 		["Anim"] = { "anim@heists@heist_corona@single_team","single_team_loop_boss" }
 	},{ -- Lenhador
