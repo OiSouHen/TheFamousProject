@@ -75,18 +75,18 @@ CreateThread(function()
 		local Ped = PlayerPedId()
 		if IsPedInAnyVehicle(Ped) then
 			local Vehicle = GetVehiclePedIsUsing(Ped)
-			if GetVehicleFuelLevel(Vehicle) >= 1 then
-				if (GetEntitySpeed(Vehicle) * VehVelocity) >= 1 then
-					ActiveFuel = (ActiveFuel - (Consume[floor(GetVehicleCurrentRpm(Vehicle))] or 1.0) * (Class[GetVehicleClass(Vehicle)] or 1.0) / 10)
-					SetVehicleFuelLevel(Vehicle,ActiveFuel + 0.0)
-
-					if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+			local ClassVehicle = GetVehicleClass(Vehicle)
+			if not Class[ClassVehicle] or Class[ClassVehicle] ~= 0.0 then
+				if GetVehicleFuelLevel(Vehicle) >= 1 then
+					if (GetEntitySpeed(Vehicle) * VehVelocity) >= 1 and GetPedInVehicleSeat(Vehicle,-1) == Ped then
+						ActiveFuel = (ActiveFuel - (Consume[floor(GetVehicleCurrentRpm(Vehicle))] or 1.0) * (Class[GetVehicleClass(Vehicle)] or 1.0) / 10)
+						SetVehicleFuelLevel(Vehicle,ActiveFuel + 0.0)
 						Entity(Vehicle)["state"]:set("Fuel",ActiveFuel,true)
 					end
+				else
+					SetVehicleEngineOn(Vehicle,false,true,true)
+					TimeDistance = 1
 				end
-			else
-				SetVehicleEngineOn(Vehicle,false,true,true)
-				TimeDistance = 1
 			end
 		end
 
@@ -203,12 +203,12 @@ AddEventHandler("engine:Supply",function(Entitys)
 			local VehicleFuel = GetVehicleFuelLevel(Vehicle)
 
 			if not Gallon then
-				Price = Price + 0.125
+				Price = Price + 0.150
 				SetVehicleFuelLevel(Vehicle,VehicleFuel + 0.025)
-				SendNUIMessage({ Action = "Tank", Payload = { floor(VehicleFuel),Price,0.125 * 4 } })
+				SendNUIMessage({ Action = "Tank", Payload = { floor(VehicleFuel),Price,0.150 * 4 } })
 			else
-				if GetAmmoInPedWeapon(Ped,883325847) - 0.02 * 100 > 1 then
-					SetPedAmmo(Ped,883325847,math.floor(GetAmmoInPedWeapon(Ped,883325847) - 0.02 * 100))
+				if GetAmmoInPedWeapon(Ped,883325847) - 0.025 * 100 > 1 then
+					SetPedAmmo(Ped,883325847,math.floor(GetAmmoInPedWeapon(Ped,883325847) - 0.025 * 100))
 					SetVehicleFuelLevel(Vehicle,VehicleFuel + 0.025)
 				end
 			end
@@ -221,7 +221,7 @@ AddEventHandler("engine:Supply",function(Entitys)
 				TaskPlayAnim(Ped,"timetable@gardener@filling_can","gar_ig_5_filling_can",8.0,8.0,-1,50,1,0,0,0)
 			end
 
-			if VehicleFuel >= 100.0 or GetEntityHealth(Ped) <= 100 or (Gallon and GetAmmoInPedWeapon(Ped,883325847) - 0.02 * 100 <= 1) or IsControlJustPressed(1,38) then
+			if VehicleFuel >= 100.0 or GetEntityHealth(Ped) <= 100 or (Gallon and GetAmmoInPedWeapon(Ped,883325847) - 0.025 * 100 <= 1) or IsControlJustPressed(1,38) then
 				if not Gallon then
 					if vSERVER.RechargeFuel(Price) then
 						Entity(Vehicle)["state"]:set("Fuel",VehicleFuel,true)
@@ -244,6 +244,8 @@ AddEventHandler("engine:Supply",function(Entitys)
 
 			Wait(1)
 		end
+	else
+		TriggerEvent("Notify","Aviso","O tanque está cheio.","vermelho",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -262,37 +264,6 @@ AddEventHandler("engine:SyncBrakes",function(Network,Result)
 		end
 	end
 end)
------------------------------------------------------------------------------------------------------------------------------------------
--- INSTALL
------------------------------------------------------------------------------------------------------------------------------------------
-local Install = {
-	[0] = "A",
-	[1] = "B",
-	[2] = "C",
-	[3] = "D",
-	[4] = "E"
-}
------------------------------------------------------------------------------------------------------------------------------------------
--- DRAWTEXT3D
------------------------------------------------------------------------------------------------------------------------------------------
-function DrawText3D(Coords,Text)
-	local onScreen,x,y = World3dToScreen2d(Coords["x"],Coords["y"],Coords["z"] + 1)
-
-	if onScreen then
-		SetTextFont(4)
-		SetTextCentre(true)
-		SetTextProportional(1)
-		SetTextScale(0.35,0.35)
-		SetTextColour(255,255,255,150)
-
-		SetTextEntry("STRING")
-		AddTextComponentString(Text)
-		EndTextCommandDisplayText(x,y)
-
-		local Width = (string.len(Text) + 4) / 170 * 0.45
-		DrawRect(x,y + 0.0125,Width,0.03,15,15,15,175)
-	end
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ENGINE:VEHRIFY
 -----------------------------------------------------------------------------------------------------------------------------------------
