@@ -151,7 +151,7 @@ AddEventHandler("plants:Water",function(Number)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport and not Active[Passport] and Plants[Number] and Plants[Number]["Timer"] and not CheckDeath(source,Number) and Plants[Number]["Timer"] >= os.time() then
-		local Consult = vRP.ConsultItem(Passport,"water")
+		local Consult = vRP.ConsultItem(Passport,"water",1)
 		if Plants[Number]["Water"] < 1.0 and Consult then
 			Active[Passport] = true
 			Player(source)["state"]["Cancel"] = true
