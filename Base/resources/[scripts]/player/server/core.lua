@@ -403,7 +403,7 @@ AddEventHandler("player:Outfit",function(Mode)
 	local Passport = vRP.Passport(source)
 	if Passport and not exports["hud"]:Repose(Passport) and not exports["hud"]:Wanted(Passport) then
 		if Mode == "aplicar" then
-			local Result = vRP.GetServerData("Outfit:"..Passport,true)
+			local Result = vRP.GetServerData("Outfit:"..Passport)
 			if Result["pants"] then
 				TriggerClientEvent("skinshop:Apply",source,Result)
 				TriggerClientEvent("Notify",source,"Sucesso","Roupas aplicadas.","verde",5000)
@@ -413,11 +413,11 @@ AddEventHandler("player:Outfit",function(Mode)
 		elseif Mode == "salvar" then
 			local Custom = vSKINSHOP.Customization(source)
 			if Custom then
-				vRP.SetServerData("Outfit:"..Passport,Custom,true)
+				vRP.SetServerData("Outfit:"..Passport,Custom)
 				TriggerClientEvent("Notify",source,"Sucesso","Roupas salvas.","verde",5000)
 			end
 		elseif Mode == "aplicarpre" then
-			local Result = vRP.GetServerData("Premiumfit:"..Passport,true)
+			local Result = vRP.GetServerData("Premiumfit:"..Passport)
 			if Result["pants"] then
 				TriggerClientEvent("skinshop:Apply",source,Result)
 				TriggerClientEvent("Notify",source,"Sucesso","Roupas aplicadas.","verde",5000)
@@ -427,7 +427,7 @@ AddEventHandler("player:Outfit",function(Mode)
 		elseif Mode == "salvarpre" then
 			local Custom = vSKINSHOP.Customization(source)
 			if Custom then
-				vRP.SetServerData("Premiumfit:"..Passport,Custom,true)
+				vRP.SetServerData("Premiumfit:"..Passport,Custom)
 				TriggerClientEvent("Notify",source,"Sucesso","Roupas salvas.","verde",5000)
 			end
 		elseif Mode == "remover" then
