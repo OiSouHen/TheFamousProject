@@ -147,10 +147,6 @@ function Hensa.Request(Name)
 					local Number = parseInt(Split[2])
 					local Identity = vRP.Identity(Number)
 
-					if Split[1] == "fidentity" then
-						Identity = vRP.FalseIdentity(Number)
-					end
-
 					if Identity then
 						v["Port"] = "Não"
 						v["Passport"] = Number
@@ -285,10 +281,6 @@ function Hensa.Request(Name)
 				if Split[1] == "identity" or Split[1] == "fidentity" then
 					local Number = parseInt(Split[2])
 					local Identity = vRP.Identity(Number)
-
-					if Split[1] == "fidentity" then
-						Identity = vRP.FalseIdentity(Number)
-					end
 
 					if Identity then
 						v["Port"] = "Não"
@@ -445,7 +437,7 @@ function Hensa.Take(Item,Slot,Amount,Target,Name)
 	if Passport then
 		local Consult = vRP.Query("warehouse/Informations",{ Name = Name })
 		if Consult[1] then
-			if vRP.TakeChest(Passport,"Warehouse:"..Name,Amount,Slot,Target,true) then
+			if vRP.TakeChest(Passport,"Warehouse:"..Name,Amount,Slot,Target) then
 				TriggerClientEvent("warehouse:Update",source)
 			else
 				local Result = vRP.GetServerData("Warehouse:"..Name)
