@@ -1138,7 +1138,7 @@ AddEventHandler("inventory:Loot",function(Number,Box)
 		end
 
 		if Loots[Box]["Item"] then
-			Consult = vRP.ConsultItem(Passport,Loots[Box]["Item"])
+			Consult = vRP.ConsultItem(Passport,Loots[Box]["Item"],1)
 			if not Consult then
 				TriggerClientEvent("Notify",source,"Atenção","Precisa de <b>1x "..ItemName(Loots[Box]["Item"]).."</b>.","amarelo",5000)
 
@@ -1347,7 +1347,7 @@ AddEventHandler("inventory:Animals",function(Entity)
 
 		if MyEntity == Entity[1] then
 			if vCLIENT.CheckWeapon(source,"WEAPON_SWITCHBLADE") then
-				if vRP.CheckWeight(Passport,"deer1star") then
+				if vRP.CheckWeight(Passport,"deer1star",1) then
 					Active[Passport] = os.time() + 30
 					Player(source)["state"]["Buttons"] = true
 					TriggerClientEvent("Progress",source,"Esfolando",30000)
