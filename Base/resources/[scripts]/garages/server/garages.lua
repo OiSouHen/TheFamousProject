@@ -2,36 +2,36 @@
 -- GARAGES
 -----------------------------------------------------------------------------------------------------------------------------------------
 Garages = {
-	["1"] = { name = "Garage", payment = true, license = true },
-	["2"] = { name = "Garage", payment = true, license = true },
-	["3"] = { name = "Garage", payment = true, license = true },
-	["4"] = { name = "Garage", payment = true, license = true },
-	["5"] = { name = "Garage", payment = true, license = true },
-	["6"] = { name = "Garage", payment = true, license = true },
-	["7"] = { name = "Garage", payment = true, license = true },
-	["8"] = { name = "Garage", payment = true, license = true },
+	["1"] = { name = "Garage", payment = true },
+	["2"] = { name = "Garage", payment = true },
+	["3"] = { name = "Garage", payment = true },
+	["4"] = { name = "Garage", payment = true },
+	["5"] = { name = "Garage", payment = true },
+	["6"] = { name = "Garage", payment = true },
+	["7"] = { name = "Garage", payment = true },
+	["8"] = { name = "Garage", payment = true },
 
 	-- Paramedico
-	["41"] = { name = "Paramedico", payment = false, license = true, perm = "Paramedico" },
-	["42"] = { name = "heliParamedico", payment = false, license = true, perm = "Paramedico" },
-	["43"] = { name = "Paramedico", payment = false, license = true, perm = "Paramedico" },
-	["44"] = { name = "heliParamedico", payment = false, license = true, perm = "Paramedico" },
-	["45"] = { name = "Paramedico", payment = false, license = true, perm = "Paramedico" },
+	["41"] = { name = "Paramedico", payment = false, perm = "Paramedico" },
+	["42"] = { name = "heliParamedico", payment = false, perm = "Paramedico" },
+	["43"] = { name = "Paramedico", payment = false, perm = "Paramedico" },
+	["44"] = { name = "heliParamedico", payment = false, perm = "Paramedico" },
+	["45"] = { name = "Paramedico", payment = false, perm = "Paramedico" },
 
 	-- Policia
-	["61"] = { name = "Policia", payment = false, license = true, perm = "Policia" },
-	["62"] = { name = "heliPolicia", payment = false, license = true, perm = "Policia" },
+	["61"] = { name = "Policia", payment = false, perm = "Policia" },
+	["62"] = { name = "heliPolicia", payment = false, perm = "Policia" },
 
 	-- Prisão
-	["67"] = { name = "Policia", payment = false, license = true, perm = "Policia" },
-	["68"] = { name = "busPolicia", payment = false, license = true, perm = "Policia" },
+	["67"] = { name = "Policia", payment = false, perm = "Policia" },
+	["68"] = { name = "busPolicia", payment = false, perm = "Policia" },
 
 	-- Gangs
-	["91"] = { name = "Ballas", payment = false, license = true, perm = "Ballas" },
-	["92"] = { name = "Families", payment = false, license = true, perm = "Families" },
-	["93"] = { name = "Vagos", payment = false, license = true, perm = "Vagos" },
-	["94"] = { name = "Aztecas", payment = false, license = true, perm = "Aztecas" },
-	["95"] = { name = "Bloods", payment = false, license = true, perm = "Bloods" },
+	["91"] = { name = "Ballas", payment = false, perm = "Ballas" },
+	["92"] = { name = "Families", payment = false, perm = "Families" },
+	["93"] = { name = "Vagos", payment = false, perm = "Vagos" },
+	["94"] = { name = "Aztecas", payment = false, perm = "Aztecas" },
+	["95"] = { name = "Bloods", payment = false, perm = "Bloods" },
 
 	-- Bikes
 	["101"] = { name = "Bikes", payment = false, license = false },
