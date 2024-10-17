@@ -1727,14 +1727,8 @@ end
 function vRP.MaxItens(Passport, Item, Amount)
 	local amountParsed = parseInt(Amount)
 	if ItemIndex(Item) and vRP.Source(Passport) and ItemMaxAmount(Item) and amountParsed then
-		if vRP.HasGroup(Passport, "Restaurantes") then
-			if vRP.ItemAmount(Passport, Item) + amountParsed > ItemMaxAmount(Item) * 5 then
-				return true
-			end
-		else
-			if vRP.ItemAmount(Passport, Item) + amountParsed > ItemMaxAmount(Item) then
-				return true
-			end
+		if vRP.ItemAmount(Passport, Item) + amountParsed > ItemMaxAmount(Item) then
+			return true
 		end
 	end
 
