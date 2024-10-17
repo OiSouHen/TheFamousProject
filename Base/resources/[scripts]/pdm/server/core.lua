@@ -47,7 +47,7 @@ function Hensa.Buy(Name)
 			if VehicleMode(Name) == "Rental" then
 				local VehiclePrice = VehicleGemstone(Name)
 				if vRP.Request(source,"Concessionária","Alugar o veículo <b>"..VehicleName(Name).."</b> por <b>"..Dotted(VehiclePrice).."</b> diamantes?") then
-					if vRP.PaymentGems(Passport,VehiclePrice) then
+					if vRP.PaymentGemstone(Passport,VehiclePrice) then
 						local Plate = vRP.GeneratePlate()
 
 						TriggerEvent("garages:Pdm",Passport,source,Name,Plate)
