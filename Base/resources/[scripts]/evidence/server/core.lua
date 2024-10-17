@@ -29,28 +29,24 @@ AddEventHandler("evidence:Drop",function(Type)
 
 		if Type == "Yellow" then
 			Color = 1
-			Marker = { 244,197,50 }
 		elseif Type == "Red" then
 			Color = 2
-			Marker = { 241,96,96 }
 		elseif Type == "Green" then
 			Color = 3
-			Marker = { 140,212,91 }
 		elseif Type == "Blue" then
 			Color = 4
-			Marker = { 70,140,245 }
 		end
 
 		EvidencesNumber = EvidencesNumber + 1
 
-		local userCoords,gridZone = vCLIENT.GetPostions(source)
+		local userCoords,gridZone = vCLIENT.GetPositions(source)
 		local Evidences = GlobalState["Evidences"]
 
 		if Evidences[gridZone] == nil then
 			Evidences[gridZone] = {}
 		end
 
-		Evidences[gridZone][tostring(EvidencesNumber)] = { userCoords, tostring("evidence0"..Color.."-"..Passport.."-"..vRP.Identity(Passport)["License"]), Marker }
+		Evidences[gridZone][tostring(EvidencesNumber)] = { userCoords, tostring("evidence0"..Color.."-"..Passport.."-"..vRP.Identity(Passport)["License"]) }
 
 		GlobalState["Evidences"] = Evidences
 	end
