@@ -16,10 +16,10 @@ vCLIENT = Tunnel.getInterface("inspect")
 local Players = {}
 local Sourcers = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
--- POLICE:INSPECT
+-- INSPECT:PLAYER
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterServerEvent("police:Inspect")
-AddEventHandler("police:Inspect",function(OtherSource)
+RegisterServerEvent("inspect:Player")
+AddEventHandler("inspect:Player",function(OtherSource)
 	local source = source
 	local Passport = vRP.Passport(source)
 	local OtherPassport = vRP.Passport(OtherSource)
@@ -152,9 +152,11 @@ function Hensa.Store(Item,Slot,Amount,Target)
 		end
 
 		if (vRP.InventoryWeight(Players[Passport]) + ItemWeight(Item) * Amount) <= vRP.GetWeight(Players[Passport]) then
-			if vRP.TakeItem(Passport,Item,Amount,true,Slot) then
+			if vRP.TakeItem(Passport,Item,Amount,true) then
 				vRP.GiveItem(Players[Passport],Item,Amount,true,Target)
+
 				TriggerClientEvent("inventory:Update",source)
+				TriggerClientEvent("inventory:Update",Sourcers[Passport])
 			end
 		else
 			TriggerClientEvent("Notify",source,"Aviso","Mochila cheia.","amarelo",5000)
@@ -176,9 +178,11 @@ function Hensa.Take(Item,Slot,Target,Amount)
 		end
 
 		if vRP.CheckWeight(Passport,Item,Amount) then
-			if vRP.TakeItem(Players[Passport],Item,Amount,true,Slot) then
+			if vRP.TakeItem(Players[Passport],Item,Amount,true) then
 				vRP.GiveItem(Passport,Item,Amount,true,Target)
+
 				TriggerClientEvent("inventory:Update",source)
+				TriggerClientEvent("inventory:Update",Sourcers[Passport])
 			end
 		else
 			TriggerClientEvent("Notify",source,"Aviso","Mochila cheia.","amarelo",5000)
