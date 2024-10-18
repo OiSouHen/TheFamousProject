@@ -29,7 +29,7 @@ function Hensa.Drops(Item,Slot,Amount)
 	if Passport and not Active[Passport] and Amount >= 1 and not Player(source)["state"]["Handcuff"] and not exports["hud"]:Wanted(Passport) and not vRPC.InsideVehicle(source) then
 		if not vRP.CheckDamaged(Item) then
 			if vRP.TakeItem(Passport,Item,Amount,false) then
-				exports["inventory"]:Drops(Passport,source,Item,Amount,true)
+				exports["inventory"]:Drops(Passport,source,Item,Amount)
 				TriggerClientEvent("inventory:Update",source,"Backpack")
 			end
 		else
@@ -42,13 +42,11 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DROPS
 -----------------------------------------------------------------------------------------------------------------------------------------
-exports("Drops",function(Passport,source,Item,Amount,Force)
+exports("Drops",function(Passport,source,Item,Amount)
 	Active[Passport] = true
 
 	local Split = splitString(Item)
 	local Route = GetPlayerRoutingBucket(source)
-
-	Force = (Force and Item)
 
 	if not Drops[Route] then
 		Drops[Route] = {}
@@ -59,7 +57,7 @@ exports("Drops",function(Passport,source,Item,Amount,Force)
 	until Selected and not Drops[Route][Selected]
 
 	local Provisory = {
-		["key"] = Force,
+		["key"] = Item,
 		["route"] = Route,
 		["id"] = Selected,
 		["amount"] = Amount,
