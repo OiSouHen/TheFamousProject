@@ -7,16 +7,16 @@ AddEventHandler("inventory:Carry",function()
 	local Passport = vRP.Passport(source)
 	if Passport then
 		if not Carry[Passport] then
-			local OtherSource = vRPC.ClosestPed(source)
+			local OtherSource = vRPC.ClosestPed(source,2)
 			local OtherPassport = vRP.Passport(OtherSource)
-			if OtherSource and not Carry[OtherPassport] and vRP.DoesEntityExist(OtherSource) and not vRPC.PlayingAnim(OtherSource,"amb@world_human_sunbathe@female@back@idle_a","idle_a") and not vRP.IsEntityVisible(OtherSource) then
+			if OtherSource and not Carry[OtherPassport] and not vRPC.PlayingAnim(OtherSource,"amb@world_human_sunbathe@female@back@idle_a","idle_a") then
 				Carry[Passport] = OtherSource
 				Player(source)["state"]["Carry"] = true
 				Player(OtherSource)["state"]["Carry"] = true
 				TriggerClientEvent("inventory:Carry",OtherSource,source,"Attach")
 			end
 		else
-			if vRP.DoesEntityExist(Carry[Passport]) then
+			if Carry[Passport] then
 				TriggerClientEvent("inventory:Carry",Carry[Passport],source,"Detach")
 				Player(Carry[Passport])["state"]["Carry"] = false
 			end
@@ -33,14 +33,14 @@ RegisterServerEvent("inventory:ServerCarry")
 AddEventHandler("inventory:ServerCarry",function(source,Passport,OtherSource,Handcuff)
 	if not Carry[Passport] then
 		local OtherPassport = vRP.Passport(OtherSource)
-		if not Carry[OtherPassport] and vRP.DoesEntityExist(OtherSource) then
+		if not Carry[OtherPassport] then
 			Carry[Passport] = OtherSource
 			Player(source)["state"]["Carry"] = true
 			Player(OtherSource)["state"]["Carry"] = true
 			TriggerClientEvent("inventory:Carry",OtherSource,source,"Attach",Handcuff)
 		end
 	else
-		if vRP.DoesEntityExist(Carry[Passport]) then
+		if Carry[Passport] then
 			TriggerClientEvent("inventory:Carry",Carry[Passport],source,"Detach")
 			Player(Carry[Passport])["state"]["Carry"] = false
 		end
@@ -55,7 +55,7 @@ end)
 RegisterServerEvent("inventory:CarryDetach")
 AddEventHandler("inventory:CarryDetach",function(source,Passport)
 	if Carry[Passport] then
-		if vRP.DoesEntityExist(Carry[Passport]) then
+		if Carry[Passport] then
 			TriggerClientEvent("inventory:Carry",Carry[Passport],source,"Detach")
 			Player(Carry[Passport])["state"]["Carry"] = false
 		end
