@@ -25,8 +25,8 @@ Groups = {
 		["Parent"] = {
 			["Policia"] = true
 		},
-		["Hierarchy"] = { "Chefe", "Capitão", "Tenente", "Sargento", "Corporal", "Oficial", "Cadete" },
-		["Salary"] = { 2500, 2250, 2000, 1750, 1500, 1500, 1500 },
+		["Hierarchy"] = { "Chefe", "Capitão", "Tenente", "Sargento", "Oficial", "Cadete" },
+		["Salary"] = { 2500, 2250, 2000, 1750, 1500, 1500 },
 		["Service"] = {},
 		["Type"] = "Work",
 		["Client"] = true,
