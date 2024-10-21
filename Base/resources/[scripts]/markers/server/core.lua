@@ -20,16 +20,17 @@ local Players = {}
 function Hensa.Users()
 	local Markers = {}
 
-	for Index,v in pairs(Players) do
+	for Source,v in pairs(Players) do
 		local Passport = v["Passport"]
 		if Timers[Passport] and not Timers[Passport]["Stop"] and os.time() >= Timers[Passport]["Timer"] then
-			exports["markers"]:Exit(Index,Passport)
+			exports["markers"]:Exit(Source,Passport)
 		else
-			local Ped = GetPlayerPed(Index)
+			local Ped = GetPlayerPed(Source)
 			if DoesEntityExist(Ped) then
-				Markers[Index] = {
+				Markers[Source] = {
 					["Coords"] = GetEntityCoords(Ped),
-					["Permission"] = v["Permission"]
+					["Permission"] = v["Permission"],
+					["Level"] = v["Level"]
 				}
 			end
 		end
@@ -40,22 +41,24 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ENTER
 -----------------------------------------------------------------------------------------------------------------------------------------
-exports("Enter",function(source,Permission,Passport,Timed)
+exports("Enter",function(source,Permission,Level,Passport,Timed)
 	if not Players[source] then
 		Players[source] = {
+			["Passport"] = Passport,
 			["Permission"] = Permission,
-			["Passport"] = Passport
+			["Level"] = vRP.Hierarchy(Permission)
 		}
 
 		if Timed then
 			Timers[Passport] = {
 				["Permission"] = Permission,
 				["Timer"] = os.time() + Timed,
+				["Level"] = Level or 1,
 				["Stop"] = false
 			}
 		end
 
-		local Service = vRP.NumPermission("Emergencia")
+		local Service = vRP.NumPermission("Policia")
 		for _,Sources in pairs(Service) do
 			async(function()
 				TriggerClientEvent("markers:Add",Sources,source,Permission)
@@ -80,7 +83,7 @@ exports("Exit",function(source,Passport)
 	if Players[source] then
 		Players[source] = nil
 
-		local Service = vRP.NumPermission("Emergencia")
+		local Service = vRP.NumPermission("Policia")
 		for _,Sources in pairs(Service) do
 			async(function()
 				TriggerClientEvent("markers:Remove",Sources,source)
@@ -108,6 +111,6 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("Connect",function(Passport,source)
 	if Timers[Passport] then
-		exports["markers"]:Enter(source,Timers[Passport]["Permission"],Passport,Timers[Passport]["Timer"])
+		exports["markers"]:Enter(source,Timers[Passport]["Permission"],Timers[Passport]["Level"],Passport,Timers[Passport]["Timer"])
 	end
 end)
