@@ -14,34 +14,42 @@ local Players = {}
 local Pause = false
 local Active = false
 -----------------------------------------------------------------------------------------------------------------------------------------
--- COLORS
+-- INFORMATION
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Colors = {
-	["Policia"] = 18, -- Azul
-	["Paramedico"] = 1, -- Vermelho
-	["Corredor"] = 7, -- Roxo
-	["Traficante"] = 5, -- Amarelo
-	["Boosting"] = 2 -- Verde
+local Information = {
+	["Policia"] = {
+		["Chefe"] = 3,
+		["Capitão"] = 18,
+		["Tenente"] = 6,
+		["Sargento"] = 32,
+		["Oficial"] = 42,
+		["Cadete"] = 53
+	},
+	["Paramedico"] = 1,
+	["Corredor"] = 8,
+	["Traficante"] = 5,
+	["Boosting"] = 47
 }
------------------------------------------------------------------------------------------------------------------------------------------
--- FORSTART
------------------------------------------------------------------------------------------------------------------------------------------
-for Index,_ in pairs(Colors) do
-	AddStateBagChangeHandler(Index,("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
-		Active = Key
-
-		if not Value then
-			Active = false
-			CleanMarkers()
-		end
-	end)
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADMARKERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
+	for Index,_ in pairs(Information) do
+		AddStateBagChangeHandler(Index,("player:%s"):format(LocalPlayer["state"]["Player"]),function(Name,Key,Value)
+			Active = Key
+
+			if not Value then
+				Active = false
+				CleanMarkers()
+			end
+		end)
+	end
+
 	while true do
-		if LocalPlayer["state"]["Active"] and Colors[Active] then
+		local TimeDistance = 10000
+		if LocalPlayer["state"]["Active"] and Active and Information[Active] then
+			TimeDistance = 2500
+
 			if IsPauseMenuActive() then
 				if not Pause then
 					Pause = true
@@ -55,44 +63,43 @@ CreateThread(function()
 							MoveBlipSmooth(Markers[Index],v["Coords"])
 						end)
 					else
+						local Level = v["Level"]
 						local Permission = v["Permission"]
-						if Colors[Permission] and not Markers[Index] then
+						if Information[Permission] and not Markers[Index] then
 							Markers[Index] = AddBlipForCoord(v["Coords"])
 							SetBlipSprite(Markers[Index],1)
 							SetBlipDisplay(Markers[Index],4)
 							SetBlipAsShortRange(Markers[Index],false)
-							SetBlipColour(Markers[Index],Colors[Permission])
+							SetBlipColour(Markers[Index],Information[Permission][Level])
 							SetBlipScale(Markers[Index],0.7)
 							BeginTextCommandSetBlipName("STRING")
-							AddTextComponentString("! "..Permission)
+							AddTextComponentString("! "..Permission.." : "..Level)
 							EndTextCommandSetBlipName(Markers[Index])
 						end
 					end
 				end
 			else
+				if Pause then
+					Pause = false
+					CleanMarkers()
+				end
+
 				local Ped = PlayerPedId()
 				if IsPedInAnyVehicle(Ped) then
-					if Pause then
-						Pause = false
-						CleanMarkers()
-					end
-
 					local List = GetPlayers()
 					for Index,v in pairs(Players) do
 						if List[Index] then
+							local Level = v["Level"]
 							local Permission = v["Permission"]
-							if Colors[Permission] and not Markers[Index] then
-								local Source = GetPlayerFromServerId(Index)
-								local Ped = GetPlayerPed(Source)
-
-								Markers[Index] = AddBlipForEntity(Ped)
+							if Information[Permission] and not Markers[Index] then
+								Markers[Index] = AddBlipForEntity(List[Index])
 								SetBlipSprite(Markers[Index],1)
 								SetBlipDisplay(Markers[Index],4)
 								SetBlipAsShortRange(Markers[Index],false)
-								SetBlipColour(Markers[Index],Colors[Permission])
+								SetBlipColour(Markers[Index],Information[Permission][Level])
 								SetBlipScale(Markers[Index],0.7)
 								BeginTextCommandSetBlipName("STRING")
-								AddTextComponentString("! "..Permission)
+								AddTextComponentString("! "..Permission.." : "..Level)
 								EndTextCommandSetBlipName(Markers[Index])
 							end
 						else
@@ -109,20 +116,20 @@ CreateThread(function()
 			end
 		end
 
-		Wait(1000)
+		Wait(TimeDistance)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GETPLAYERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function GetPlayers()
-	local Selected = {}local GamePool = GetGamePool("CPed")
+	local Selected = {}
 
-	for _,Entity in pairs(GamePool) do
+	for _,Entity in pairs(GetGamePool("CPed")) do
 		local Index = NetworkGetPlayerIndexFromPed(Entity)
 
 		if Index and IsPedAPlayer(Entity) and NetworkIsPlayerConnected(Index) then
-			Selected[GetPlayerServerId(Index)] = true
+			Selected[GetPlayerServerId(Index)] = Entity
 		end
 	end
 
@@ -132,7 +139,7 @@ end
 -- CLEANMARKERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 function CleanMarkers()
-	for Index,v in pairs(Markers) do
+	for _,v in pairs(Markers) do
 		if DoesBlipExist(v) then
 			RemoveBlip(v)
 		end
