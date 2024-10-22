@@ -1279,7 +1279,7 @@ AddEventHandler("inventory:StealTrunk",function(Entity)
 					Active[Passport] = os.time() + 20
 					Player(source)["state"]["Buttons"] = true
 					TriggerClientEvent("Progress",source,"Vasculhando",20000)
-					TriggerClientEvent("player:Residuals",source,"Resíduo de Ferro")
+					TriggerClientEvent("player:Residual",source,"Resíduo de Ferro")
 
 					local Players = vRPC.Players(source)
 					for _,v in pairs(Players) do
@@ -1439,7 +1439,7 @@ AddEventHandler("inventory:Products",function(Service)
 					end
 
 					if Products[Service]["Residual"] then
-						TriggerClientEvent("player:Residuals",source,Products[Service]["Residual"])
+						TriggerClientEvent("player:Residual",source,Products[Service]["Residual"])
 					end
 				end
 			end
