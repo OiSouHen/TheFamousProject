@@ -19,7 +19,6 @@ body {
 	max-width: 250px;
 	padding: 10px 13px;
 	position: absolute;
-	border-radius: 5px;
 	word-wrap: break-word;
 	background: rgba(15,15,15,0.75);
 }
