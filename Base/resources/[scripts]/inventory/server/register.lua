@@ -48,7 +48,7 @@ AddEventHandler("inventory:Register",function(Number)
 						Player(source)["state"]["Buttons"] = false
 
 						vRP.MountContainer(Passport,"Registers:"..Number,Itens,1,false)
-						TriggerClientEvent("player:Residuals",source,"Resquício de Línter")
+						TriggerClientEvent("player:Residual",source,"Resquício de Línter")
 						TriggerClientEvent("chest:Open",source,"Registers:"..Number,"Custom",false,true,true)
 					end
 
