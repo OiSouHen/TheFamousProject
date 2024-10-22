@@ -25,10 +25,18 @@ local Information = {
 		["Oficial"] = 42,
 		["Cadete"] = 53
 	},
-	["Paramedico"] = 1,
-	["Corredor"] = 8,
-	["Traficante"] = 5,
-	["Boosting"] = 47
+	["Paramedico"] = {
+		["Paramedico"] = 1
+	},
+	["Corredor"] = {
+		["Corredor"] = 8
+	},
+	["Traficante"] = {
+		["Traficante"] = 5
+	},
+	["Boosting"] = {
+		["Boosting"] = 47
+	}
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADMARKERS
@@ -65,7 +73,7 @@ CreateThread(function()
 					else
 						local Level = v["Level"]
 						local Permission = v["Permission"]
-						if Information[Permission] and not Markers[Index] then
+						if Information[Permission] and Information[Permission][Level] and not Markers[Index] then
 							Markers[Index] = AddBlipForCoord(v["Coords"])
 							SetBlipSprite(Markers[Index],1)
 							SetBlipDisplay(Markers[Index],4)
@@ -73,7 +81,7 @@ CreateThread(function()
 							SetBlipColour(Markers[Index],Information[Permission][Level])
 							SetBlipScale(Markers[Index],0.7)
 							BeginTextCommandSetBlipName("STRING")
-							AddTextComponentString("! "..Permission.." : "..Level)
+							AddTextComponentString("! "..Permission..": "..Level)
 							EndTextCommandSetBlipName(Markers[Index])
 						end
 					end
@@ -91,7 +99,7 @@ CreateThread(function()
 						if List[Index] then
 							local Level = v["Level"]
 							local Permission = v["Permission"]
-							if Information[Permission] and not Markers[Index] then
+							if Information[Permission] and Information[Permission][Level] and not Markers[Index] then
 								Markers[Index] = AddBlipForEntity(List[Index])
 								SetBlipSprite(Markers[Index],1)
 								SetBlipDisplay(Markers[Index],4)
@@ -99,7 +107,7 @@ CreateThread(function()
 								SetBlipColour(Markers[Index],Information[Permission][Level])
 								SetBlipScale(Markers[Index],0.7)
 								BeginTextCommandSetBlipName("STRING")
-								AddTextComponentString("! "..Permission.." : "..Level)
+								AddTextComponentString("! "..Permission..": "..Level)
 								EndTextCommandSetBlipName(Markers[Index])
 							end
 						else
@@ -174,8 +182,8 @@ end
 -- MARKERS:ADD
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("markers:Add")
-AddEventHandler("markers:Add",function(Source,Permission)
-	Players[Source] = Permission
+AddEventHandler("markers:Add",function(Source,Table)
+	Players[Source] = Table
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- MARKERS:FULL
