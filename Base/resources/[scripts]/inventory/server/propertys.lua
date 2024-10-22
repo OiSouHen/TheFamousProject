@@ -32,7 +32,7 @@ AddEventHandler("inventory:PropertysRobbery",function(Name)
 				TriggerClientEvent("propertys:Enter",source,Name,Property[Name])
 			end
 		else
-			TriggerClientEvent("player:Residuals",source,"Resíduo de Alumínio")
+			TriggerClientEvent("player:Residual",source,"Resíduo de Alumínio")
 
 			exports["vrp"]:CallPolice({
 				["Source"] = source,
