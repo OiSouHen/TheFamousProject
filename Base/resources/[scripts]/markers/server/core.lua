@@ -46,7 +46,7 @@ exports("Enter",function(source,Permission,Level,Passport,Timed)
 		Players[source] = {
 			["Passport"] = Passport,
 			["Permission"] = Permission,
-			["Level"] = vRP.Hierarchy(Permission)
+			["Level"] = vRP.NameHierarchy(Permission,Passport)
 		}
 
 		if Timed then
@@ -61,7 +61,7 @@ exports("Enter",function(source,Permission,Level,Passport,Timed)
 		local Service = vRP.NumPermission("Policia")
 		for _,Sources in pairs(Service) do
 			async(function()
-				TriggerClientEvent("markers:Add",Sources,source,Permission)
+				TriggerClientEvent("markers:Add",Sources,source,Players[source])
 			end)
 		end
 
