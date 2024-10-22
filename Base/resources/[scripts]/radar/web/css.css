@@ -11,7 +11,7 @@ body {
 	box-sizing: border-box;
 }
 
-#topRadar {
+#Top {
 	left: 5vh;
 	width: 225px;
 	bottom: 47vh;
@@ -25,10 +25,10 @@ body {
 	border-radius: 4px;
 	text-transform: uppercase;
 	text-shadow: 1px 1px #000;
-	background: rgba(15, 15, 15, .75);
+	background: rgba(15,15,15,.75);
 }
 
-#botRadar {
+#Botton {
 	left: 5vh;
 	width: 225px;
 	bottom: 35vh;
@@ -42,7 +42,7 @@ body {
 	border-radius: 4px;
 	text-transform: uppercase;
 	text-shadow: 1px 1px #000;
-	background: rgba(15, 15, 15, .75);
+	background: rgba(15,15,15,.75);
 }
 
 c {
