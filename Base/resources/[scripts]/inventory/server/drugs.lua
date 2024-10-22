@@ -94,12 +94,6 @@ function Hensa.PaymentDrugs()
 			Valuation = Valuation + (Valuation * Bonification)
 		end
 
-		local SprayPermission = vRPC.SprayExist(source)
-		if SprayPermission and vRP.HasService(Passport,SprayPermission) then
-			Valuation = Valuation + (Valuation * 0.25)
-			GainExperience = GainExperience + 1
-		end
-
 		TriggerClientEvent("player:Residual",source,"Resíduo de Orgânicos")
 		vRP.GenerateItem(Passport,"dirtydollar",Valuation,true)
 		vRP.PutExperience(Passport,"Traffic",GainExperience)
