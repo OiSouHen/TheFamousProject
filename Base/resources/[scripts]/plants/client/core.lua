@@ -69,7 +69,7 @@ AddEventHandler("plants:Informations",function(Number)
 		exports["dynamic"]:AddButton("Fertilização","Processo de Clonagem: <b>"..Informations[2].."%</b>","plants:Cloning",Number,false,true)
 		exports["dynamic"]:AddButton("Hidratação","Fortificação do Adubo: <b>"..math.floor(Informations[4] * 100).."%</b>","plants:Water",Number,false,true)
 
-		exports["dynamic"]:openMenu()
+		exports["dynamic"]:Open()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
