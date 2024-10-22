@@ -11,7 +11,9 @@ vSERVER = Tunnel.getInterface("party")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
+local List = {}
 local Open = false
+local Display = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PARTYS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -96,3 +98,86 @@ AddEventHandler("party:ResetNui",function()
 		SendNUIMessage({ Action = "Close" })
 	end
 end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PARTY:INVITE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("party:Invite")
+AddEventHandler("party:Invite",function(Source,Name)
+	List[Source] = Name
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PARTY:DISMISS
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("party:Dismiss")
+AddEventHandler("party:Dismiss",function(Source)
+	if List[Source] then
+		List[Source] = nil
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PARTY:CLEAR
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("party:Clear")
+AddEventHandler("party:Clear",function()
+	List = {}
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- GETPLAYERS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function GetPlayers()
+	local Selected = {}
+	for _,Entity in pairs(GetGamePool("CPed")) do
+		local Index = NetworkGetPlayerIndexFromPed(Entity)
+
+		if Entity ~= PlayerPedId() and Index and IsPedAPlayer(Entity) and NetworkIsPlayerConnected(Index) then
+			Selected[GetPlayerServerId(Index)] = Entity
+		end
+	end
+
+	return Selected
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADACTIVE
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	while true do
+		local TimeDistance = 999
+		if LocalPlayer["state"]["Active"] and not IsPauseMenuActive() and Display then
+			local Ped = PlayerPedId()
+			local Players = GetPlayers()
+			local Coords = GetEntityCoords(Ped)
+
+			for Source,v in pairs(Players) do
+				if List[Source] then
+					local OtherCoords = GetEntityCoords(v)
+
+					if #(Coords - OtherCoords) <= 25 then
+						TimeDistance = 1
+						DrawText3D(OtherCoords,"~w~"..List[Source],0.45)
+					end
+				end
+			end
+		end
+
+		Wait(TimeDistance)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DRAWTEXT3D
+-----------------------------------------------------------------------------------------------------------------------------------------
+function DrawText3D(Coords,Text,Weight)
+	local onScreen,x,y = World3dToScreen2d(Coords["x"],Coords["y"],Coords["z"] + 1.25)
+
+	if onScreen then
+		SetTextFont(4)
+		SetTextCentre(true)
+		SetTextDropShadow()
+		SetTextProportional(1)
+		SetTextScale(0.35,0.35)
+		SetTextColour(255,255,255,200)
+
+		SetTextEntry("STRING")
+		AddTextComponentString(Text)
+		EndTextCommandDisplayText(x,y)
+	end
+end
