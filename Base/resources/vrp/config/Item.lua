@@ -2,70 +2,6 @@
 -- LIST
 -----------------------------------------------------------------------------------------------------------------------------------------
 local List = {
-	-- SPRAYS
-	["spray_ballas"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Ballas",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
-	["spray_vagos"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Vagos",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
-	["spray_families"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Families",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
-	["spray_marabunta"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Marabunta",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
-	["spray_bennys"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Bennys",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
-	["spray_aztecas"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Aztecas",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
-	["spray_bahamas"] = {
-		["Index"] = "sprays",
-		["Name"] = "Spray: Bahamas",
-		["Description"] = "Liberte sua expressão urbana com spray de pichação, sua ferramenta para transformar paredes em telas vibrantes de criatividade.",
-		["Type"] = "Consumível",
-		["Weight"] = 0.15,
-		["Market"] = true,
-		["Economy"] = 9725
-	},
 	-- REPAROS
 	["repairkit01"] = {
 		["Index"] = "repairkit01",
@@ -5127,6 +5063,12 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 function ItemList()
 	return List
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- ALLITEMS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function AllItems()
+	return List["Index"]
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ITEMEXIST
