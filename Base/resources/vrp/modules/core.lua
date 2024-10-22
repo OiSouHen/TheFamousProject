@@ -958,7 +958,18 @@ function vRP.FullName(Passport)
 	if Characters[Source] then
 		return Characters[Source]["Name"].." "..Characters[Source]["Lastname"]
 	else
-		return "Hensa.store"
+		return "Lucas Hen"
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- LOWERNAME
+-----------------------------------------------------------------------------------------------------------------------------------------
+function vRP.LowerName(Passport)
+	local Source = vRP.Source(Passport)
+	if Characters[Source] then
+		return Characters[Source]["Name"]
+	else
+		return "Hensa"
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -2700,6 +2711,16 @@ function vRP.Hierarchy(Permission)
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- NAMEHIERARCHY
+-----------------------------------------------------------------------------------------------------------------------------------------
+function vRP.NameHierarchy(Permission,Passport)
+	if Groups[Permission] then
+		return vRP.Hierarchy(Permission)[vRP.GetUserHierarchy(Passport, Permission)]
+	end
+
+	return false
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- NUMPERMISSION
 -----------------------------------------------------------------------------------------------------------------------------------------
 function vRP.NumPermission(Permission)
@@ -2746,7 +2767,8 @@ function vRP.ServiceEnter(Source, Passport, Permission, Silenced)
 		end
 
 		if GroupBlips[Permission] then
-			exports["markers"]:Enter(Source,Permission)
+			local Hierarchy = vRP.GetUserHierarchy(Passport,Permission)
+			exports["markers"]:Enter(Source,Permission,Hierarchy,Passport,false)
 		end
 
 		if Groups[Permission] and Groups[Permission]["Salary"] then
@@ -2758,7 +2780,7 @@ function vRP.ServiceEnter(Source, Passport, Permission, Silenced)
 		exports["discord"]:Embed("Services","**Passaporte:** "..Passport.."\n**Entrou na permissão:** "..Permission,0xa3c846)
 
 		if not Silenced then
-			TriggerClientEvent("Notify", Source, "verde", "Entrou em serviço.", false, 5000)
+			TriggerClientEvent("Notify", Source, "Sucesso", "Você entrou em serviço.", "verde", 5000)
 		end
 	end
 end
@@ -2789,7 +2811,7 @@ function vRP.ServiceLeave(Source, Passport, Permission, Silenced)
 		exports["discord"]:Embed("Services","**Passaporte:** "..Passport.."\n**Saiu da permissão:** "..Permission,0xa3c846)
 
 		if not Silenced then
-			TriggerClientEvent("Notify", Source, "verde", "Saiu de serviço.", false, 5000)
+			TriggerClientEvent("Notify", Source, "Atenção", "Você saiu de serviço.", "amarelo", 5000)
 		end
 	end
 end
