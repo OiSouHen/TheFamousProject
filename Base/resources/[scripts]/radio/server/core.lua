@@ -39,24 +39,9 @@ function Hensa.Frequency(Number)
 			if vRP.HasService(Passport,Reserved[Number]) then
 				return true
 			else
-				TriggerClientEvent("Notify",source,"amarelo","Rádio exclusiva para <b>"..Reserved[Number].."</b>.","Atenção",5000)
+				TriggerClientEvent("Notify",source,"Radiofrequência","Frequência exclusiva para <b>"..Reserved[Number].."</b>.","roxo",5000)
 			end
 		else
-			return true
-		end
-	end
-
-	return false
-end
------------------------------------------------------------------------------------------------------------------------------------------
--- CHECKRADIO
------------------------------------------------------------------------------------------------------------------------------------------
-function Hensa.CheckRadio()
-	local source = source
-	local Passport = vRP.Passport(source)
-	if Passport then
-		local Consult = vRP.InventoryItemAmount(Passport,"radio")
-		if Consult[1] <= 0 then
 			return true
 		end
 	end
