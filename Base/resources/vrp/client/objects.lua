@@ -2,48 +2,14 @@
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Init = {}
-local Sprays = {}
 local Objects = {}
 local Switch = false
------------------------------------------------------------------------------------------------------------------------------------------
--- SPRAYEXIST
------------------------------------------------------------------------------------------------------------------------------------------
-function tvRP.SprayExist(Distance)
-	local Return = false
-
-	for Number,v in pairs(Sprays) do
-		local Ped = PlayerPedId()
-		local Coords = GetEntityCoords(Ped)
-		local BlipCoords = GetBlipCoords(v["Blip"])
-
-		if #(Coords - BlipCoords) <= (Distance or 250) then
-			Return = v["Permission"]
-
-			break
-		end
-	end
-
-	return Return
-end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- OBJECTS:TABLE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("objects:Table")
 AddEventHandler("objects:Table",function(Table)
 	Objects = Table
-
-	for Number,v in pairs(Objects) do
-		if v["Mode"] and v["Mode"] == "Sprays" then
-			if not Sprays[Number] then
-				Sprays[Number] = {}
-			end
-
-			Sprays[Number]["Blip"] = AddBlipForRadius(v["Coords"][1],v["Coords"][2],v["Coords"][3],250.0)
-			SetBlipColour(Sprays[Number]["Blip"],v["Color"])
-			Sprays[Number]["Permission"] = v["Permission"]
-			SetBlipAlpha(Sprays[Number]["Blip"],150)
-		end
-	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- OBJECTS:ADICIONAR
@@ -51,17 +17,6 @@ end)
 RegisterNetEvent("objects:Adicionar")
 AddEventHandler("objects:Adicionar",function(Number,Table)
 	Objects[Number] = Table
-
-	if Table and Table["Mode"] and Table["Mode"] == "Sprays" then
-		if not Sprays[Number] then
-			Sprays[Number] = {}
-		end
-
-		Sprays[Number]["Blip"] = AddBlipForRadius(Table["Coords"][1],Table["Coords"][2],Table["Coords"][3],250.0)
-		SetBlipColour(Sprays[Number]["Blip"],Table["Color"])
-		Sprays[Number]["Permission"] = Table["Permission"]
-		SetBlipAlpha(Sprays[Number]["Blip"],150)
-	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- OBJECTS:REMOVER
@@ -82,14 +37,6 @@ AddEventHandler("objects:Remover",function(Number)
 
 	if Objects[Number] and Objects[Number]["Active"] and Objects[Number]["Active"] == "Spikes" then
 		TriggerEvent("spikes:Remover",Number)
-	end
-
-	if Sprays[Number] then
-		if DoesBlipExist(Sprays[Number]["Blip"]) then
-			RemoveBlip(Sprays[Number]["Blip"])
-		end
-
-		Sprays[Number] = nil
 	end
 
 	if Objects[Number] then
@@ -177,22 +124,6 @@ function TargetLabel(Number,Coords,Mode,Weight,Item)
 				},{
 					event = "inventory:StoreObjects",
 					label = "Guardar",
-					tunnel = "server"
-				}
-			}
-		})
-	elseif Mode == "Sprays" then
-		exports["target"]:AddCircleZone("Objects:"..Number,vec3(Coords[1],Coords[2],Coords[3] + Weight),1.0,{
-			name = "Objects:"..Number,
-			heading = Coords[4] or 0.0,
-			useZ = true
-		},{
-			shop = Number,
-			Distance = 2.5,
-			options = {
-				{
-					event = "inventory:StoreObjects",
-					label = "Limpar",
 					tunnel = "server"
 				}
 			}
@@ -325,10 +256,6 @@ CreateThread(function()
 
 						if v["Mode"] then
 							TargetLabel(Number,v["Coords"],v["Mode"],v["Weight"] or 0.0,v["Item"])
-
-							if v["Mode"] == "Sprays" then
-								AddReplaceTexture("sprays","np_sprays_st_dif","sprayTxd_"..v["Permission"],"sprayTex_"..v["Permission"])
-							end
 						end
 
 						if not v["Ground"] then
