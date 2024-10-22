@@ -82,7 +82,7 @@ function Hensa.Paybbery(Name,Number)
 			exports["inventory"]:Drops(Passport,source,Result["Item"],Result["Valuation"])
 		end
 
-		TriggerClientEvent("player:Residuals",source,"Resquício de Línter")
+		TriggerClientEvent("player:Residual",source,"Resquício de Línter")
 		Robbery[Name][Number] = os.time() + 3600
 	end
 end
