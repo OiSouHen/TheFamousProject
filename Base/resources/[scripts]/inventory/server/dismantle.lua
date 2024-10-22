@@ -103,7 +103,7 @@ AddEventHandler("inventory:Dismantle",function(Entity)
 				Player(source)["state"]["Buttons"] = false
 				TriggerClientEvent("dismantle:Reset",source)
 				TriggerEvent("garages:Delete",Entity[4],Plate)
-				TriggerClientEvent("player:Residuals",source,"Resíduo de Borracha")
+				TriggerClientEvent("player:Residual",source,"Resíduo de Borracha")
 
 				local GainExperience = 3
 				local Amount = math.random(1125,1375)
