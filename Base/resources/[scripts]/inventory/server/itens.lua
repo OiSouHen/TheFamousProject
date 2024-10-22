@@ -178,7 +178,7 @@ Use = {
 					Player(source)["state"]["Buttons"] = false
 
 					if vRP.TakeItem(Passport,Full,1,true,Slot) then
-						TriggerClientEvent("player:Residuals",source)
+						TriggerClientEvent("player:Residual",source)
 					end
 				end
 
@@ -750,7 +750,7 @@ Use = {
 
 					if vDEVICE.Device(source,30) then
 						if Boosting[Plate]["Class"] >= 4 then
-							exports["markers"]:Enter(source,"Boosting",1,Passport,60)
+							exports["markers"]:Enter(source,"Boosting",Passport,60)
 						end
 
 						vRP.UpgradeStress(Passport,3)
@@ -800,7 +800,7 @@ Use = {
 
 					if vRP.Task(source,10,10000) then
 						vGARAGE.RegisterDecors(source,Vehicle)
-						TriggerClientEvent("player:Residuals",source,"Resíduo de Alumínio")
+						TriggerClientEvent("player:Residual",source,"Resíduo de Alumínio")
 
 						exports["vrp"]:CallPolice({
 							["Source"] = source,
@@ -834,7 +834,7 @@ Use = {
 						Active[Passport] = os.time() + 15
 						vGARAGE.RegisterDecors(source,Vehicle)
 						TriggerClientEvent("Progress",source,"Destravando",15000)
-						TriggerClientEvent("player:Residuals",source,"Resíduo de Alumínio")
+						TriggerClientEvent("player:Residual",source,"Resíduo de Alumínio")
 
 						exports["vrp"]:CallPolice({
 							["Source"] = source,
