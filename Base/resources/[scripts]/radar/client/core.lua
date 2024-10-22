@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VRP
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Proxy = module("vrp", "lib/Proxy")
+local Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADBUTTON
@@ -15,40 +15,34 @@ CreateThread(function()
 	while true do
 		local TimeDistance = 999
 		local Ped = PlayerPedId()
-		if IsPedInAnyPoliceVehicle(Ped) and LocalPlayer["state"]["Policia"] then
-			if policeRadar then
-				if not policeFreeze then
-					TimeDistance = 100
+		if IsPedInAnyPoliceVehicle(Ped) and policeRadar and not policeFreeze and CheckPolice() then
+			TimeDistance = 100
 
-					local vehicle = GetVehiclePedIsUsing(Ped)
-					local vehicleDimension = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, 1.0, 1.0)
+			local Vehicle = GetVehiclePedIsUsing(Ped)
+			local Dimension = GetOffsetFromEntityInWorldCoords(Vehicle,0.0,1.0,1.0)
 
-					local vehicleFront = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, 105.0, 0.0)
-					local vehicleFrontShape = StartShapeTestCapsule(vehicleDimension, vehicleFront, 3.0, 10, vehicle, 7)
-					local _, _, _, _, vehFront = GetShapeTestResult(vehicleFrontShape)
+			local VehicleFront = GetOffsetFromEntityInWorldCoords(Vehicle,0.0,105.0,0.0)
+			local VehicleFrontShape = StartShapeTestCapsule(Dimension,VehicleFront,3.0,10,Vehicle,7)
+			local _,_,_,_,Front = GetShapeTestResult(VehicleFrontShape)
 
-					if IsEntityAVehicle(vehFront) then
-						local Model = GetEntityModel(vehFront)
-						local Plate = GetVehicleNumberPlateText(vehFront)
-						local Speed = GetEntitySpeed(vehFront) * 2.236936
-						local Name = GetDisplayNameFromVehicleModel(Model)
+			if IsEntityAVehicle(Front) then
+				local Model = vRP.VehicleModel(Front)
+				local Speed = GetEntitySpeed(Front) * 3.6
+				local Plate = GetVehicleNumberPlateText(Front)
 
-						SendNUIMessage({ radar = "top", plate = Plate, Model = Name, speed = Speed })
-					end
+				SendNUIMessage({ radar = "top", plate = Plate, Model = VehicleName(Model), speed = Speed })
+			end
 
-					local vehicleBack = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, -105.0, 0.0)
-					local vehicleBackShape = StartShapeTestCapsule(vehicleDimension, vehicleBack, 3.0, 10, vehicle, 7)
-					local _, _, _, _, vehBack = GetShapeTestResult(vehicleBackShape)
+			local VehicleBack = GetOffsetFromEntityInWorldCoords(Vehicle,0.0,-105.0,0.0)
+			local VehicleBackShape = StartShapeTestCapsule(Dimension,VehicleBack,3.0,10,Vehicle,7)
+			local _,_,_,_,Back = GetShapeTestResult(VehicleBackShape)
 
-					if IsEntityAVehicle(vehBack) then
-						local Model = GetEntityModel(vehBack)
-						local Plate = GetVehicleNumberPlateText(vehBack)
-						local Speed = GetEntitySpeed(vehBack) * 2.236936
-						local Name = GetDisplayNameFromVehicleModel(Model)
+			if IsEntityAVehicle(Back) then
+				local Model = vRP.VehicleModel(Back)
+				local Speed = GetEntitySpeed(Back) * 3.6
+				local Plate = GetVehicleNumberPlateText(Back)
 
-						SendNUIMessage({ radar = "bot", plate = Plate, Model = Name, speed = Speed })
-					end
-				end
+				SendNUIMessage({ radar = "bot", plate = Plate, Model = VehicleName(Model), speed = Speed })
 			end
 		end
 
@@ -63,31 +57,29 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TOGGLERADAR
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("toggleRadar", function()
-	if not IsPauseMenuActive() then
-		local Ped = PlayerPedId()
-		if IsPedInAnyPoliceVehicle(Ped) and LocalPlayer["state"]["Policia"] then
-			if policeRadar then
-				policeRadar = false
-				SendNUIMessage({ radar = false })
-			else
-				policeRadar = true
-				SendNUIMessage({ radar = true })
-			end
+RegisterCommand("toggleRadar",function()
+	local Ped = PlayerPedId()
+	if IsPedInAnyPoliceVehicle(Ped) and not IsPauseMenuActive() and CheckPolice() then
+		if policeRadar then
+			policeRadar = false
+			SendNUIMessage({ radar = false })
+		else
+			policeRadar = true
+			SendNUIMessage({ radar = true })
 		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TOGGLEFREEZE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterCommand("toggleFreeze", function()
+RegisterCommand("toggleFreeze",function()
 	local Ped = PlayerPedId()
-	if IsPedInAnyPoliceVehicle(Ped) and LocalPlayer["state"]["Policia"] and not IsPauseMenuActive() then
+	if IsPedInAnyPoliceVehicle(Ped) and not IsPauseMenuActive() and CheckPolice() then
 		policeFreeze = not policeFreeze
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- KEYMAPPING
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterKeyMapping("toggleRadar", "Ativar/Desativar radar das viaturas.", "keyboard", "N")
-RegisterKeyMapping("toggleFreeze", "Travar/Destravar radar das viaturas.", "keyboard", "M")
+RegisterKeyMapping("toggleRadar","Ativar/Desativar radar das viaturas.","keyboard","N")
+RegisterKeyMapping("toggleFreeze","Travar/Destravar radar das viaturas.","keyboard","M")
