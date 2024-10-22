@@ -126,7 +126,6 @@ AddEventHandler("spawn:Finish",function(Coords,Creation)
 			TriggerEvent("hud:Active",true)
 		end
 
-		-- TriggerServerEvent("vRP:WaitCharacters",Creation)
 		SendNUIMessage({ Action = "Close" })
 		SetNuiFocus(false,false)
 
@@ -200,7 +199,6 @@ function Customization(Table, Check)
 		LocalPlayer["state"]:set("Invisible", false, false)
 	end
 end
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SPAWN:INCREMENT
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -208,17 +206,5 @@ RegisterNetEvent("spawn:Increment")
 AddEventHandler("spawn:Increment",function(Tables)
 	for Name,v in pairs(Tables) do
 		Locate[#Locate + 1] = { ["Coords"] = v, ["Name"] = "" }
-
-		if Name ~= "Hotel" then
-			local Blip = AddBlipForCoord(v["x"],v["y"],v["z"])
-			SetBlipSprite(Blip,411)
-			SetBlipDisplay(Blip,4)
-			SetBlipAsShortRange(Blip,true)
-			SetBlipColour(Blip,5)
-			SetBlipScale(Blip,0.6)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString("Propriedade")
-			EndTextCommandSetBlipName(Blip)
-		end
 	end
 end)
