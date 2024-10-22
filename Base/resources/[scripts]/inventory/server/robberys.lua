@@ -151,7 +151,7 @@ AddEventHandler("inventory:Robberys",function(Crime)
 						Active[Passport] = nil
 						vRP.FreezePlayer(source,false)
 						Player(source)["state"]["Buttons"] = false
-						TriggerClientEvent("player:Residuals",source,"Resquício de Línter")
+						TriggerClientEvent("player:Residual",source,"Resquício de Línter")
 
 						vRP.GenerateItem(Passport,Robberys[Crime]["Payment"]["Item"],math.random(Robberys[Crime]["Payment"]["Min"],Robberys[Crime]["Payment"]["Max"]),true)
 					end
