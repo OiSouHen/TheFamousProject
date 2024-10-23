@@ -15,34 +15,32 @@ vSERVER = Tunnel.getInterface("paramedic")
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Damaged = {}
-local Bleeding = 0
-local BloodTick = 0
-local Hope = GetGameTimer()
-local Warning = GetGameTimer()
+local Bleedings = 0
 local Injuried = GetGameTimer()
 local BloodTimers = GetGameTimer()
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GAMEEVENTTRIGGERED
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("gameEventTriggered",function(Event,Message)
-	if Event ~= "CEventNetworkEntityDamage" then
+	if Event ~= "CEventNetworkEntityDamage" or PlayerPedId() ~= Message[1] then
 		return
 	end
 
-	if PlayerPedId() == Message[1] then
-		if (Message[7] == 126349499 or Message[7] == 1064738331 or Message[7] == 85055149) and GetEntityHealth(Message[1]) > 100 then
-			SetPedToRagdoll(Message[1],2500,2500,0,0,0,0)
-		else
-			if GetGameTimer() >= Injuried then
-				if not IsPedInAnyVehicle(Message[1]) and GetEntityHealth(Message[1]) > 100 then
-					Injuried = GetGameTimer() + 1000
+	if (Message[7] == 126349499 or Message[7] == 1064738331 or Message[7] == 85055149) and GetEntityHealth(Message[1]) > 100 then
+		SetPedToRagdoll(Message[1],2500,2500,0,0,0,0)
+	else
+		if GetGameTimer() >= Injuried and GetEntityHealth(Message[1]) > 100 then
+			Injuried = GetGameTimer() + 1000
 
-					local Hit,Mark = GetPedLastDamageBone(Message[1])
-					if Hit and not Damaged[Mark] and Mark ~= 0 then
-						TriggerServerEvent("evidence:Drop", "Yellow")
-						Bleeding = Bleeding + 1
-						Damaged[Mark] = true
-					end
+			local Hit,Mark = GetPedLastDamageBone(Message[1])
+			if Hit and not Damaged[Mark] and Mark ~= 0 then
+				TriggerServerEvent("evidence:Drop", "Yellow")
+				ClearPedBloodDamage(Message[1])
+				Bleedings = Bleedings + 1
+				Damaged[Mark] = true
+
+				if Bleedings >= 5 then
+					Bleedings = 5
 				end
 			end
 		end
@@ -54,18 +52,11 @@ end)
 CreateThread(function()
 	while true do
 		local Ped = PlayerPedId()
-		if GetGameTimer() >= BloodTimers and GetEntityHealth(Ped) > 100 then
-			BloodTimers = GetGameTimer() + 10000
-			BloodTick = BloodTick + 1
-
-			if BloodTick >= 3 and Bleeding >= 3 then
-				BloodTick = 0
-
-				AnimpostfxPlay("MenuMGIn")
-				SetTimeout(Bleeding * 750, function()
-					AnimpostfxStop("MenuMGIn")
-				end)
-			end
+		if Bleedings >= 1 and GetGameTimer() >= BloodTimers and GetEntityHealth(Ped) > 100 then
+			TriggerEvent("Notify","Saúde","Você está com sangramento.","blood",5000)
+			BloodTimers = GetGameTimer() + 30000
+			ApplyDamageToPed(Ped,1,false)
+			ClearPedBloodDamage(Ped)
 		end
 
 		Wait(1000)
@@ -79,7 +70,7 @@ AddEventHandler("paramedic:Open", function()
 	local Ped = PlayerPedId()
 	if not IsPedSwimming(Ped) then
 		if LocalPlayer["state"]["Paramedico"] then
-			SendNUIMessage({ action = "openSystem" })
+			SendNUIMessage({ action = "Open" })
 			TriggerEvent("dynamic:Close")
 			SetNuiFocus(true, true)
 
@@ -102,12 +93,12 @@ RegisterNUICallback("Announce", function(data)
 	vSERVER.Announce(data["Title"], data["Seconds"], data["Text"])
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CLOSESYSTEM
+-- CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("closeSystem", function()
+RegisterNUICallback("Close", function()
 	SetNuiFocus(false, false)
 	SetCursorLocation(0.5, 0.5)
-	SendNUIMessage({ action = "closeSystem" })
+	SendNUIMessage({ action = "Close" })
 	vRP.Destroy("one")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -123,8 +114,7 @@ end)
 RegisterNetEvent("paramedic:Reset")
 AddEventHandler("paramedic:Reset", function()
 	Damaged = {}
-	Bleeding = 0
-	BloodTick = 0
+	Bleedings = 0
 	Injuried = GetGameTimer()
 	BloodTimers = GetGameTimer()
 	ClearPedBloodDamage(PlayerPedId())
@@ -140,19 +130,17 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Bandage()
 	local Humanes = ""
-	for Number, _ in pairs(Damaged) do
-		TriggerEvent("Notify", "default", "Passou ataduras no(a) <b>" .. Bone(Number) .. "</b>.", false, 5000)
-		TriggerEvent("sounds:Private", "bandage", 0.5)
-		Bleeding = Bleeding - 1
+	for Number,_ in pairs(Damaged) do
+		TriggerEvent("Notify","Saúde","Passou ataduras no(a) <b>"..Bone(Number).."</b>.","blood",5000)
+		TriggerEvent("sounds:Private","bandage",0.5)
+		Bleedings = Bleedings - 1
 		Humanes = Bone(Number)
 		Damaged[Number] = nil
-		BloodTick = 0
+
 		break
 	end
 
-	if Bleeding <= 0 then
-		ClearPedBloodDamage(PlayerPedId())
-	end
+	ClearPedBloodDamage(PlayerPedId())
 
 	return Humanes
 end
@@ -165,84 +153,24 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PARAMEDIC:INJURIES
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("paramedic:Injuries")
-AddEventHandler("paramedic:Injuries", function()
-	local Wounds = 0
+AddEventHandler("paramedic:Injuries",function()
+	local Ticks = 0
 	local Injuries = ""
-	local Damages = false
 
-	for Number, _ in pairs(Damaged) do
-		if not Damages then
-			Injuries = Injuries .. "<b>Danos Superficiais:</b><br>"
-			Damages = true
-		end
-
-		Wounds = Wounds + 1
-		Injuries = Injuries .. "<b>" .. Wounds .. "</b>: " .. Bone(Number) .. "<br>"
+	for Number,_ in pairs(Damaged) do
+		Ticks = Ticks + 1
+		Injuries = Injuries.."<b>"..Ticks.."</b>: "..Bone(Number).."<br>"
 	end
 
 	if Injuries == "" then
-		TriggerEvent("Notify", "default", "Nenhum ferimento encontrado.", false, 5000)
+		TriggerEvent("Notify","Saúde","Nenhum ferimento encontrado.","blood",5000)
 	else
-		TriggerEvent("Notify", "default", Injuries, "Seus ferimentos", 10000)
+		TriggerEvent("Notify","Ferimentos",Injuries,"blood",10000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DIAGNOSTIC
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hensa.Diagnostic()
-	return Damaged, Bleeding
+	return Damaged,Bleedings
 end
------------------------------------------------------------------------------------------------------------------------------------------
--- ARMS
------------------------------------------------------------------------------------------------------------------------------------------
-exports("Arms", function()
-	if Damaged[18905] or Damaged[60309] or Damaged[36029] or Damaged[57005] or Damaged[28422] or Damaged[6286] then
-		return true
-	end
-
-	return false
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- LEGS
------------------------------------------------------------------------------------------------------------------------------------------
-exports("Legs", function()
-	if Damaged[14201] or Damaged[65245] or Damaged[57717] or Damaged[52301] or Damaged[35502] or Damaged[24806] then
-		return true
-	end
-
-	return false
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- GLOBALTHREAD
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	while true do
-		local TimeDistance = 999
-		local Ped = PlayerPedId()
-		local currentTime = GetGameTimer()
-
-		if not IsPedInAnyVehicle(Ped) then
-			local hasLegInjury = exports["paramedic"]:Legs()
-			if hasLegInjury then
-				TimeDistance = 1
-
-				DisableControlAction(1, 22, true)
-
-				if IsDisabledControlJustPressed(1, 22) and currentTime >= Warning then
-					TriggerEvent("Notify", "default", "Você não consegue pular pois está com a <b>Perna</b> machucada.", false, 5000)
-					Warning = currentTime + 5000
-				end
-			elseif currentTime <= Hope then
-				TimeDistance = 1
-				DisableControlAction(1, 22, true)
-			else
-				if IsPedJumping(Ped) then
-					Hope = currentTime + 5000
-				end
-			end
-		end
-
-		Wait(TimeDistance)
-	end
-end)
