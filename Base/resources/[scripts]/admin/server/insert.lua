@@ -137,7 +137,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 
 						vRPC.Destroy(ClosestPed)
 
-						TriggerClientEvent("Notify", ClosestPed, "Sistema", "Você recebeu uma cura divina.", "blood", 5000)
+						TriggerClientEvent("Notify", ClosestPed, "Saúde", "Você recebeu uma cura divina.", "blood", 5000)
 					end
 				end
 			else
