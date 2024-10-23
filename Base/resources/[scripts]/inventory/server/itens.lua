@@ -4,7 +4,7 @@
 Use = {
 	["bandage"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		if (not Healths[Passport] or os.time() > Healths[Passport]) then
-			if vRP.GetHealth(source) > 100 then
+			if vRP.GetHealth(source) > 100 and vRP.GetHealth(source) < 200 then
 				Active[Passport] = os.time() + 5
 				Player(source)["state"]["Buttons"] = true
 				TriggerClientEvent("inventory:Close",source)
@@ -28,7 +28,7 @@ Use = {
 					Wait(100)
 				until not Active[Passport]
 			else
-				TriggerClientEvent("Notify",source,"Atenção","Não pode utilizar de vida cheia.","amarelo",5000)
+				TriggerClientEvent("Notify",source,"Atenção","Não pode utilizar de vida cheia ou nocauteado.","amarelo",5000)
 			end
 		else
 			TriggerClientEvent("Notify",source,"Atenção","Aguarde "..CompleteTimers(Healths[Passport] - os.time())..".","amarelo",5000)
