@@ -33,7 +33,7 @@ function Hensa.Announce(Title, Seconds, Text)
 
 				exports["discord"]:Embed("Paramedic","**Por:** "..Dotted(Passport).."\nHorário:** "..os.date("%H:%M:%S").."\n**Anúncio:** "..Text,0xa3c846)
 				TriggerClientEvent("Notify", -1, "hospital", Text, Title, Seconds * 1000)
-				TriggerClientEvent("paramedic:Update", source, "reloadAnnounce")
+				TriggerClientEvent("paramedic:Update", source, "ReloadAnnounce")
 				Announces[Passport] = os.time() + 300
 
 				Active[Passport] = nil
@@ -68,7 +68,7 @@ function Hensa.GivePsico(OtherPassport)
 					local ItemName = ItemName("medicpass")
 					local currentTimeFormatted = os.date("%H:%M:%S")
 					exports["discord"]:Embed("Paramedic", "**Por:** "..Dotted(Passport).."\nPara:** "..OtherPassport.."\nHorário:** "..currentTimeFormatted,0xa3c846)
-					TriggerClientEvent("paramedic:Update", source, "reloadPsico")
+					TriggerClientEvent("paramedic:Update", source, "ReloadPsico")
 					Psico[Passport] = currentTime + 600
 
 					Active[Passport] = nil
