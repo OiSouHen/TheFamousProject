@@ -6,19 +6,19 @@ $(document).ready(function () {
 
 	window.addEventListener("message", function (event) {
 		switch (event["data"]["action"]) {
-			case "openSystem":
+			case "Open":
 				$("#mainPage").css("display", "block");
 				break;
 
-			case "closeSystem":
+			case "Close":
 				$("#mainPage").css("display", "none");
 				break;
 
-			case "reloadPsico":
+			case "ReloadPsico":
 				functionPsico();
 				break;
 
-			case "reloadAnnounce":
+			case "ReloadAnnounce":
 				functionAnunciar();
 				break;
 		};
@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 	document.onkeyup = function (data) {
 		if (data["which"] == 27) {
-			$.post("http://paramedic/closeSystem");
+			$.post("http://paramedic/Close");
 		};
 	};
 });
