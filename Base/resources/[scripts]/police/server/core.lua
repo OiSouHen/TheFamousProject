@@ -245,7 +245,7 @@ function Hensa.Prison(Table)
 
 		if Daily and Daily >= 1 then
 			vRP.GiveBank(Passport,425 * Daily)
-			TriggerClientEvent("Notify",source,"azul","A pessoa já foi presa hoje <b>"..Daily.." vezes</b> e você recebeu <b>$"..(600 * Daily).."</b> como bonificação por efetuar a prisão do mesmo.",false,10000)
+			TriggerClientEvent("Notify",source,"Aviso","A pessoa já foi presa hoje <b>"..Daily.." vezes</b> e você recebeu <b>$"..(600 * Daily).."</b> como bonificação por efetuar a prisão do mesmo.","amarelo",10000)
 		end
 
 		vRP.Query("police/prisons/Insert",{ Passport = OtherPassport, Police = Passport, Crimes = Table["crimes"], Notes = Table["notes"], Fines = Fines, Services = Services, Date = os.date("%d/%m/%Y").." | "..os.date("%H:%M") })
@@ -269,7 +269,7 @@ function Hensa.Prison(Table)
 			if OtherSource then
 				vRP.Teleport(OtherSource,1679.94,2513.07,45.56)
 				TriggerClientEvent("police:Prisioner",OtherSource,true)
-				TriggerClientEvent("Notify",OtherSource,"amarelo","Todas as lixeiras do pátio estão disponíveis para <b>vasculhar</b> em troca de redução penal.","Atenção",30000)
+				TriggerClientEvent("Notify",OtherSource,"Boolingbroke","Todas as lixeiras do pátio estão disponíveis para <b>vasculhar</b> em troca de redução penal.","amarelo",30000)
 			end
 		end
 
