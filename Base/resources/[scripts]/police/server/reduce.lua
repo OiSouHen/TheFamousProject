@@ -27,18 +27,18 @@ AddEventHandler("police:Escape",function()
 					end
 
 					vRP.CallGroup(vec3(1860.4,2594.06,45.66), "Policia", "Presidio", "Fuga do Presidio", 34, 22)
-					TriggerClientEvent("Notify",source,"vermelho","Você fugiu da prisão e as autoridades foram notificadas, fuja o mais rápido possível daqui.","Aviso",5000)
+					TriggerClientEvent("Notify",source,"Departamento Policial","Você fugiu da prisão e as autoridades foram notificadas, fuja o mais rápido possível daqui.","policia",5000)
 
 					Player(source)["state"]["Buttons"] = false
 					Player(source)["state"]["Cancel"] = false
 					vRP.UpdatePrison(Passport,Amount)
 					vRPC.Destroy(source)
 				else
-					TriggerClientEvent("Notify", source, "Aviso", "<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.", "vermelho", 5000)
+					TriggerClientEvent("Notify",source,"Aviso","<b>"..ItemName(DefaultMoneyOne).."</b> insuficientes.","amarelo",5000)
 				end
 			end
 		else
-			TriggerClientEvent("Notify",source,"amarelo","Você não tem motivos para fugir.","Atenção",5000)
+			TriggerClientEvent("Notify",source,"Atenção","Você não tem motivos para fugir.","amarelo",5000)
 		end
 	end
 end)
@@ -59,7 +59,7 @@ AddEventHandler("police:Reduce",function(Number)
 			if os.time() >= Locations[Passport][Number] then
 				Reduction(source,Passport,Number)
 			else
-				TriggerClientEvent("Notify",source,"azul","Aguarde <b>"..Locations[Passport][Number] - os.time().."</b> segundos.",false,5000)
+				TriggerClientEvent("Notify",source,"Atenção","Aguarde "..CompleteTimers(Locations[Passport][Number] - os.time())..".","amarelo",5000)
 			end
 		else
 			Reduction(source,Passport,Number)
