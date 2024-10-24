@@ -7,8 +7,6 @@ vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
 -----------------------------------------------------------------------------------------------------------------------------------------
-Hensa = {}
-Tunnel.bindInterface("trucker",Hensa)
 vSERVER = Tunnel.getInterface("trucker")
 vGARAGE = Tunnel.getInterface("garages")
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -16,10 +14,9 @@ vGARAGE = Tunnel.getInterface("garages")
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Blip = nil
 local Position = 1
-local Status = false
 local Package = false
 local Service = "Vehicles"
-local ServiceStatus = "Iniciar"
+local Init = vec4(1239.87,-3257.2,7.09,274.97)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DELIVERY
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -70,150 +67,76 @@ local Delivery = {
 	}
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
--- TRUCKER:VERIFY
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trucker:Verify")
-AddEventHandler("trucker:Verify",function()
-	if vSERVER.CheckWork("Trucker") and not vSERVER.CheckDelay() then
-		if not Status then
-			exports["dynamic"]:AddButton("Iniciar","Clique aqui para <b>Iniciar</b> o serviço.","trucker:Status",false,false,false)
-		else
-			exports["dynamic"]:AddButton("Finalizar","Clique aqui para <b>Finalizar</b> o serviço.","trucker:Status",false,false,false)
-
-			exports["dynamic"]:AddMenu("Cargas","Clique para mais ações.","trucker")
-			exports["dynamic"]:AddButton("Entrega de Veículos","Clique aqui para selecionar esta carga.","trucker:Vehicles",false,"trucker",false)
-			exports["dynamic"]:AddButton("Entrega de Diesel","Clique aqui para selecionar esta carga.","trucker:Diesel",false,"trucker",false)
-			exports["dynamic"]:AddButton("Entrega de Gasolina","Clique aqui para selecionar esta carga.","trucker:Fuel",false,"trucker",false)
-			exports["dynamic"]:AddButton("Entrega de Madeira","Clique aqui para selecionar esta carga.","trucker:Wood",false,"trucker",false)
-		end
-
-		exports["dynamic"]:Open()
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- TRUCKER:STATUS
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trucker:Status")
-AddEventHandler("trucker:Status",function()
-	if not Status then
-		Status = true
-		ServiceStatus = "Finalizar"
-		TriggerEvent("dynamic:Close")
-		TriggerEvent("Notify","amarelo","Converse novamente e selecione sua carga.","Atenção",5000)
-	else
-		Status = false
-		Package = false
-		ServiceStatus = "Iniciar"
-		TriggerEvent("dynamic:Close")
-		TriggerEvent("Notify","amarelo","Serviço finalizado.","Atenção",5000)
-
-		if DoesBlipExist(Blip) then
-			RemoveBlip(Blip)
-			Blip = nil
-		end
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- TRUCKER:VEHICLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trucker:Vehicles")
 AddEventHandler("trucker:Vehicles",function()
-	if vSERVER.CheckWork("Trucker") and not vSERVER.CheckDelay() then
-		if not Package then
-			if not Status then
-				TriggerEvent("Notify","amarelo","Inicie o serviço antes de escolher uma carga.","Atenção",5000)
-			else
-				Position = 1
-				Package = true
-				Service = "Vehicles"
-				TriggerEvent("dynamic:Close")
-				TriggerEvent("Notify","amarelo","Dirija-se até a Garagem, remova o seu caminhão e buzine o mesmo para receber a carga responsável pelo transporte selecionado.","Atenção",10000)
-			end
-		else
-			TriggerEvent("Notify","azul","Você já possúi uma entrega em andamento.",false,5000)
-		end
+	if not Package then
+		Position = 1
+		Package = true
+		Service = "Vehicles"
+		TriggerEvent("Notify","Central de Empregos","Dirija-se ao caminhão e buzine o mesmo<br>para receber a carga responsável pelo transporte.","default",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TRUCKER:DIESEL
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trucker:Diesel")
 AddEventHandler("trucker:Diesel",function()
-	if vSERVER.CheckWork("Trucker") and not vSERVER.CheckDelay() then
-		if not Package then
-			if not Status then
-				TriggerEvent("Notify","amarelo","Inicie o serviço antes de escolher uma carga.","Atenção",5000)
-			else
-				Position = 1
-				Package = true
-				Service = "Diesel"
-				TriggerEvent("dynamic:Close")
-				TriggerEvent("Notify","amarelo","Dirija-se até a Garagem, remova o seu caminhão e buzine o mesmo para receber a carga responsável pelo transporte selecionado.","Atenção",10000)
-			end
-		else
-			TriggerEvent("Notify","azul","Você já possúi uma entrega em andamento.",false,5000)
-		end
+	if not Package then
+		Position = 1
+		Package = true
+		Service = "Diesel"
+		TriggerEvent("Notify","Central de Empregos","Dirija-se ao caminhão e buzine o mesmo<br>para receber a carga responsável pelo transporte.","default",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TRUCKER:FUEL
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trucker:Fuel")
 AddEventHandler("trucker:Fuel",function()
-	if vSERVER.CheckWork("Trucker") and not vSERVER.CheckDelay() then
-		if not Package then
-			if not Status then
-				TriggerEvent("Notify","amarelo","Inicie o serviço antes de escolher uma carga.","Atenção",5000)
-			else
-				Position = 1
-				Package = true
-				Service = "Fuel"
-				TriggerEvent("dynamic:Close")
-				TriggerEvent("Notify","amarelo","Dirija-se até a Garagem, remova o seu caminhão e buzine o mesmo para receber a carga responsável pelo transporte selecionado.","Atenção",10000)
-			end
-		else
-			TriggerEvent("Notify","azul","Você já possúi uma entrega em andamento.",false,5000)
-		end
+	if not Package then
+		Position = 1
+		Package = true
+		Service = "Fuel"
+		TriggerEvent("Notify","Central de Empregos","Dirija-se ao caminhão e buzine o mesmo<br>para receber a carga responsável pelo transporte.","default",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TRUCKER:WOOD
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("trucker:Wood")
 AddEventHandler("trucker:Wood",function()
-	if vSERVER.CheckWork("Trucker") and not vSERVER.CheckDelay() then
-		if not Package then
-			if not Status then
-				TriggerEvent("Notify","amarelo","Inicie o serviço antes de escolher uma carga.","Atenção",5000)
-			else
-				Position = 1
-				Package = true
-				Service = "Wood"
-				TriggerEvent("dynamic:Close")
-				TriggerEvent("Notify","amarelo","Dirija-se até a Garagem, remova o seu caminhão e buzine o mesmo para receber a carga responsável pelo transporte selecionado.","Atenção",10000)
-			end
-		else
-			TriggerEvent("Notify","azul","Você já possúi uma entrega em andamento.",false,5000)
-		end
+	if not Package then
+		Position = 1
+		Package = true
+		Service = "Wood"
+		TriggerEvent("Notify","Central de Empregos","Dirija-se ao caminhão e buzine o mesmo<br>para receber a carga responsável pelo transporte.","default",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ONCLIENTRESOURCESTART
+-- THREADSERVERSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("onClientResourceStart",function(Resource)
-	if (GetCurrentResourceName() ~= Resource) then
-		return
-	end
-
-	exports["target"]:AddCircleZone("Trucker",vec3(1239.87,-3257.2,7.09),0.5,{
+CreateThread(function()
+	exports["target"]:AddBoxZone("Trucker",Init["xyz"],0.75,0.75,{
 		name = "Trucker",
-		heading = 0.0
+		heading = Init["w"],
+		minZ = Init["z"] - 1.0,
+		maxZ = Init["z"] + 1.0
 	},{
-		Distance = 1.0,
+		Distance = 1.75,
 		options = {
 			{
-				event = "trucker:Verify",
-				label = "Conversar",
+				event = "trucker:Vehicles",
+				label = "Entrega de Veículos",
+				tunnel = "client"
+			},{
+				event = "trucker:Diesel",
+				label = "Entrega de Diesel",
+				tunnel = "client"
+			},{
+				event = "trucker:Fuel",
+				label = "Entrega de Gasolina",
+				tunnel = "client"
+			},{
+				event = "trucker:Wood",
+				label = "Entrega de Madeira",
 				tunnel = "client"
 			}
 		}
@@ -225,7 +148,6 @@ end)
 CreateThread(function()
 	while true do
 		local TimeDistance = 999
-
 		if Package then
 			local Vehicle = GetPlayersLastVehicle()
 			if IsEntityAVehicle(Vehicle) and GetEntityArchetypeName(Vehicle) == "packer" then
@@ -236,12 +158,12 @@ CreateThread(function()
 				if Distance <= 200 then
 					TimeDistance = 1
 					DrawMarker(1,Delivery[Service]["Coords"][Position]["x"],Delivery[Service]["Coords"][Position]["y"],Delivery[Service]["Coords"][Position]["z"] - 3,0,0,0,0,0,0,12.0,12.0,8.0,255,255,255,25,0,0,0,0)
-					DrawMarker(21,Delivery[Service]["Coords"][Position]["x"],Delivery[Service]["Coords"][Position]["y"],Delivery[Service]["Coords"][Position]["z"] + 1,0,0,0,0,180.0,130.0,3.0,3.0,2.0,65,130,226,100,0,0,0,1)
+					DrawMarker(21,Delivery[Service]["Coords"][Position]["x"],Delivery[Service]["Coords"][Position]["y"],Delivery[Service]["Coords"][Position]["z"] + 1,0,0,0,0,180.0,130.0,3.0,3.0,2.0,88,101,242,175,0,0,0,1)
 
 					if Distance <= 10 then
 						if Position >= #Delivery[Service]["Coords"] then
 							Package = false
-							vSERVER.Payment(Service)
+							vSERVER.Payment()
 
 							if DoesBlipExist(Blip) then
 								RemoveBlip(Blip)
@@ -252,10 +174,10 @@ CreateThread(function()
 								if IsControlJustPressed(1,38) then
 									local Heading = GetEntityHeading(Vehicle)
 									local Coords = GetOffsetFromEntityInWorldCoords(Vehicle,0.0,-12.0,0.0)
-									local Trailer = vGARAGE.ServerVehicle(Delivery[Service]["Trailer"],Coords["x"],Coords["y"],Coords["z"],Heading,nil,0,nil,1000,0)
+									local Networked = vGARAGE.ServerVehicle(Delivery[Service]["Trailer"],Coords["x"],Coords["y"],Coords["z"],Heading,nil,0,nil,1000,0)
 
-									if NetworkDoesNetworkIdExist(Trailer) then
-										local Network = NetToEnt(Trailer)
+									if NetworkDoesNetworkIdExist(Networked) then
+										local Network = NetToEnt(Networked)
 										if NetworkDoesNetworkIdExist(Network) then
 											SetVehicleOnGroundProperly(Network)
 										end
@@ -269,7 +191,7 @@ CreateThread(function()
 									if not IsPedInAnyVehicle(Ped) and IsControlJustPressed(1,38) then
 										local Vehicle,Network,Plate,Model = vRP.VehicleList(10)
 										if Vehicle and Model == Delivery[Service]["Trailer"] then
-											TriggerEvent("Notify","amarelo","Volte para receber o pagamento.","Atenção",5000)
+											TriggerEvent("Notify","Aviso","Volte para receber o pagamento.","amarelo",5000)
 											TriggerServerEvent("garages:DeleteVehicle",Network,Plate)
 											Position = Position + 1
 											BlipMarked()
