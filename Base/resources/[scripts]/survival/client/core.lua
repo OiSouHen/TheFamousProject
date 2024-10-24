@@ -105,7 +105,6 @@ CreateThread(function()
 
 					SendNUIMessage({ Action = "Open" })
 					TriggerServerEvent("paramedic:bloodDeath")
-					-- exports["lb-phone"]:ToggleDisabled(true)
 					TriggerEvent("player:DeathUpdate",true)
 					TriggerEvent("inventory:CleanWeapons")
 					TriggerServerEvent("inventory:Cancel")
@@ -143,8 +142,8 @@ CreateThread(function()
 								exports["pma-voice"]:Mute(true)
 
 								local DeathTimer = Death["Default"]
-								if LocalPlayer["state"]["Esmeralda"] or LocalPlayer["state"]["Diamante"] or LocalPlayer["state"]["Platina"] or LocalPlayer["state"]["Ouro"] or LocalPlayer["state"]["Prata"] or LocalPlayer["state"]["Bronze"] or LocalPlayer["state"]["Ferro"] then
-									DeathTimer = (LocalPlayer["state"]["Esmeralda"] and (DeathTimer * 0.3)) or (LocalPlayer["state"]["Diamante"] and (DeathTimer * 0.5)) or (LocalPlayer["state"]["Platina"] and (DeathTimer * 0.6)) or (LocalPlayer["state"]["Ouro"] and (DeathTimer * 0.7)) or (LocalPlayer["state"]["Prata"] and (DeathTimer * 0.8)) or (LocalPlayer["state"]["Bronze"] and (DeathTimer * 0.9)) or (LocalPlayer["state"]["Ferro"] and (DeathTimer * 0.65))
+								if LocalPlayer["state"]["Premium"] then
+									DeathTimer = (LocalPlayer["state"]["Premium"] and (DeathTimer * 0.3))
 								end
 
 								Death["Timer"] = DeathTimer
@@ -257,7 +256,6 @@ function FinishSurvival()
 	exports["pma-voice"]:Mute(false)
 	SendNUIMessage({ Action = "Close" })
 	TriggerEvent("inventory:CleanWeapons")
-	-- exports["lb-phone"]:ToggleDisabled(false)
 
 	if LocalPlayer["state"]["Handcuff"] then
 		LocalPlayer["state"]:set("Handcuff",false,true)
@@ -301,7 +299,6 @@ exports("Revive",function(Health)
 		exports["pma-voice"]:Mute(false)
 		SendNUIMessage({ Action = "Close" })
 		TriggerEvent("player:DeathUpdate",false)
-		-- exports["lb-phone"]:ToggleDisabled(false)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
