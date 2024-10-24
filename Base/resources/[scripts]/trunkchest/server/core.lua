@@ -164,7 +164,7 @@ function Hensa.Store(Item,Slot,Amount,Target)
 		local Name = Vehicle[Passport]["Model"]
 
 		if (Store[Name] and not Store[Name][Item]) or Blocked[Item] then
-			TriggerClientEvent("Notify",source,"Aviso","Armazenamento proibido.","amarelo",5000)
+			TriggerClientEvent("Notify",source,"Atenção","Armazenamento proibido.","amarelo",5000)
 			TriggerClientEvent("inventory:Update",source)
 
 			return false
@@ -229,25 +229,29 @@ AddEventHandler("trunkchest:openTrunk",function(Entity)
 
 		if PassportPlate then
 			local Consult = vRP.Query("vehicles/selectVehicles",{ Passport = PassportPlate["Passport"], Vehicle = Entity[2] })
+			if Consult[1]["Weight"] > 0 then
 
-			Vehicle[Passport] = {
-				["Net"] = Entity[4],
-				["Plate"] = Entity[1],
-				["Model"] = Entity[2],
-				["Weight"] = Consult[1]["Weight"],
-				["User"] = PassportPlate["Passport"],
-				["Data"] = "Trunkchest:"..PassportPlate["Passport"]..":"..Entity[2]
-			}
+				Vehicle[Passport] = {
+					["Net"] = Entity[4],
+					["Plate"] = Entity[1],
+					["Model"] = Entity[2],
+					["Weight"] = Consult[1]["Weight"],
+					["User"] = PassportPlate["Passport"],
+					["Data"] = "Trunkchest:"..PassportPlate["Passport"]..":"..Entity[2]
+				}
 
-			TriggerClientEvent("trunkchest:Open",source)
+				TriggerClientEvent("trunkchest:Open",source)
 
-			local Players = vRPC.Players(source)
-			for _,v in pairs(Players) do
-				async(function()
-					if Vehicle[Passport] and Vehicle[Passport]["Net"] then
-						TriggerClientEvent("player:VehicleDoors",v,Vehicle[Passport]["Net"],"open")
-					end
-				end)
+				local Players = vRPC.Players(source)
+				for _,v in pairs(Players) do
+					async(function()
+						if Vehicle[Passport] and Vehicle[Passport]["Net"] then
+							TriggerClientEvent("player:VehicleDoors",v,Vehicle[Passport]["Net"],"open")
+						end
+					end)
+				end
+			else
+				TriggerClientEvent("Notify",source,"Aviso","O veículo não possuí <b>Porta-Malas</b>.","vermelho",5000)
 			end
 		end
 	end
