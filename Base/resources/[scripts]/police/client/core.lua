@@ -13,10 +13,10 @@ vSERVER = Tunnel.getInterface("police")
 -- POLICE:OPEN
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("police:Open",function()
-	if LocalPlayer["state"]["Policia"] then
+	if CheckPolice() then
 		SetNuiFocus(true,true)
-		SendNUIMessage({ name = "Open" })
 		TriggerEvent("dynamic:Close")
+		SendNUIMessage({ name = "Open" })
 
 		local Ped = PlayerPedId()
 		if not IsPedInAnyVehicle(Ped) then
