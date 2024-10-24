@@ -110,7 +110,7 @@ Use = {
 	["notepad"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		if Split and Split[3] then
 			local Name = "notepad:"..Split[3]
-			local Message = vRP.GetSrvData(Name,true)
+			local Message = vRP.GetServerData(Name)
 
 			TriggerClientEvent("notepad:Open",source,Name,Message)
 			TriggerClientEvent("inventory:Close",source)
