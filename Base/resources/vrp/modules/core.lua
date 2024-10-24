@@ -2316,7 +2316,7 @@ RegisterCommand("gg", function(source)
 		vRP.UpgradeHunger(Passport, 100)
 		vRP.DowngradeStress(Passport, 100)
 
-		SURVIVAL.Respawn(source)
+		SURVIVAL.Respawn(source) --verificar
 
 		exports["discord"]:Embed("Airport","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Address:** "..GetPlayerEndpoint(source),0xa3c846)
 	end
