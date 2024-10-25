@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `Unlikes` int(20) NOT NULL DEFAULT 0,
   `Badge` int(3) NOT NULL DEFAULT 0,
   `Created` int(20) NOT NULL DEFAULT 0,
+  `Login` int(20) NOT NULL DEFAULT 0,
   `Deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `license` (`License`),
