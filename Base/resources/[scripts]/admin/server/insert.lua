@@ -19,7 +19,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "rename" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Tertiary(source,"ID:","Nome:","Sobrenome:")
+				local Keyboard = vKEYBOARD.Tertiary(source,"Passaporte:","Nome:","Sobrenome:")
 				if Keyboard then
 					vRP.UpgradeNames(Keyboard[1],Keyboard[2],Keyboard[3])
 					TriggerClientEvent("Notify",source,"Sucesso","Nome atualizado.","verde",5000)
@@ -30,7 +30,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "ugroups" then
 			if vRP.HasGroup(Passport, "Admin") then
-				local Keyboard = vKEYBOARD.Primary(source, "ID:")
+				local Keyboard = vKEYBOARD.Primary(source, "Passaporte:")
 				if Keyboard then
 					local Result = ""
 					local Groups = vRP.Groups()
@@ -54,7 +54,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "clearinv" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					TriggerClientEvent("dynamic:Close",source)
 
@@ -70,7 +70,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "gem" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","Quantidade:")
+				local Keyboard = vKEYBOARD.Secondary(source,"Passaporte:","Quantidade:")
 				if Keyboard then
 					local Amount = parseInt(Keyboard[2])
 					local OtherPassport = parseInt(Keyboard[1])
@@ -99,7 +99,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "god" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** god "..Keyboard[1],0xa3c846)
 
@@ -145,7 +145,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "armour" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** armour "..Keyboard[1],0xa3c846)
 
@@ -172,7 +172,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "item2" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Tertiary(source,"ID:","Nome do Item:","Quantidade:")
+				local Keyboard = vKEYBOARD.Tertiary(source,"Passaporte:","Nome do Item:","Quantidade:")
 				if Keyboard then
 					if ItemIndex(Keyboard[2]) ~= nil then
 						exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** item2 "..Keyboard[1].." "..Keyboard[2].." "..Keyboard[3],0xa3c846)
@@ -204,7 +204,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "delete" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** unban "..Keyboard[1],0xa3c846)
 
@@ -221,7 +221,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "skin" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","Skin:")
+				local Keyboard = vKEYBOARD.Secondary(source,"Passaporte:","Skin:")
 				if Keyboard then
 					local ClosestPed = vRP.Source(Keyboard[1])
 					if ClosestPed then
@@ -236,7 +236,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "resetskin" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					local ClosestPed = vRP.Source(Keyboard[1])
 					if ClosestPed then
@@ -267,7 +267,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "kick" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					local OtherSource = vRP.Source(Keyboard[1])
 					if OtherSource then
@@ -281,7 +281,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "ban" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","Dias:")
+				local Keyboard = vKEYBOARD.Secondary(source,"Passaporte:","Dias:")
 				if Keyboard then
 					local Days = parseInt(Keyboard[2])
 					local OtherPassport = parseInt(Keyboard[1])
@@ -305,7 +305,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "unban" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					local OtherPassport = parseInt(Keyboard[1])
 					local Identity = vRP.Identity(OtherPassport)
@@ -351,11 +351,15 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "group" then
 			if vRP.HasGroup(Passport, "Admin", 1) then
-				local Keyboard = vKEYBOARD.Tertiary(source, "ID:", "Grupo:", "Hierarquia:")
-				if Keyboard then
+				local Keyboard = vKEYBOARD.Tertiary(source, "Passaporte:", "Grupo:", "Hierarquia:")
+				if Keyboard and Keyboard[1] and Keyboard[2] and Keyboard[3] then
 					local Level = Keyboard[3]
 					local Permission = Keyboard[2]
 					local OtherPassport = Keyboard[1]
+
+					if Permission == "Admin" and vRP.HasPermission(Passport,Permission) >= 2 then
+						return false
+					end
 
 					if tonumber(Level) then
 						if vRP.GroupType(Permission) then
@@ -380,7 +384,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "ungroup" then
 			if vRP.HasGroup(Passport,"Admin",1) then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","Grupo:")
+				local Keyboard = vKEYBOARD.Secondary(source,"Passaporte:","Grupo:")
 				if Keyboard then
 					TriggerClientEvent("Notify",source,"Sucesso","Removido <b>"..Keyboard[2].."</b> ao passaporte <b>"..Keyboard[1].."</b>.","verde",5000)
 					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** ungroup "..Keyboard[1].." "..Keyboard[2],0xa3c846)
@@ -391,7 +395,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "tptome" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source, "ID:")
+				local Keyboard = vKEYBOARD.Primary(source, "Passaporte:")
 				if Keyboard then
 					local ClosestPed = vRP.Source(Keyboard[1])
 					if ClosestPed then
@@ -406,7 +410,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "tpto" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source, "ID:")
+				local Keyboard = vKEYBOARD.Primary(source, "Passaporte:")
 				if Keyboard then
 					local ClosestPed = vRP.Source(Keyboard[1])
 					if ClosestPed then
@@ -453,7 +457,10 @@ AddEventHandler("admin:Dynamic", function(Mode)
 						local Keyboard = vKEYBOARD.Primary(source, "Litros:")
 						if Keyboard then
 							local Networked = NetworkGetEntityFromNetworkId(Network)
-							Entity(Networked)["state"]:set("Fuel", Keyboard[1], true)
+							if DoesEntityExist(Networked) then
+								Entity(Networked)["state"]:set("Fuel", Keyboard[1], true)
+							end
+
 							TriggerClientEvent("Notify",source,"Sucesso","Veículo com <b>"..parseInt(Keyboard[1]).."% de Gasolina</b>.","verde",5000)
 						end
 					end
@@ -463,26 +470,48 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			else
 				TriggerClientEvent("Notify",source,"Atenção","Você não tem permissões para isso.","amarelo",5000)
 			end
+		elseif Mode == "nitro" then
+			if vRP.HasGroup(Passport,"Admin",2) then
+				if vRPC.InsideVehicle(source) then
+					local Vehicle,Network,Plate = vRPC.VehicleList(source,10)
+					if Vehicle then
+						local Keyboard = vKEYBOARD.Primary(source, "Litros:")
+						if Keyboard then
+							local Networked = NetworkGetEntityFromNetworkId(Network)
+							if DoesEntityExist(Networked) then
+								local Nitro = GlobalState["Nitro"]
+								Nitro[Plate] = parseInt(Keyboard[1])
+								GlobalState:set("Nitro", Nitro, true)
+							end
+
+							TriggerClientEvent("Notify",source,"Sucesso","Veículo com <b>"..parseInt(Keyboard[1]).."% de Nitro</b>.","verde",5000)
+						end
+					end
+				end
+			else
+				TriggerClientEvent("Notify",source,"Atenção","Você não tem permissões para isso.","amarelo",5000)
+			end
 		elseif Mode == "lockpick" then
 			if vRP.HasGroup(Passport,"Admin",1) then
 				local Vehicle, Network, Plate, Model, Class = vRPC.VehicleList(source, 5)
 				if Vehicle then
 					local Networked = NetworkGetEntityFromNetworkId(Network)
+					if DoesEntityExist(Networked) then
+						TriggerClientEvent("Notify",source,"Sucesso","Você destrancou o veículo.","verde",5000)
 
-					if not vRP.PassportPlate(Plate) then
-						Entity(Networked)["state"]:set("Fuel", 100, true)
-						Entity(Networked)["state"]:set("Nitro", 0, true)
-						SetVehicleDoorsLocked(Networked, 1)
-					else
-						SetVehicleDoorsLocked(Networked, 1)
+						if not vRP.PassportPlate(Plate) then
+							Entity(Networked)["state"]:set("Fuel", 100, true)
+							Entity(Networked)["state"]:set("Nitro", 0, true)
+							SetVehicleDoorsLocked(Networked, 1)
+						else
+							SetVehicleDoorsLocked(Networked, 1)
+						end
+
+						TriggerEvent("plateEveryone", Plate)
+						TriggerEvent("platePlayers", Plate, Passport)
+
+						exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** lockpick",0xa3c846)
 					end
-
-					TriggerEvent("plateEveryone", Plate)
-					TriggerEvent("platePlayers", Plate, Passport)
-
-					TriggerClientEvent("Notify",source,"Sucesso","Você destrancou o veículo.","verde",5000)
-
-					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** lockpick",0xa3c846)
 				else
 					TriggerClientEvent("Notify",source,"Atenção","Sem veículos próximos.","amarelo",5000)
 				end
@@ -493,7 +522,12 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			if vRP.HasGroup(Passport,"Admin",2) then
 				local Ped = GetPlayerPed(source)
 				local Coords = GetEntityCoords(Ped)
-				vCLIENT.Limparea(source, Coords)
+				local Players = vRPC.Players(source)
+				for _,Sources in pairs(Players) do
+					async(function()
+						vCLIENT.Limparea(Sources,Coords)
+					end)
+				end
 			else
 				TriggerClientEvent("Notify",source,"Atenção","Você não tem permissões para isso.","amarelo",5000)
 			end
@@ -508,7 +542,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "setbank" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","Quantidade:")
+				local Keyboard = vKEYBOARD.Secondary(source,"Passaporte:","Quantidade:")
 				if Keyboard then
 					vRP.GiveBank(Keyboard[1],Keyboard[2])
 					TriggerClientEvent("Notify",source,"Sucesso","Envio concluído.","verde",5000)
@@ -518,7 +552,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "rembank" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Secondary(source, "ID:", "Quantidade:")
+				local Keyboard = vKEYBOARD.Secondary(source, "Passaporte:", "Quantidade:")
 				if Keyboard then
 					vRP.RemoveBank(Keyboard[1],Keyboard[2])
 					TriggerClientEvent("Notify",source,"Sucesso","Remoção concluída.","verde",5000)
@@ -569,8 +603,8 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "setcar" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Secondary(source, "ID:", "Veículo:")
-				if Keyboard then
+				local Keyboard = vKEYBOARD.Secondary(source, "Passaporte:", "Veículo:")
+				if Keyboard and Keyboard[1] and Keyboard[2] and VehicleExist(Keyboard[2]) then
 					local Consult = vRP.Query("vehicles/selectVehicles",{ Passport = Keyboard[1], Vehicle = Keyboard[2] })
 					if Consult[1] then
 						TriggerClientEvent("Notify",source,"Atenção","O veículo <b>"..Keyboard[2].."</b> já está adicionado.","amarelo",5000)
@@ -585,7 +619,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "remcar" then
 			if vRP.HasGroup(Passport,"Admin") then
-				local Keyboard = vKEYBOARD.Secondary(source,"ID:","Veículo:")
+				local Keyboard = vKEYBOARD.Secondary(source,"Passaporte:","Veículo:")
 				if Keyboard then
 					vRP.Query("vehicles/removeVehicles",{ Passport = Keyboard[1], Vehicle = Keyboard[2] })
 					exports["discord"]:Embed("Admin","**Passaporte:** "..Passport.."\n**Comando:** remcar "..Keyboard[1].." "..Keyboard[2],0xa3c846)
@@ -596,7 +630,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 			end
 		elseif Mode == "clearprison" then
 			if vRP.HasGroup(Passport,"Admin",2) then
-				local Keyboard = vKEYBOARD.Primary(source,"ID:")
+				local Keyboard = vKEYBOARD.Primary(source,"Passaporte:")
 				if Keyboard then
 					local OtherPlayer = vRP.Source(Keyboard[1])
 					if OtherPlayer then
