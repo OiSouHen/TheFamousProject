@@ -316,6 +316,7 @@ function vRP.ChosenCharacter(source, Passport, Model)
 			Characters[source]["Unlikes"] = Consult[1]["Unlikes"]
 			Characters[source]["Badge"] = Consult[1]["Badge"]
 			Characters[source]["Created"] = Consult[1]["Created"]
+			Characters[source]["Login"] = Consult[1]["Login"]
 			Characters[source]["Deleted"] = Consult[1]["Deleted"]
 
 			Characters[source]["Premium"] = Account["Premium"]
@@ -348,6 +349,8 @@ function vRP.ChosenCharacter(source, Passport, Model)
 		if Account["Gemstone"] > 0 then
 			TriggerClientEvent("hud:AddGemstone",source,Account["Gemstone"])
 		end
+
+		vRP.Query("characters/LastLogin",{ Passport = Passport })
 
 		exports["discord"]:Embed("Connect","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Nome:** "..vRP.FullName(Passport).."\n**Address:** "..GetPlayerEndpoint(source),0xa3c846)
 	end
