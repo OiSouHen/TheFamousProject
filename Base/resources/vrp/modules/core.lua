@@ -1380,9 +1380,9 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CHESTWEIGHT
 -----------------------------------------------------------------------------------------------------------------------------------------
-function vRP.ChestWeight(items)
+function vRP.ChestWeight(List)
 	local Weight = 0
-	for k,v in pairs(items) do
+	for k,v in pairs(List) do
 		Weight = Weight + (ItemWeight(v["item"]) * v["amount"])
 	end
 
