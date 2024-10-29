@@ -29,8 +29,8 @@ vRP.Prepare("characters/NewCharacter","INSERT INTO characters(License,Name,Lastn
 -----------------------------------------------------------------------------------------------------------------------------------------
 vRP.Prepare("accounts/All","SELECT * FROM accounts")
 vRP.Prepare("accounts/Account","SELECT * FROM accounts WHERE License = @License")
-vRP.Prepare("accounts/NewAccount","INSERT INTO accounts(License) VALUES(@License)")
 vRP.Prepare("accounts/Clean","UPDATE accounts SET Whitelist = 0 WHERE License = @License")
+vRP.Prepare("accounts/NewAccount","INSERT INTO accounts(License) VALUES(@License)")
 vRP.Prepare("accounts/SetWhitelist","UPDATE accounts SET Whitelist = @Whitelist WHERE id = @id")
 vRP.Prepare("accounts/SetPremium","UPDATE accounts SET Premium = @Premium WHERE License = @License")
 vRP.Prepare("accounts/UpgradePremium","UPDATE accounts SET Premium = Premium + 2592000 WHERE License = @License")
@@ -89,12 +89,6 @@ vRP.Prepare("Races/Consult","SELECT * FROM races WHERE Race = @Race ORDER BY Poi
 vRP.Prepare("Races/Insert","INSERT INTO races(Race,Passport,Vehicle,Points) VALUES(@Race,@Passport,@Vehicle,@Points)")
 vRP.Prepare("Races/Update","UPDATE races SET Points = @Points, Vehicle = @Vehicle WHERE Race = @Race AND Passport = @Passport")
 -----------------------------------------------------------------------------------------------------------------------------------------
--- FINDENTITY
------------------------------------------------------------------------------------------------------------------------------------------
-vRP.Prepare("fidentity/Result","SELECT * FROM fidentity WHERE id = @id")
-vRP.Prepare("fidentity/GetIdentity","SELECT id FROM fidentity ORDER BY id DESC LIMIT 1")
-vRP.Prepare("fidentity/NewIdentity","INSERT INTO fidentity(Name,Lastname,Blood) VALUES(@Name,@Lastname,@Blood)")
------------------------------------------------------------------------------------------------------------------------------------------
 -- WAREHOUSE
 -----------------------------------------------------------------------------------------------------------------------------------------
 vRP.Prepare("warehouse/All","SELECT * FROM warehouse")
@@ -103,8 +97,9 @@ vRP.Prepare("warehouse/Informations","SELECT * FROM warehouse WHERE Name = @Name
 vRP.Prepare("warehouse/Password","UPDATE warehouse SET Password = @Password WHERE Name = @Name")
 vRP.Prepare("warehouse/Transfer","UPDATE warehouse SET Passport = @Passport WHERE Name = @Name")
 vRP.Prepare("warehouse/Acess","SELECT * FROM warehouse WHERE Name = @Name AND Password = @Password")
-vRP.Prepare("warehouse/Tax","UPDATE warehouse SET Tax = UNIX_TIMESTAMP() + 2592000 WHERE Name = @Name")
-vRP.Prepare("warehouse/Upgrade","UPDATE warehouse SET Weight = Weight + (10 * @Multiplier) WHERE Name = @Name")
+vRP.Prepare("warehouse/Minimals","SELECT * FROM warehouse WHERE (Tax + 1296000) <= UNIX_TIMESTAMP()")
+vRP.Prepare("warehouse/Tax","UPDATE warehouse SET Tax = (UNIX_TIMESTAMP() + 2592000) WHERE Name = @Name")
+vRP.Prepare("warehouse/Upgrade","UPDATE warehouse SET Weight = (Weight + (10 * @Multiplier)) WHERE Name = @Name")
 vRP.Prepare("warehouse/Buy","INSERT INTO warehouse(Name,Password,Passport,Tax) VALUES(@Name,@Password,@Passport,UNIX_TIMESTAMP() + 2592000)")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PROPERTYS
