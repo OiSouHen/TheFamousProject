@@ -32,12 +32,6 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 Location = {
 	{
-		["Coords"] = vec3(-634.15,234.73,82.14),
-		["Mode"] = "TotenFood",
-	},{
-		["Coords"] = vec3(-1458.53,-349.46,45.01),
-		["Mode"] = "TotenFood",
-	},{
 		["Coords"] = vec3(24.51,-1346.75,29.49),
 		["Mode"] = "Departament",
 	},{
@@ -123,71 +117,12 @@ Location = {
 	},{
 		["Coords"] = vec3(46.7,-1749.71,29.62),
 		["Mode"] = "Megamall"
-	},{
-		["Coords"] = vec3(1692.27,3760.91,34.69),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(253.80,-50.47,69.94),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(842.54,-1035.25,28.19),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(-331.67,6084.86,31.46),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(-662.37,-933.58,21.82),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(-1304.12,-394.56,36.7),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(-1118.98,2699.73,18.55),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(2567.98,292.62,108.73),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(-3173.51,1088.35,20.84),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(22.53,-1105.52,29.79),
-		["Mode"] = "Ammunation"
-	},{
-		["Coords"] = vec3(810.22,-2158.99,29.62),
-		["Mode"] = "Ammunation"
 	}
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LIST
 -----------------------------------------------------------------------------------------------------------------------------------------
 List = {
-	["TotenFood"] = {
-		["Mode"] = "Buy",
-		["Type"] = "Cash",
-		["List"] = {
-			["orangejuice"] = 150,
-			["hamburger2"] = 150
-		}
-	},
-	["Ammunation"] = {
-		["Mode"] = "Buy",
-		["Type"] = "Cash",
-		["List"] = {
-			["WEAPON_HATCHET"] = 40000,
-			["WEAPON_BAT"] = 40000,
-			["WEAPON_BATTLEAXE"] = 40000,
-			["WEAPON_SWITCHBLADE"] = 40000,
-			["WEAPON_GOLFCLUB"] = 40000,
-			["WEAPON_HAMMER"] = 40000,
-			["WEAPON_MACHETE"] = 40000,
-			["WEAPON_POOLCUE"] = 40000,
-			["WEAPON_STONE_HATCHET"] = 40000,
-			["WEAPON_WRENCH"] = 40000,
-			["WEAPON_KNUCKLE"] = 40000,
-			["WEAPON_FLASHLIGHT"] = 40000
-		}
-	},
 	["Departament"] = {
 		["Mode"] = "Buy",
 		["Type"] = "Cash",
@@ -212,7 +147,7 @@ List = {
 		["Mode"] = "Buy",
 		["Type"] = "Cash",
 		["List"] = {
-			["boilies"] = 5,
+			["worm"] = 5,
 			["rope"] = 925,
 			["scuba"] = 975,
 			["notepad"] = 10,
@@ -223,8 +158,7 @@ List = {
 			["GADGET_PARACHUTE"] = 225,
 			["axe"] = 1225,
 			["pickaxe"] = 1225,
-			["fishingrod"] = 1225,
-			["emptypurifiedwater"] = 1275
+			["fishingrod"] = 1225
 		}
 	},
 	["Clandestine"] = {
@@ -234,31 +168,31 @@ List = {
 		["List"] = {
 			["scotchtape"] = 45,
 			["insulatingtape"] = 55,
+			["screws"] = 45,
+			["screwnuts"] = 45,
+			["safependrive"] = 3325,
+			["weaponparts"] = 125,
 			["rammemory"] = 375,
 			["powersupply"] = 475,
 			["processorfan"] = 325,
 			["processor"] = 725,
-			["screws"] = 45,
-			["screwnuts"] = 45,
 			["videocard"] = 4225,
 			["ssddrive"] = 525,
-			["safependrive"] = 3225,
 			["powercable"] = 225,
-			["weaponparts"] = 125,
 			["electroniccomponents"] = 375,
-			["batteryaa"] = 225,
-			["batteryaaplus"] = 275,
-			["goldnecklace"] = 625,
-			["silverchain"] = 425,
-			["horsefigurine"] = 2425,
-			["toothpaste"] = 175,
 			["techtrash"] = 95,
 			["tarp"] = 65,
 			["sheetmetal"] = 65,
 			["roadsigns"] = 65,
 			["explosives"] = 105,
 			["sulfuric"] = 75,
-			["races"] = 425,
+			["batteryaa"] = 225,
+			["batteryaaplus"] = 275,
+			["goldnecklace"] = 625,
+			["silverchain"] = 425,
+			["horsefigurine"] = 2425,
+			["toothpaste"] = 175,
+			["races"] = 175,
 			["pistolbody"] = 275,
 			["smgbody"] = 525,
 			["riflebody"] = 975,
@@ -345,12 +279,13 @@ List = {
 			["syringe02"] = 45,
 			["syringe03"] = 45,
 			["syringe04"] = 45,
-			["bandage"] = 925,
+			["bandage"] = 115,
+			["gauze"] = 75,
 			["gdtkit"] = 25,
-			["medkit"] = 1725,
-			["sinkalmy"] = 325,
-			["analgesic"] = 525,
-			["ritmoneury"] = 625,
+			["medkit"] = 285,
+			["sinkalmy"] = 185,
+			["analgesic"] = 65,
+			["ritmoneury"] = 235,
 			["medicbag"] = 725,
 			["adrenaline"] = 3225
 		}
@@ -392,15 +327,15 @@ List = {
 		["Mode"] = "Sell",
 		["Type"] = "Cash",
 		["List"] = {
-			["tin_pure"] = 80,
-			["lead_pure"] = 80,
-			["copper_pure"] = 80,
-			["iron_pure"] = 80,
-			["gold_pure"] = 90,
-			["diamond_pure"] = 130,
-			["ruby_pure"] = 120,
-			["sapphire_pure"] = 110,
-			["emerald_pure"] = 100
+			["tin_pure"] = 40,
+			["lead_pure"] = 40,
+			["copper_pure"] = 42,
+			["iron_pure"] = 45,
+			["gold_pure"] = 50,
+			["diamond_pure"] = 50,
+			["ruby_pure"] = 60,
+			["sapphire_pure"] = 60,
+			["emerald_pure"] = 75
 		}
 	},
 	["Policia"] = {
@@ -408,6 +343,7 @@ List = {
 		["Type"] = "Cash",
 		["Permission"] = "Policia",
 		["List"] = {
+			["vest"] = 125,
 			["gsrkit"] = 25,
 			["gdtkit"] = 25,
 			["barrier"] = 25,
