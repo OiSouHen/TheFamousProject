@@ -257,7 +257,7 @@ function Hensa.Update(Slot,Target,Amount,Name)
 	local Amount = parseInt(Amount,true)
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if vRP.UpdateChest(Passport,"Warehouse:"..Name,Slot,Target,Amount,true) then
+		if vRP.UpdateChest(Passport,"Warehouse:"..Name,Slot,Target,Amount) then
 			TriggerClientEvent("inventory:Update",source)
 		end
 	end
