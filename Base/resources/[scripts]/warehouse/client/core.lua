@@ -247,10 +247,10 @@ local List = {
 	["227"] = vec3(-2389.6,3286.8,33.6)
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
--- WAREHOUSE:BLIPS
+-- PROPERTYS:BLIPS
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("warehouse:Blips")
-AddEventHandler("warehouse:Blips",function()
+RegisterNetEvent("propertys:Blips")
+AddEventHandler("propertys:Blips",function()
 	if json.encode(Blips) ~= "[]" then
 		for _,v in pairs(Blips) do
 			if DoesBlipExist(v) then
