@@ -3,6 +3,7 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Tunnel = module("vrp","lib/Tunnel")
 local Proxy = module("vrp","lib/Proxy")
+vRPS = Tunnel.getInterface("vRP")
 vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CONNECTION
@@ -12,7 +13,7 @@ vSERVER = Tunnel.getInterface("warehouse")
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Blips = {}
-local Warehouse = ""
+local Opened = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LIST
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -195,9 +196,9 @@ local List = {
 	["176"] = vec3(2832.87,2800.02,58.0),
 	["177"] = vec3(2746.34,2787.67,36.02),
 	["178"] = vec3(2707.58,2776.49,38.36),
-	["179"] = vec3(-229.36,-1117.95,23.61),
-	["180"] = vec3(-169.18,-1026.67,27.85),
-	["181"] = vec3(-96.98,-1013.21,27.88),
+	["179"] = vec3(-2173.06,3256.12,33.46),
+	["180"] = vec3(-2007.05,3407.1,31.9),
+	["181"] = vec3(721.3,1292.0,360.64),
 	["182"] = vec3(23.38,-619.61,35.58),
 	["183"] = vec3(23.4,-619.59,32.2),
 	["184"] = vec3(491.34,-507.02,28.76),
@@ -243,9 +244,7 @@ local List = {
 	["224"] = vec3(-1735.11,2962.85,33.44),
 	["225"] = vec3(-1776.78,2973.94,33.44),
 	["226"] = vec3(-2385.41,3298.9,33.56),
-	["227"] = vec3(-2389.6,3286.8,33.6),
-	["228"] = vec3(-2173.06,3256.12,33.46),
-	["229"] = vec3(-2007.05,3407.1,31.9)
+	["227"] = vec3(-2389.6,3286.8,33.6)
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- WAREHOUSE:BLIPS
@@ -260,7 +259,6 @@ AddEventHandler("warehouse:Blips",function()
 		end
 
 		Blips = {}
-		TriggerEvent("Notify","amarelo","Marcações desativadas.","Armazéns",5000)
 	else
 		for Name,v in pairs(List) do
 			Blips[Name] = AddBlipForCoord(v["x"],v["y"],v["z"])
@@ -269,18 +267,12 @@ AddEventHandler("warehouse:Blips",function()
 			SetBlipColour(Blips[Name],GlobalState["Warehouses"][Name] and 35 or 43)
 			SetBlipScale(Blips[Name],0.4)
 		end
-
-		TriggerEvent("Notify","verde","Marcações ativadas.","Armazéns",5000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- ONCLIENTRESOURCESTART
+-- THREADSERVERSTART
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("onClientResourceStart",function(Resource)
-	if (GetCurrentResourceName() ~= Resource) then
-		return
-	end
-
+CreateThread(function()
 	for Index,v in pairs(List) do
 		exports["target"]:AddCircleZone("Warehouse:"..Index,v,0.1,{
 			name = "Warehouse:"..Index,
@@ -293,7 +285,7 @@ AddEventHandler("onClientResourceStart",function(Resource)
 				{
 					event = "warehouse:Open",
 					label = "Abrir",
-					tunnel = "shop"
+					tunnel = "client"
 				},{
 					event = "warehouse:Password",
 					label = "Trocar Senha",
@@ -310,32 +302,32 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- WAREHOUSE:OPEN
 -----------------------------------------------------------------------------------------------------------------------------------------
-AddEventHandler("warehouse:Open",function(Number)
-	if not exports["hud"]:Wanted() and vSERVER.Warehouse(Number) then
-		Warehouse = Number
-		SetNuiFocus(true,true)
-		SendNUIMessage({ action = "Open" })
-		TriggerEvent("sounds:Private","chest",0.35)
-		vRP.PlayAnim(false,{"amb@prop_human_bum_bin@base","base"},true)
+AddEventHandler("warehouse:Open",function(Mode)
+	if not exports["hud"]:Wanted() and vSERVER.Warehouse(Mode) then
+		Opened = Mode
+
+		TriggerEvent("inventory:Open",{
+			Action = "Open",
+			Type = "Chest",
+			Resource = "warehouse"
+		})
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CLOSE
+-- INVENTORY:CLOSE
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Close",function(Data,Callback)
-	SendNUIMessage({ action = "Close" })
-	SetNuiFocus(false,false)
-	Warehouse = ""
-	vRP.Destroy()
-
-	Callback("Ok")
+RegisterNetEvent("inventory:Close")
+AddEventHandler("inventory:Close",function()
+	if Opened then
+		Opened = false
+	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TAKE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Take",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Take(Data["item"],Data["slot"],Data["amount"],Data["target"],Warehouse)
+		vSERVER.Take(Data["item"],Data["slot"],Data["amount"],Data["target"],Opened)
 	end
 
 	Callback("Ok")
@@ -345,7 +337,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Store",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"],Warehouse)
+		vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"],Opened)
 	end
 
 	Callback("Ok")
@@ -355,31 +347,17 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Update",function(Data,Callback)
 	if MumbleIsConnected() then
-		vSERVER.Update(Data["slot"],Data["target"],Data["amount"],Warehouse)
+		vSERVER.Update(Data["slot"],Data["target"],Data["amount"],Opened)
 	end
 
 	Callback("Ok")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- REQUEST
+-- MOUNT
 -----------------------------------------------------------------------------------------------------------------------------------------
-RegisterNUICallback("Request",function(Data,Callback)
-	local Inventory,Warehouse,invPeso,invMaxpeso,warehousePeso,warehouseMaxpeso = vSERVER.Request(Warehouse)
-	if Inventory then
-		Callback({ myInventory = Inventory, myWarehouse = Warehouse, invPeso = invPeso, invMaxpeso = invMaxpeso, warehousePeso = warehousePeso, warehouseMaxpeso = warehouseMaxpeso })
+RegisterNUICallback("Mount",function(Data,Callback)
+	local Primary,Secondary,PrimaryWeight,SecondaryWeight = vSERVER.Mount(Opened)
+	if Primary then
+		Callback({ Primary = Primary, Secondary = Secondary, PrimaryMaxWeight = PrimaryWeight, SecondaryMaxWeight = SecondaryWeight })
 	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- WAREHOUSE:UPDATE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("warehouse:Update")
-AddEventHandler("warehouse:Update",function()
-	SendNUIMessage({ action = "Request" })
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- WAREHOUSE:WEIGHT
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("warehouse:Weight")
-AddEventHandler("warehouse:Weight",function(invPeso,invMaxpeso,warehousePeso,warehouseMaxpeso)
-	SendNUIMessage({ action = "updateWeight", invPeso = invPeso, invMaxpeso = invMaxpeso, warehousePeso = warehousePeso, warehouseMaxpeso = warehouseMaxpeso })
 end)
