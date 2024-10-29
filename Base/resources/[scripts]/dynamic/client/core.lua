@@ -157,11 +157,11 @@ RegisterCommand("PlayerFunctions",function()
 		end
 
 		if MumbleIsConnected() then
-			exports["dynamic"]:AddMenu("Experiência", "Todas as suas habilidades.", "Experience")
-			local Experience = vSERVER.Experience()
-			for Name,Exp in pairs(Experience) do
-				exports["dynamic"]:AddButton(Name, "Você possuí <rare>"..Exp.." pontos</rare> no nível <rare>"..ClassCategory(Exp).."</rare>.", "", "", "Experience", false)
-			end
+			-- exports["dynamic"]:AddMenu("Experiência", "Todas as suas habilidades.", "Experience")
+			-- local Experience = vSERVER.Experience()
+			-- for Name,Exp in pairs(Experience) do
+				-- exports["dynamic"]:AddButton(Name, "Você possuí <rare>"..Exp.." pontos</rare> no nível <rare>"..ClassCategory(Exp).."</rare>.", "", "", "Experience", false)
+			-- end
 
 			exports["dynamic"]:AddMenu("Estatísticas", "Estatísticas do seu personagem.", "Stats")
 			local Stats = vSERVER.PedStats()
@@ -172,9 +172,8 @@ RegisterCommand("PlayerFunctions",function()
 
 		exports["dynamic"]:AddMenu("Outros", "Todas as funções do personagem.", "others")
 		exports["dynamic"]:AddButton("Estatísticas da Cidade", "Tudo sobre nossa cidade.", "admin:Dynamic", "stats", "others", true)
-		exports["dynamic"]:AddButton("Rebocar", "Colocar/Remover o veículo na prancha.", "inventory:InvokeTow", "", "others", false)
+		-- exports["dynamic"]:AddButton("Rebocar", "Colocar/Remover o veículo na prancha.", "inventory:InvokeTow", "", "others", false)
 		exports["dynamic"]:AddButton("Propriedades", "Marcar/Desmarcar propriedades no mapa.", "propertys:Blips", "", "others", false)
-		exports["dynamic"]:AddButton("Armazéns", "Marcar/Desmarcar armazéns no mapa.", "warehouse:Blips", "", "others", false)
 		exports["dynamic"]:AddButton("Ferimentos", "Verificar ferimentos no corpo.", "paramedic:Injuries", "", "others", false)
 		exports["dynamic"]:AddButton("Desbugar", "Recarregar o personagem.", "player:Debug", "", "others", true)
 
