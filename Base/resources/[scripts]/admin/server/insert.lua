@@ -356,6 +356,7 @@ AddEventHandler("admin:Dynamic", function(Mode)
 					local Level = Keyboard[3]
 					local Permission = Keyboard[2]
 					local OtherPassport = Keyboard[1]
+					local OtherSource = vRP.Source(Keyboard[1])
 
 					if Permission == "Admin" and vRP.HasPermission(Passport,Permission) >= 2 then
 						return false
@@ -365,14 +366,16 @@ AddEventHandler("admin:Dynamic", function(Mode)
 						if vRP.GroupType(Permission) then
 							if not vRP.GetUserType(OtherPassport, "Work") then
 								exports["discord"]:Embed("Admin", "**Passaporte:** "..Passport.."\n**Comando:** group "..OtherPassport.." "..Permission.." "..Level, 0xa3c846)
-								TriggerClientEvent("Notify", source, "Sucesso", "Adicionado <b>"..Permission.."</b> ao passaporte <b>"..OtherPassport.."</b>.", "verde", 5000)
+								TriggerClientEvent("Notify", source, "Sucesso", "Adicionado a permissão <b>"..Permission.."</b> ao passaporte <b>"..OtherPassport.."</b>.", "verde", 5000)
+								TriggerClientEvent("Notify", OtherSource, "Sucesso", "Você recebeu a permissão de <b>"..Permission.."</b>.", "verde", 5000)
 								vRP.SetPermission(OtherPassport, Permission, Level)
 							else
 								TriggerClientEvent("Notify", source, "Atenção", "O passaporte já pertence a outro grupo.", "amarelo", 5000)
 							end
 						else
 							exports["discord"]:Embed("Admin", "**Passaporte:** "..Passport.."\n**Comando:** group "..OtherPassport.." "..Permission.." "..Level, 0xa3c846)
-							TriggerClientEvent("Notify", source, "Sucesso", "Adicionado <b>"..Permission.."</b> ao passaporte <b>"..OtherPassport.."</b>.", "verde", 5000)
+							TriggerClientEvent("Notify", source, "Sucesso", "Adicionado a permissão <b>"..Permission.."</b> ao passaporte <b>"..OtherPassport.."</b>.", "verde", 5000)
+							TriggerClientEvent("Notify", OtherSource, "Sucesso", "Você recebeu a permissão de <b>"..Permission.."</b>.", "verde", 5000)
 							vRP.SetPermission(OtherPassport, Permission, Level)
 						end
 					else
